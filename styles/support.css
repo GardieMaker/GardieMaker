@@ -1,0 +1,405 @@
+body > iframe:first-child { display: none !important; }
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+select, input {
+	margin-right: 2px !important;
+}
+
+strong, em, i, u, span, b, sub, sup, a, label, tt, var {
+    font-size: inherit;
+}
+
+body{
+	/* background: #34386f url("https://www.eldarya.es/static/img/design/background.jpg") fixed top center; */
+	background: #34386f url("https://www.eldarya.es/assets/img/item/player/web_full/db28c830f7176d59b26856ba831ec0fb.jpg") fixed top center;
+	background-size: cover;
+	overflow-y: scroll;
+	transition: background-image 4s linear;
+    /*-------------------*/
+    font-family: "trebuchet ms", arial, serif;
+    font-size: 14px;
+    line-height: 1em;
+    color: #000;
+    min-height: 100%;
+}
+
+html, body{
+	width:100%;
+	position: relative;
+	font-family: Rubik, cursive;
+}
+
+.glow:hover, #header-menu a:hover, #footer #footer-links a:hover {
+    font-weight: bold;
+    text-shadow: 1px 0 20px #ffffff;
+    -webkit-transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in;
+    -ms-transition: all 0.3s ease-in;
+    -o-transition: all 0.3s ease-in;
+    transition: all 0.3s ease-in;
+}
+
+#header{
+	height: 179px;
+	position: relative;
+}
+
+#header-in{
+	height:100%;
+	width:1010px;
+	margin:auto;
+	position: relative;
+	top: 0;
+	left:0;
+}
+
+#logo{
+	display: block;
+	/*left: 70px;*/
+	top: 12px;
+	z-index: 2;
+	position: absolute;
+
+	left: 20px;
+	font-size: 20px;
+	color: #fff;
+}
+
+#header-top{
+	position: absolute;
+	top: 0;
+	background-color: #34386f;
+	height: 39px;
+	width: 100%;
+}
+
+/* Novedades */
+#header-news {
+    position: absolute;
+	right: 0;
+	top: 50px;
+	width: 450px;
+	height: 128px;
+	font-size: 16px;
+	text-align: center;
+}
+
+#header-news > div {
+	display: inline-block;
+	position: relative;
+	vertical-align: top;
+	padding: 10px 50px;
+	border-radius: 10px;
+	top: 30px;
+}
+
+#news-infos {
+    background-image: url("https://www.eldarya.es/static/img/design/player-infos-background-middle.png");
+    background-repeat-y: no-repeat;
+    padding: 0 10px 0 10px;
+    text-align: center;
+}
+
+#news-infos .news-title {
+    color: #fff;
+    font-weight: 600;
+    font-family: Rubik, cursive;
+    position: relative;
+    height: 32px;
+    line-height: 32px;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 0;
+    border: solid 2px #0BD6F4;
+    background-color: #34386f;
+    -webkit-transform: skew(-14deg);
+    -moz-transform: skew(-14deg);
+    -o-transform: skew(-14deg);
+    -webkit-backface-visibility: hidden;
+}
+
+#news-infos .news-title .news-title-content {
+    -webkit-transform: skew(14deg);
+    -moz-transform: skew(14deg);
+    -o-transform: skew(14deg);
+    -webkit-backface-visibility: hidden;
+    padding: 0 70px 0 15px;
+}
+
+#news-infos .news-latest {
+    background-color: #34386f;
+    border-radius: 20px;
+    height: 25px;
+    line-height: 25px;
+    font-family: Rubik, cursive;
+    font-weight: 600;
+    padding: 0 10px;
+    border: solid 2px #0BD6F4;
+    display: inline-block;
+}
+
+.news-main {
+	color: #fff;
+	font-size: 12px;
+}
+
+.news-main.disabled {
+	font-style: oblique;
+	color: #acacac;
+}
+/* Fin novedades */
+
+ #header #header-top #header-top-in{
+	width: 1010px;
+	margin: auto;
+	position: relative;
+	text-align: center;
+	line-height: 39px;
+	font-size: 12px;
+	color: #fff;
+	font-family: Rubik, cursive;
+}
+
+ol, ul{
+	list-style: none;
+}
+
+#header-menu{
+	text-align: right;
+	padding-right: 150px;
+}
+
+#header-menu li{
+	display: inline-block;
+	margin: 0 10px;
+}
+
+#header-menu a{
+	color: #fff;
+}
+
+body a{
+	text-decoration: none;
+}
+
+#content{
+	padding-bottom: 82px;
+	width: 1010px;
+	margin: auto;
+}
+
+#container {
+	position: relative;
+	font-family: Rubik, cursive;
+}
+
+#container .page-main-container{
+	background-color: rgba(73,79,154,0.87);
+	border-radius: 8px;
+	padding: 20px;
+	min-height: 400px;
+	position: relative;
+	box-shadow: inset 1px 1px 3px 1px #34386f;
+}
+
+#container .page-main-container::after{
+	content: '';
+	border-radius: 8px;
+	background-position: 0 0, 100% 0, 0 0, 0 100%;
+	background-repeat: no-repeat;
+	background-size: 4px 100%, 4px 100%, 100% 4px, 100% 4px;
+
+	background-image: -webkit-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), -webkit-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+	background-image: -moz-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), -moz-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+	background-image: -o-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), -o-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+	background-image: -ms-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), -ms-linear-gradient(-90deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+	background-image: linear-gradient(180deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), linear-gradient(180deg, #fff 4%, #d2d5f9 14%, #3f49d0 74%, #c4c7f7 90%, #fff 97%), linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+
+	box-shadow: 1px 2px 3px 0 rgba(47, 62, 113, 0.75);
+	position: absolute;
+	z-index: -1;
+	top: -2px;
+	left: -2px;
+	right: -2px;
+	bottom: -2px;
+}
+
+#container .page-main-container.marketplace-main-container{
+	overflow: visible;
+}
+
+#container h1 {
+	position: relative;
+	background-image: url("https://www.eldarya.es/static/img/design/h1.png");
+	height: 45px;
+	line-height: 45px;
+	display: inline-block;
+	color: #fff;
+	font-family: Rubik, cursive;
+	font-size: 16px;
+	text-transform: uppercase;
+	padding: 0 15px 0 25px;
+	margin-left: -20px;
+}
+
+#container h1 .title-end{
+	background-image: url("https://www.eldarya.es/static/img/design/h1-end.png");
+	position: absolute;
+	right: -25px;
+	top:0;
+	width: 25px;
+	height: 45px;
+}
+
+.clearer {
+    clear: both;
+}
+/*--------------------------------------------------------*/
+
+.button {
+	background-color: #2293fb;
+	border: 2px solid #2293fb;
+	border-radius: 25px;
+	font-family: Rubik, cursive;
+	font-size: 14px;
+	color: #fff;
+	padding: 4px 8px;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 100%;
+
+	-webkit-transition: background-color 0.3s ease-in, color 0.3s ease-in;
+	-moz-transition: background-color 0.3s ease-in, color 0.3s ease-in;
+	-ms-transition: background-color 0.3s ease-in, color 0.3s ease-in;
+	-o-transition: background-color 0.3s ease-in, color 0.3s ease-in;
+	transition: background-color 0.3s ease-in, color 0.3s ease-in;
+	margin: 0 5px;
+}
+
+.button:hover {
+	background-color: #fff;
+	color: #2293fb;
+}
+/*-------------------------------------------------------*/
+#container .support-main-container h1 {
+    float: left;
+}
+
+#support-menu {
+    width: 180px;
+    padding: 8px;
+    background-color: #34386f;
+    border-radius: 10px;
+    position: relative;
+    float: left;
+    clear: both;
+}
+
+#support-menu li {
+    padding: 5px;
+    font-size: 13px;
+    color: rgb(116, 121, 179);
+    margin: 7px 0;
+    cursor: pointer;
+}
+
+#support-menu li:hover {
+    color: #fff;
+}
+
+#support-menu li.on {
+    color: #ebc518;
+    font-weight: bold;
+}
+
+#support-category-content {
+    float: left;
+    width: 635px;
+    border-radius: 10px;
+    margin: 0 15px;
+    padding: 15px;
+}
+
+.support-main-container .question {
+    background: #fff;
+    border-radius: 4px;
+    margin: 2px 0;
+    border: 1px solid #ccc;
+}
+
+.support-main-container .question.active {
+    border-color: #b7ceff;
+}
+
+.support-main-container .question > div {
+    display: block;
+    padding: 10px 10px 10px 30px;
+    border-radius: 4px;
+    color: #1c94c4;
+    font-weight: bold;
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+}
+
+.support-main-container .question > div:hover, .support-main-container .question.active > div {
+    background-color: #d2f7ff;
+    cursor: pointer;
+}
+
+.support-main-container .question.active > div {
+    color: #1c5583;
+}
+
+.support-main-container .question .answer {
+    display: none;
+}
+
+.support-main-container .question.active .answer {
+    display: block;
+    line-height: 1.5em;
+    border-radius: 0;
+    background: #fff;
+	border-top: 1px solid #b7ceff;
+    padding: 10px;
+    font-weight: normal;
+    color: #000;
+    cursor: default;
+    text-align: justify;
+}
+
+.answer ul {
+    list-style: revert;
+    padding-left: 30px;
+    margin: 10px 0px;
+}
+
+/*-------------------------------------------------------*/
+#footer{
+	font-family: Rubik, cursive;
+	position: absolute;
+	height: 42px;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	background-color: #34386f;
+}
+
+#footer #footer-in{
+	width: 1010px;
+	margin: auto;
+	line-height: 42px;
+	color: #fff;
+	font-size: 12px;
+	position: relative;
+}
+
+#footer #footer-links{
+	position: absolute;
+	right: 0;
+}
