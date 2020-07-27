@@ -434,7 +434,7 @@ body a{
 
 #index-featured {
 	margin-bottom: 0;
-	width: 24%;
+	width: 180px;
 	float: right;
 	margin-right: -21px;
 	border-top-right-radius: 0;
@@ -453,20 +453,10 @@ body a{
 	padding-top: 15px;
 }
 
-
-
-
-
-
-
-
-
-
-
 #index-news {
 	display: inline-block;
 	vertical-align: top;
-	width: 485px;
+	width: 475px;
 	background-color: #437ae1;
 	border-radius: 10px;
 	border: 2px solid rgba(77, 168, 253, 0.37);
@@ -529,9 +519,6 @@ body a{
     padding: 0 5px;
     font-family: Rubik, cursive;
 }
-
-
-
 
 .clearer {
 	clear: both;
