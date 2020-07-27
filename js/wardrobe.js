@@ -1104,6 +1104,7 @@ function updateFilters() {
 						case "A":case "a": pri = "1 de Abril "; break;
 						case "P":case "p": pri = "Pascua "; break;
 						case "M":case "m": pri = "Música "; break;
+						case "JE":case "je": pri = "Japan Expo "; break;
 						case "PM":case "pm": pri = "Pride Month "; break;
 						case "V":case "v": pri = "Verano "; break;
 						case "BF":case "bf": pri = "Black Friday "; break;
