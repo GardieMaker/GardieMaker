@@ -18,7 +18,7 @@ var galor;
 //================================================================
 
 $(document).ready(function iniciaTodo() {
-    $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/ativities", function(estado, success, xhr) {
+    $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/activities", function(estado, success, xhr) {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 

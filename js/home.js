@@ -1,5 +1,5 @@
 $(document).ready(function iniciaTodo() {
-    $.get("https://raw.githubusercontent.com/GardieMaker/data/status/ativities", function(estado, success, xhr) {
+    $.get("https://raw.githubusercontent.com/GardieMaker/data/status/activities", function(estado, success, xhr) {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
