@@ -8,6 +8,10 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     background: transparent;
 }
 
+html {
+	height: 100%;
+}
+
 input {
 	margin-right: 2px !important;
 	border: 1px solid #ddd;
@@ -204,7 +208,7 @@ body a{
 }
 
 #content{
-	padding-bottom: 82px;
+	padding-bottom: 124px;
 	width: 1010px;
 	margin: auto;
 }
