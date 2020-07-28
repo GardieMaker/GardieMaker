@@ -559,6 +559,6 @@ body a{
 #footer-links a img {
 	height: 28px;
 	float: right;
-	padding: 7px;
+	padding: 7px 7px 7px 0;
 	position: relative;
 }
