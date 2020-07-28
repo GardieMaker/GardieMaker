@@ -175,7 +175,7 @@ html, body{
 /* Fin novedades */
 
  #header #header-top #header-top-in{
-	width: 1010px;
+	width: 1012px;
 	margin: auto;
 	position: relative;
 	text-align: center;
@@ -183,6 +183,7 @@ html, body{
 	font-size: 12px;
 	color: #fff;
 	font-family: Rubik, cursive;
+	background: #34386f;
 }
 
 ol, ul{
@@ -540,12 +541,13 @@ body a{
 }
 
 #footer #footer-in{
-	width: 1010px;
+	width: 1012px;
 	margin: auto;
 	line-height: 42px;
 	color: #fff;
 	font-size: 12px;
 	position: relative;
+	background: #34386f;
 }
 
 #footer #footer-links{
