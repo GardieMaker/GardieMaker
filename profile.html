@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-173992141-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-173992141-1');
+		</script>
+
 		<meta charset="utf-8">
 		<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
 		<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
@@ -11,12 +21,8 @@
 		<script type="text/javascript" src="js/profile.js"></script>
 
 		<title>Perfil - GardieMaker</title>
+		<link rel="stylesheet" type="text/css" href="styles/base.css">
 		<link rel="stylesheet" type="text/css" href="styles/profile.css">
-		<script>
-			if (window.location.search != "?a=zunnnay") {
-				window.location.href = "https://gardiemaker.tumblr.com/es/profile";
-			}
-		</script>
 	</head>
 	<body>
 		<div id="header">
@@ -60,21 +66,35 @@
 					<h1>
 						Mi personaje
 						<span class="title-end"></span>
-						<!--falta CSS -->
 					</h1>
+
 					<div id="player-display" class="isDraggable">
 						<div class="player-element background-element" style="background: url('https://www.eldarya.es/assets/img/item/player/web_full/ebe3cacec9acff9a1ae9d9554a3192c0.jpg')"></div>
 						<div id="player-pet-containment" style="width: 1164.8px; height: 864px; left: -182.4px; top: -132px;"></div>
-						<div id="player-display-pet" class="dragEnabled ui-draggable ui-draggable-handle" onmousedown="dragPet()" style="position: absolute; inset: 100px auto auto 100px; width: auto; height: auto">
-							<img src="">
+
+						<!-- friend-pet -->
+						<div id="friend-display-pet" class="dragEnabled ui-draggable ui-draggable-handle" onmousedown="dragPet('friend-display-pet')" style="position: absolute; inset: 100px auto auto 100px; width: auto; height: auto; z-index: 1">
+							<img id="img-friend-pet" src="">
 						</div>
-						<div id="player-display-draggable" class ="dragEnabled ui-draggable" style="position: absolute; left: 50px" onmousedown="dragGardienne()">
+						<!-- friend -->
+						<div id="friend-display-draggable" class ="dragEnabled ui-draggable" style="position: absolute; left: 250px; display: none; z-index: 2" onmousedown="dragGardienne('friend-display-draggable')">
+							<img id="img-friend" src="" style="position: absolute; bottom: 0">
+							<div id="friend-display-draggable-handler" class="ui-draggable-handle"></div>
+						</div>
+
+						<!-- player-pet -->
+						<div id="player-display-pet" class="dragEnabled ui-draggable ui-draggable-handle" onmousedown="dragPet('player-display-pet')" style="position: absolute; inset: 100px auto auto 100px; width: auto; height: auto; z-index: 3">
+							<img id="img-player-pet" src="">
+						</div>
+						<!-- player -->
+						<div id="player-display-draggable" class ="dragEnabled ui-draggable" style="position: absolute; left: 50px; z-index: 4;" onmousedown="dragGardienne('player-display-draggable')">
 							<div class="playerProfileAvatar">
 								<canvas width="420" height="594"></canvas>
 							</div>
 							<div id="player-display-draggable-handler" class="ui-draggable-handle"></div>
 						</div>
 					</div>
+
 					<ul id="player-actions-tab">
 						<li>
 							<div id="reLoad" class="button">Volver a cargar</div>
@@ -83,7 +103,7 @@
 							<div id="borderRad" class="button">Cambiar esquinas</div>
 						</li>
 						<li>
-							<div id="getPortrait" class="button">Ver Portrait</div>
+							<div id="getPortrait" class="button">Guardar PNG</div>
 						</li>
 						<li>
 							<div id="getCode" class="button">Copiar código</div>
@@ -91,37 +111,79 @@
 					</ul>
 					<div id="player-left-tab">
 						<div id="left-info-tab">
-							<h3>Bonus</h3>
+							<h3>Opciones</h3>
 							<br>
-							<div style="margin: 3px 8px; float:left;">Seleccionar familiar: </div>
 
-							<select id="selectPet" style="float:left; width:140px">
-							</select>
+							<div class="bonus-container">
+								<form onsubmit="return false;">
+									Familiar: 
+									<select id="select-player-pet" style="width:170px"></select>
+									<span style="display: none" id="check-player-span"><input type="checkbox" id="check-player-pet" class="chkVb" style="">&nbsp;Adulto</span>
+								</form>
+							</div>
 
-							<input type="checkbox" id="chkPet" class="chkVb" style="margin: 3px 8px;float:left; display: none"><div style="margin: 4px 5px;float:left; display: none;" class="chkVb">Adulto</div><br>
-							<div class="clearer"></div><br><br><br>
+							<div class="bonus-container">
+								<form onsubmit="return false">
+									Compañero: 
+									<select id="select-friend" style="width:125px"></select>
+									<select id="select-version" style="display:none"></select>
+									<input id="button-centrar" type="submit" value="Centrar" style="display: none;padding: 1px 8px;">
+								</form>
+								
+								<div id="otro-container" style="display: none; text-align: center;">
+									<br>
+									<form onsubmit="return false;">
+										<input id="input-url" value="" placeholder="Enlace..." style="width: 190px">
+										<input id="input-height" value="594" style="width: 30px">
+										px&nbsp;&nbsp;
+										<input id="load-url" type="submit" value="Cargar" style="padding: 1px 8px;">
+									</form>
+								</div>
+								<br>
+								<form onsubmit="return false;">
+									Familiar: 
+									<select id="select-friend-pet" style="width:170px"></select>
+									<span style="display: none" id="check-friend-span"><input type="checkbox" id="check-friend-pet" class="chkVb" style="">&nbsp;Adulto</span>
+								</form>
+							</div>
 
-							<div style="margin: 3px 8px; text-align: center;">CARGAR GUARDIANA</div><br>
-							<div style="margin: 3px 8px; float:left;">Código:</div>
-							<form onsubmit="return false;">
-								<input id="inputCode" value="" style="width: 220px">
-								<input id="loadCode" type="submit" value="Generar">
-							</form>
-							<div class="clearer"></div><br>
+							<div class="bonus-container" style="display: none;">
+								<span style="text-align: center; display: block; margin-bottom: 10px;">POSICIONAMIENTO</span>
+								<form onsubmit="return false;">
+									Seleccione: 
+									<select id="position-player" style=""></select>
+									<input id="position-bajar" type="submit" value="Retrasar" style="padding: 1px 8px;">
+									<input id="position-subir" type="submit" value="Avanzar" style="padding: 1px 8px;">
+								</form>
+							</div>
+
+							<h3>Cargar guardiana</h3>
+							<br>
+							<div class="bonus-container">
+								<div style="margin: 3px 8px; font-size: 13px; text-align: justify;"><u>Advertencia:</u> Al cargar una nueva guardiana perderá todos los cambios de la sesión actual.</div><br>
+								<form onsubmit="return false;">
+									Código: 
+									<input id="inputCode" placeholder="Código..." value="" style="width: 195px">
+									<input id="loadCode" type="submit" value="Generar" style="padding: 1px 8px;">
+								</form>
+							</div>
 
 						</div>
 					</div>
 					<div id="right-profile-tab">
 						<div id="profile" style="text-align: center;">
 							<span><b>INFORMACIÓN:</b><br><br>
-								1) Puedes guardar un render de tu guardiana desde el portrait, haciendo clic en "Ver portrait". Si estás desde un dispositivo móvil, aunque puedas visualizarlo es probable que no puedas guardarlo.<br><br>
+								1) Para guardar un render tu guardiana puedes hacerlo desde el popup de "Guardar PNG" seleccionando la resolución que prefieras. Si estás desde un dispositivo móvil, aunque puedas visualizarlo es probable que no puedas guardarlo. <br><br>
 
-								2) Para evitar problemas con la carga de la guardiana, puse unos botones tanto aquí como en el portrait para recargar la misma. <br><br>
+								2) Decora tu perfil con las opciones en el panel izquierdo: Puedes crear una escena bonita con dos familiares y un compañero. Si la imagen del compañero demora en cargarse es probable que no se centre bien. Si notas este inconveniente utiliza el botón para centrarlo.<br><br>
 
-								3) El desplazamiento de la guardiana, los familiares y el desplazamiento de los mismos no se guardan, solo sirven como decoración para hacer capturas del perfil. <br><br>
+								3) Utiliza el posicionamiento para avanzar o retrasar los elementos dentro del perfil.<br><br>
 
-								4) Siempre puedes utilizar el "código" para volver a generar la misma guardiana.
+								4) ¡No necesitas una guardiana! Puedes jugar con las opciones aunque no tengas una y, si no quieres el fondo default, podrás elegir uno en el vestidor.<br><br>
 
+								5) Tanto el compañero como los familiares solo son mera decoración para realizar capuras. Si compartes el link o el código de tu guardiana solo cargará ella en su posición default.<br><br>
+
+								6) Siempre puedes utilizar el "código" para volver a generar una misma guardiana. Recuerda que si tienes otra guardiana cargada, tanto ella como su "decoración" se perderá.
 								</span>
 						</div>
 					</div>

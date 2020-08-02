@@ -7,6 +7,10 @@ $(document).ready(function () {
 		document.getElementsByClassName("news-latest")[0].innerHTML = estado;
 	});
 
+    $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
+        document.getElementById("footer-links").innerHTML = afiliados;
+    });
+
 	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/trackingList.json", function(groupList, success, xhr) {
 		trackingList = JSON.parse(groupList);
 		checkLoad();
@@ -94,9 +98,10 @@ function firstLoad() {
 				aa.setAttribute("data-fancy-title","<p>undefined</p>");
 			} else {
 				aa.setAttribute("data-fancy-title","<p>" + items[b][0] + "</p>");
+				aa.setAttribute("title", items[b][0]);
 			};
 			aa.setAttribute("href",URL_FULL + items[b][2]);
-			aa.setAttribute("target","_bank");
+			aa.setAttribute("target","_blank");
 			document.getElementsByClassName("iconList")[iconListCounter].appendChild(aa);
 
 			var img = document.createElement("img");

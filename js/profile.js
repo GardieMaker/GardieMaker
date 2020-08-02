@@ -1,4 +1,5 @@
 const URL_SRC = "https://www.eldarya.es/assets/img/"; 
+const URL_PJ = "https://www.eldarya.es/assets/img/npc/mood/web/";
 
 const URL_CLOTHES = "item/player/";
 const URL_SKIN = "player/skin/";
@@ -11,9 +12,9 @@ const URL_FULL ="web_full/";
 const URL_PORTRAIT = "web_portrait/";
 var imgurl;
 
-var groupInfo, groupList, groupPet;
+var groupInfo, groupList, groupPet, groupFriend;
 var i = 0;
-var str;
+var str, portraitMin = false;
 var galor;
 //================================================================
 
@@ -35,37 +36,67 @@ $(document).ready(function iniciaTodo() {
         groupPet = JSON.parse(dataPet);
         optPet();
     });
+
+    $.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupFriend.json", function(dataFriend, success, xhr) {
+        groupFriend = JSON.parse(dataFriend);
+        optFriend();
+    });
+    
 });
 
 function getCustom() {
 	str = window.location.search;
+
 	if (str != "") {
 		str = str.slice(3);
 		customArray = str.split("&");
 		
-		cargarCanvas(customArray[0]);
+		if (customArray.length == 1) {
+            document.getElementById("player-display-draggable").style.display = "none";
+            $("#player-actions-tab li").eq(2).hide();
+        }
+        cargarCanvas(customArray[0]);
 
         $("#footer-links").html(customArray.length + " items en uso.");
 
         document.getElementById("backC").setAttribute("href","wardrobe" + window.location.search);
 
-		dragGardienne();
-		dragPet();
-
 	} else {
+
         $("#footer-links").html("Ningún item en uso.");
+        document.getElementById("player-display-draggable").style.display = "none";
+        $("#player-actions-tab li").eq(2).hide();
     };
+
+    dragGardienne('player-display-draggable');
+    dragGardienne('friend-display-draggable');
+
+    dragPet("player-display-pet");
+    dragPet("friend-display-pet");
+
 };
 
 function cargarCanvas(n) {
 
+    var error = "";
+
     try {
     	var getLista = groupList.filter(function(v){return v.itemId == n});
+        (getLista.length == 0)?(error = "Código incorrecto"):("");
     	var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
     	
     } catch {
-        alert("Se ha producido un error, la página se actualizará.");
-        location.reload();
+
+        if (error != "") {
+            alert("El código introducido no es correcto o está corrupto.");
+            document.getElementById("player-display-draggable").style.display = "none";
+            $("#player-actions-tab li").eq(2).hide();
+
+        } else {
+            alert("Se ha producido un error, la página se actualizará.");
+            location.reload();
+        }
+        
     };
 
     var newimg;
@@ -104,17 +135,40 @@ function cargarCanvas(n) {
 };
 
 function optPet() {
-    var selP = document.getElementById("selectPet");
+
+    for (s = 0; s < 2; s++) {
+
+        var selP;
+        (s == 0)?(selP = document.getElementById("select-player-pet")):(selP = document.getElementById("select-friend-pet"));
+        
+        var option = document.createElement("option");
+        option.text = "Ninguno";
+        selP.add(option);
+
+        for (p = 0; p < groupPet.length; p++) {
+            option = document.createElement("option");
+            option.text = groupPet[p][0];
+            selP.add(option);
+        };
+    };
+};
+
+function optFriend() {
+    var selF = document.getElementById("select-friend");
     
     var option = document.createElement("option");
     option.text = "Ninguno";
-    selP.add(option);
+    selF.add(option);
 
-    for (p = 0; p < groupPet.length; p++) {
+    for (f = 0; f < groupFriend.length; f++) {
         option = document.createElement("option");
-        option.text = groupPet[p][0];
-        selP.add(option);
+        option.text = groupFriend[f].name;
+        selF.add(option);
     };
+
+    option = document.createElement("option");
+    option.text = "Otro...";
+    selF.add(option);
 };
 
 function cargarPortrait(n) {
@@ -123,14 +177,29 @@ function cargarPortrait(n) {
     var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
     var newimg;
 
-    switch (getInfo[0].category) {
-        case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_PORTRAIT + getLista[0].itemURL; break;
-        case "Pieles": newimg = URL_SRC + URL_SKIN + URL_PORTRAIT + getLista[0].itemURL; break;
-        case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_PORTRAIT + getLista[0].itemURL; break;
-        case "Ojos": newimg = URL_SRC + URL_EYES + URL_PORTRAIT + getLista[0].itemURL; break;
-        case "Cabello": newimg = URL_SRC + URL_HAIR + URL_PORTRAIT + getLista[0].itemURL; break;
-        default: newimg = URL_SRC + URL_CLOTHES + URL_PORTRAIT + getLista[0].itemURL;
-    };
+    if (portraitMin == false) {
+
+        switch (getInfo[0].category) {
+            case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_PORTRAIT + getLista[0].itemURL; break;
+            case "Pieles": newimg = URL_SRC + URL_SKIN + URL_PORTRAIT + getLista[0].itemURL; break;
+            case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_PORTRAIT + getLista[0].itemURL; break;
+            case "Ojos": newimg = URL_SRC + URL_EYES + URL_PORTRAIT + getLista[0].itemURL; break;
+            case "Cabello": newimg = URL_SRC + URL_HAIR + URL_PORTRAIT + getLista[0].itemURL; break;
+            default: newimg = URL_SRC + URL_CLOTHES + URL_PORTRAIT + getLista[0].itemURL;
+        };
+
+    } else {
+
+        switch (getInfo[0].category) {
+            case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL; break;
+            case "Pieles": newimg = URL_SRC + URL_SKIN + URL_FULL + getLista[0].itemURL; break;
+            case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_FULL + getLista[0].itemURL; break;
+            case "Ojos": newimg = URL_SRC + URL_EYES + URL_FULL + getLista[0].itemURL; break;
+            case "Cabello": newimg = URL_SRC + URL_HAIR + URL_FULL + getLista[0].itemURL; break;
+            default: newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL;
+        };
+
+    }
 
     if (getInfo[0].category == "Fondos") {
     } else {
@@ -155,8 +224,6 @@ function cargarPortrait(n) {
 };
 
 function cargarPopUp() {
-    document.getElementById("player-display-draggable").style.display = "none";
-    document.getElementById("player-display-pet").style.display = "none";
 
     var div = document.createElement("div");
     div.setAttribute("id","portraitbg");
@@ -174,27 +241,39 @@ function cargarPopUp() {
 
     // boton recargar
     div = document.createElement("div");
-    div.setAttribute("class", "button");
-    div.setAttribute("style", "display: block;position: absolute;z-index: 3;top: 17px;margin-left: 355px");
-    div.setAttribute("onclick", "reLoadPortrait()");
-    div.innerHTML = "Volver a cargar";
+    div.setAttribute("id", "portrait-buttons");
     document.getElementById("portraitcontainer").appendChild(div);
 
-    document.getElementsByTagName("body")[0].setAttribute("style", "overflow:hidden");
+    div = document.createElement("div");
+    div.setAttribute("class", "button");
+    div.setAttribute("id", "max-size");
+    div.setAttribute("onclick", "maxSize()");
+    (portraitMin == false)?(div.innerHTML = "Volver a cargar"):(div.innerHTML = "Ver. 800x1132");
+    document.getElementById("portrait-buttons").appendChild(div);
 
-}
+    div = document.createElement("div");
+    div.setAttribute("class", "button");
+    div.setAttribute("id", "min-size");
+    div.setAttribute("onclick", "minSize()");
+    (portraitMin == true)?(div.innerHTML = "Volver a cargar"):(div.innerHTML = "Ver. 420x594");
+    document.getElementById("portrait-buttons").appendChild(div);
+
+    document.getElementsByTagName("body")[0].setAttribute("style", "overflow:hidden");
+};
 
 function cierraPopUp() {
     $("div").remove("#portraitcontainer");
     $("div").remove("#portraitbg");
-    document.getElementById("player-display-draggable").style.display = "block";
-    document.getElementById("player-display-pet").style.display = "block";
     document.getElementsByTagName("body")[0].removeAttribute("style");
-}
+};
 
-function reLoadPortrait() {
+function maxSize() {
+
+    portraitMin = false;
+    $("#max-size").text("Volver a cargar");
+    $("#min-size").text("Ver. 420x594");
+
     $("canvas").remove("#portrait");
-
     var portrait = document.createElement("canvas");
     portrait.setAttribute("id","portrait");
     portrait.setAttribute("width", "800");
@@ -203,27 +282,62 @@ function reLoadPortrait() {
 
     i = 0;
     cargarPortrait(customArray[i]);
-}
+};
 
+function minSize() {
 
-function cargarPet(select, check) {
+    portraitMin = true;
+    $("#max-size").text("Ver. 800x1132");
+    $("#min-size").text("Volver a cargar");
 
-    var imagep = document.getElementsByTagName("img")[1];
+    $("canvas").remove("#portrait");
+    var portrait = document.createElement("canvas");
+    portrait.setAttribute("id","portrait");
+    portrait.setAttribute("width", "420");
+    portrait.setAttribute("height", "594");
+    document.getElementById("portraitcontainer").appendChild(portrait);
+
+    i = 0;
+    cargarPortrait(customArray[i]);
+};
+
+function cargarPet(select, check, owner) {
+
+    var imagep;
+    (owner == "player")?(imagep = document.getElementById("img-player-pet")):(imagep = document.getElementById("img-friend-pet"));
+
     var imgPet;
 
     if (select == "Ninguno") {
-        $(".chkVb").hide();
+        if (owner == "player") {
+            $("#check-player-span").hide();
+        } else {
+            $("#check-friend-span").hide();
+        }
+
         imagep.src = "";
 
     } else {
         var fPet = groupPet.filter(function(v){return v[0] == select});
 
         if (fPet[0][1] === "none" || fPet[0][2] === "none") {
-            $(".chkVb").hide();
+            
+            if (owner == "player") {
+                $("#check-player-span").hide();
+            } else {
+                $("#check-friend-span").hide();
+            }
+
             (fPet[0][1] === "none")?(imgPet = fPet[0][2]):(imgPet = fPet[0][1]);
 
         } else {
-            $(".chkVb").show();
+            
+            if (owner == "player") {
+                $("#check-player-span").show();
+            } else {
+                $("#check-friend-span").show();
+            }
+
             (check === false)?(imgPet = fPet[0][1]):(imgPet = fPet[0][2]);
         };
 
@@ -238,7 +352,9 @@ function cargarPet(select, check) {
             imagep.style.margin = "0";
 
             if (galor == true) {
-                var asda = document.getElementById("player-display-pet");
+                var asda;
+                (owner == "player")?(asda = document.getElementById("player-display-pet")):(asda = document.getElementById("friend-display-pet"));
+                
                 asda.setAttribute("style","position: absolute; inset: 100px auto auto 100px; width: auto; height: auto");
                 galor = false;
             };   
@@ -246,10 +362,136 @@ function cargarPet(select, check) {
     };
 };
 
+function cargarFriend(nombre, i) {
+
+    var img = document.getElementById("img-friend");
+
+    if(i != "url") {
+
+        var filtro = groupFriend.filter(function(v){return v.name == nombre});        
+        img.setAttribute("src", URL_PJ + filtro[0].version[i - 1]);
+        img.style.height = filtro[0].altura;
+
+        alert("Un momento...");
+
+        var cuenta = ((210 - img.clientWidth)/2);
+        img.style.marginLeft = cuenta + "px";
+
+    } else {
+
+        img.setAttribute("src", nombre);
+        img.style.height = $("#input-height").val() + "px";
+
+        alert("Un momento...");
+
+        var cuenta = ((210 - img.clientWidth)/2);
+        img.style.marginLeft = cuenta + "px";
+
+    };
+};
+
+function rellenaSelectPosicion() {
+
+    var pet1 = $("#select-player-pet :selected").text();
+    var friend = $("#select-friend :selected").text();
+    var pet2 = $("#select-friend-pet :selected").text();
+
+    var select = document.getElementById("position-player");
+    var gardie = document.getElementById("player-display-draggable");
+    $('#position-player option').remove();
+
+    if (gardie.style.display != "none") {
+        var option = document.createElement("option");
+        option.text = "Gardienne";
+        select.add(option);
+    };
+
+    if (pet1 != "Ninguno") {
+        var option = document.createElement("option");
+        option.text = "Familiar 1";
+        select.add(option);
+    };
+
+    if (friend != "Ninguno") {
+        var option = document.createElement("option");
+        option.text = "Compañero";
+        select.add(option);
+    };
+
+    if (pet2 != "Ninguno") {
+        var option = document.createElement("option");
+        option.text = "Familiar 2";
+        select.add(option);
+    };
+
+    
+    if (select.length > 1) {
+        document.getElementsByClassName("bonus-container")[2].style.display = "revert";
+    } else {
+        document.getElementsByClassName("bonus-container")[2].style.display = "none";
+    };
+};
+
+function muevePosicion(mov) {
+    var select = document.getElementById("position-player");
+    var elmnt, z, uno, dos, tres, cuatro;
+    var opcion = $("#position-player :selected").text();
+
+    // Obtiene elemento que cambia de posición
+    if (opcion == "Gardienne") {
+        elmnt = document.getElementById("player-display-draggable");
+    } else if (opcion == "Familiar 1") {
+        elmnt = document.getElementById("player-display-pet");
+    } else if (opcion == "Compañero") {
+        elmnt = document.getElementById("friend-display-draggable");
+    } else if (opcion == "Familiar 2") {
+        elmnt = document.getElementById("friend-display-pet");
+    };
+
+    z = elmnt.style.zIndex;
+
+    // Obtiene todos los elementos para obtener posicion
+    uno = document.getElementById("player-display-draggable");
+    dos = document.getElementById("player-display-pet");
+    tres = document.getElementById("friend-display-draggable");
+    cuatro = document.getElementById("friend-display-draggable");
+
+    var zUno = uno.style.zIndex;
+    var zDos = dos.style.zIndex;
+    var zTres = tres.style.zIndex;
+    var zCuatro = cuatro.style.zIndex;
+
+    // Fija nueva ubicación
+    (mov == "sube")?(z++):(z--);
+
+    // Busca elemento con misma posición de z
+    if (mov == "sube") {
+        if (z < 5) {
+            (zUno == z)?(zUno--):(zDos == z)?(zDos--):(zTres == z)?(zTres--):(zCuatro--);
+        };
+    } else {
+        if (z > 0) {
+            (zUno == z)?(zUno++):(zDos == z)?(zDos++):(zTres == z)?(zTres++):(zCuatro++);
+        };
+    };
+
+    // Fija nuevos posiciones finales
+    uno.style.zIndex = zUno;
+    dos.style.zIndex = zDos;
+    tres.style.zIndex = zTres;
+    cuatro.style.zIndex = zCuatro;
+
+    // Solo cambia el valor si z se encuentra dentro del rango
+    if (z < 5 && z > 0) {
+        elmnt.style.zIndex = z;
+    }
+}
+
 // ------------------------------------
 
-function dragGardienne() {
-    var elmnt = document.getElementById("player-display-draggable");
+function dragGardienne(pj) {
+    //var elmnt = document.getElementById("player-display-draggable");
+    var elmnt = document.getElementById(pj);
     var pos1 = 0, pos3 = 0;
     if (document.getElementById(elmnt.id + "header")) {
         /* if present, the header is where you move the DIV from:*/
@@ -293,8 +535,8 @@ function dragGardienne() {
     };
 };
 
-function dragPet() {
-	var pet = document.getElementById("player-display-pet");
+function dragPet(id) {
+	var pet = document.getElementById(id);
 	//var petContainer = document.getElementById("player-pet-containment");
 	var pp1 = 0, pp2 = 0, pp3 = 0, pp4 = 0;
 	if (document.getElementById(pet.id + "header")) {
@@ -385,13 +627,12 @@ $(function() {
 
     $("#getPortrait").click(function() {
         cargarPopUp();
-        var portrait = document.createElement("canvas");
-        portrait.setAttribute("id","portrait");
-        portrait.setAttribute("width", "800");
-        portrait.setAttribute("height", "1132");
-        document.getElementById("portraitcontainer").appendChild(portrait);
-        i = 0;
-        cargarPortrait(customArray[i]);
+
+        if (portraitMin == false) {
+            maxSize();
+        } else {
+            minSize();
+        }
     });
 
     $("#getCode").click(function() {
@@ -405,15 +646,101 @@ $(function() {
         alert("Se ha copiado el código.");
     });
 
-    $("#selectPet").change(function() {
-        var a = $("#selectPet :selected").text();
-        var b = $("#chkPet").prop('checked');
-        cargarPet(a,b);
+    $("#select-player-pet").change(function() {
+        var a = $("#select-player-pet :selected").text();
+        var b = $("#check-player-pet").prop('checked');
+        var c = "player";
+        cargarPet(a,b,c);
+        rellenaSelectPosicion();
     });
-    $("#chkPet").change(function() {
-        var a = $("#selectPet :selected").text();
-        var b = $("#chkPet").prop('checked');
-        cargarPet(a,b);
+    $("#check-player-pet").change(function() {
+        var a = $("#select-player-pet :selected").text();
+        var b = $("#check-player-pet").prop('checked');
+        var c = "player";
+        cargarPet(a,b,c);
+    });
+
+    $("#select-friend-pet").change(function() {
+        var a = $("#select-friend-pet :selected").text();
+        var b = $("#check-friend-pet").prop('checked');
+        var c = "friend";
+        cargarPet(a,b,c);
+        rellenaSelectPosicion();
+    });
+    $("#check-friend-pet").change(function() {
+        var a = $("#select-friend-pet :selected").text();
+        var b = $("#check-friend-pet").prop('checked');
+        var c = "friend";
+        cargarPet(a,b,c);
+    });
+
+    $("#select-friend").change(function() {
+
+        document.getElementById("img-friend").setAttribute("src","");
+        $('#select-version option').remove();
+        var a = $("#select-friend :selected").text();
+        var selV = document.getElementById("select-version");
+        document.getElementById("otro-container").style.display = "none";
+
+        if(a != "Ninguno"){
+            document.getElementById("button-centrar").style.display = "revert";
+        } else {
+            document.getElementById("button-centrar").style.display = "none";
+        };
+
+        if(a != "Ninguno" && a != "Otro...") {
+            document.getElementById("friend-display-draggable").style.display = "block";
+            var filtro = groupFriend.filter(function(v){return v.name == a});
+
+            for (f = 1; f <= filtro[0].version.length; f++) {
+                option = document.createElement("option");
+                option.text = f;
+                selV.add(option);
+            };
+
+            selV.style.display = "revert";
+            var b = $("#select-version :selected").text();
+
+            cargarFriend(a,b);
+
+        } else if (a == "Otro...") {
+
+            selV.style.display = "none";
+            document.getElementById("friend-display-draggable").style.display = "none";
+            document.getElementById("otro-container").style.display = "block";
+
+        } else {
+            document.getElementById("friend-display-draggable").style.display = "none";
+            selV.style.display = "none";
+        };
+
+        rellenaSelectPosicion();
+    });
+    $("#select-version").change(function() {
+        document.getElementById("img-friend").setAttribute("src","");
+        var a = $("#select-friend :selected").text();
+        var b = $("#select-version :selected").text();
+        cargarFriend(a,b);
+    });
+
+    $("#button-centrar").click(function() {
+        var img = document.getElementById("img-friend");
+        var cuenta = ((210 - img.clientWidth)/2);
+        img.style.marginLeft = cuenta + "px";
+    });
+
+    $("#load-url").click(function() {
+        document.getElementById("friend-display-draggable").style.display = "block";
+        var url = $("#input-url").val();
+        cargarFriend(url, "url");
+        rellenaSelectPosicion();
+    });
+    
+    $("#position-bajar").click(function() {
+        muevePosicion("baja");
+    });
+    $("#position-subir").click(function() {
+        muevePosicion("sube");
     });
 
     $("#loadCode").click(function() {
@@ -424,18 +751,3 @@ $(function() {
 
 });
 
-
-// ------------------------------------------------------
-
-function key() {
-
-    var input = document.getElementById("inputCode");
-
-    input.addEventListener("keypress", function(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            document.getElementById("loadCode").click();
-        };
-    });
-
-};
