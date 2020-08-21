@@ -63,6 +63,10 @@ canvas {
 	width: 325px;
 	height: 80px;
 	text-align: center;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select:none;
 }
 
 .marketplace-itemDetail-cont, .marketplace-itemDetail-cont2 {
@@ -278,6 +282,10 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 
 .pagination{
 	margin-left: 15px;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select:none;
 }
 
 .page{

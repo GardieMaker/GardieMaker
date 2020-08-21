@@ -1,6 +1,6 @@
 const URL_SRC = "https://www.eldarya.es/assets/img/player/hair/icon/";
 const URL_FULL = "https://www.eldarya.es/assets/img/player/hair/web_portrait/";
-var trackingList, tracking = "all";;
+var trackingList, tracking = "all";
 //================================================================
 $(document).ready(function () {
 	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/activities", function(estado, success, xhr) {
@@ -11,29 +11,17 @@ $(document).ready(function () {
         document.getElementById("footer-links").innerHTML = afiliados;
     });
 
-	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/trackingList.json", function(groupList, success, xhr) {
-		trackingList = JSON.parse(groupList);
-		checkLoad();
-	});
+	const requestTracking = new XMLHttpRequest();
+	requestTracking.open("GET", "/data/trackingList.json");
+	requestTracking.responseType = "json";
+	requestTracking.send();
+	requestTracking.onload = function() {trackingList = requestTracking.response;firstLoad();}
 
 });
-
-function checkLoad() {
-
-	try {
-		if (trackingList != undefined) {
-			firstLoad();
-		};
-	} catch {
-		alert("Se ha producido un error, la página se actualizará.");
-		location.reload();
-	};
-};
 
 function firstLoad() {
 
 	var pageMain = document.getElementsByClassName("page-main-container")[0];
-
 	var iconListCounter = 0;
 
 	// Debe contar cuantos grupos contiene

@@ -1,4 +1,4 @@
-const URL_SRC = "https://www.eldarya.es/assets/img/"; 
+const URL_SRC = "https://www.eldarya.es/assets/img/";
 const URL_PJ = "https://www.eldarya.es/assets/img/npc/mood/web/";
 
 const URL_CLOTHES = "item/player/";
@@ -12,7 +12,7 @@ const URL_FULL ="web_full/";
 const URL_PORTRAIT = "web_portrait/";
 var imgurl;
 
-var groupInfo, groupList, groupPet, groupFriend;
+var dbCount = 0, groupInfo, groupList, groupPet, groupFriend;
 var i = 0;
 var str, portraitMin = false;
 var galor;
@@ -23,26 +23,44 @@ $(document).ready(function iniciaTodo() {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupInfo.json", function(dataInfo, success, xhr) {
-		groupInfo = JSON.parse(dataInfo);
-	});
+    const requestInfo = new XMLHttpRequest();
+    requestInfo.open("GET", "/data/groupInfo.json");
+    requestInfo.responseType = "json";
+    requestInfo.send();
+    requestInfo.onload = function() {tempDB = requestInfo.response;countDB(tempDB, "info");};
 
-	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupList.json", function(dataList, success, xhr) {
-		groupList = JSON.parse(dataList);
-		getCustom();
-	});
+    const requestList = new XMLHttpRequest();
+    requestList.open("GET", "/data/groupList.json");
+    requestList.responseType = "json";
+    requestList.send();
+    requestList.onload = function() {tempDB = requestList.response;countDB(tempDB, "list");};
 
-    $.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupPet.json", function(dataPet, success, xhr) {
-        groupPet = JSON.parse(dataPet);
-        optPet();
-    });
+    const requestPet = new XMLHttpRequest();
+    requestPet.open("GET", "/data/groupPet.json");
+    requestPet.responseType = "json";
+    requestPet.send();
+    requestPet.onload = function() {tempDB = requestPet.response;countDB(tempDB, "pet");};
 
-    $.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupFriend.json", function(dataFriend, success, xhr) {
-        groupFriend = JSON.parse(dataFriend);
-        optFriend();
-    });
-    
+    const requestFriend = new XMLHttpRequest();
+    requestFriend.open("GET", "/data/groupFriend.json");
+    requestFriend.responseType = "json";
+    requestFriend.send();
+    requestFriend.onload = function() {tempDB = requestFriend.response;countDB(tempDB, "friend");};
+
 });
+
+
+function countDB(db, name) {
+    
+    switch (name) {
+        case "info":groupInfo = db;dbCount++;break;
+        case "list":groupList = db;dbCount++;break;
+        case "pet":groupPet = db;dbCount++;break;
+        case "friend":groupFriend = db;dbCount++;
+    };
+    
+    if (dbCount == 4) {getCustom();optPet();optFriend();};
+};
 
 function getCustom() {
 	str = window.location.search;

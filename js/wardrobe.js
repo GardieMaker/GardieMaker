@@ -11,7 +11,7 @@ const URL_FULL ="web_full/";
 const URL_PORTRAIT = "web_portrait/";
 var imgurl;
 
-var groupInfo, groupList;
+var groupInfo, groupList, dbCount = 0;
 var filterGroup = [];
 var selectedPage = 1;
 var paginas, resto;
@@ -26,7 +26,6 @@ var catEs, tipo, seReemplaza = [], posicionReemplazo = "none";
 // Determina si el submenu está abierto o no
 var submenu = false;
 var getGroupId, mainPage, mainPageI, itemsxpag = 7;
-
 //----------------------------------------------
 
 $(document).ready(function iniciaTodo() {
@@ -35,17 +34,30 @@ $(document).ready(function iniciaTodo() {
 		document.getElementsByClassName("news-latest")[0].innerHTML = estado;
 	});
 
-	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupInfo.json", function(dataInfo, success, xhr) {
-		groupInfo = JSON.parse(dataInfo);
-	});
+	const requestInfo = new XMLHttpRequest();
+	requestInfo.open("GET", "/data/groupInfo.json");
+	requestInfo.responseType = "json";
+	requestInfo.send();
+	requestInfo.onload = function() {tempDB = requestInfo.response;countDB(tempDB, "info");}
 
-	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/groupList.json", function(dataList, success, xhr) {
-		groupList = JSON.parse(dataList);
-		updateFilters();
-		getCustom();
-	});
+	const requestList = new XMLHttpRequest();
+	requestList.open("GET", "/data/groupList.json");
+	requestList.responseType = "json";
+	requestList.send();
+	requestList.onload = function() {tempDB = requestList.response;countDB(tempDB, "list");}
 
 });
+
+function countDB(db, name) {
+    
+    switch (name) {
+        case "info":groupInfo = db;dbCount++;break;
+        case "list":groupList = db;dbCount++;
+    };
+
+    if (dbCount == 2) {updateFilters();getCustom();};
+};
+
 
 function getCustom() {
 	var str = window.location.search;
