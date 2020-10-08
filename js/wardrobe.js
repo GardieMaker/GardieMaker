@@ -1,14 +1,6 @@
 const URL_SRC = "https://www.eldarya.es/assets/img/"; 
-
-const URL_CLOTHES = "item/player/";
-const URL_SKIN = "player/skin/";
-const URL_MOUTH = "player/mouth/";
-const URL_EYES = "player/eyes/";
-const URL_HAIR = "player/hair/";
-
-const URL_ICON = "icon/";
-const URL_FULL ="web_full/";
-const URL_PORTRAIT = "web_portrait/";
+const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/", URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
+const URL_ICON = "icon/", URL_FULL ="web_full/", URL_PORTRAIT = "web_portrait/";
 var imgurl;
 
 var groupInfo, groupList, dbCount = 0;
@@ -19,13 +11,14 @@ var paginas, resto;
 // Variables para cargar items
 var primerItem, ultimoItem, itemLooper, item, filtro, getCodigo, getGrupo, getNombre, getCategoria, getRareza, getEspecial, getNota;
 //Variables para filtros
-var fGrupos, fCategorias, fEspecial, fRareza, fOrden, fName;
+var fCategorias, fEspecial, fRareza, fOrden, fName;
 // Variables para fijar items
-var customArray = [], selectedCode, selectedGroup, unset, hijo;
+var customArray = [], selectedCode, selectedGroup, hayFondo = false, unset, hijo;
 var catEs, tipo, seReemplaza = [], posicionReemplazo = "none";
 // Determina si el submenu está abierto o no
 var submenu = false;
 var getGroupId, mainPage, mainPageI, itemsxpag = 7;
+var REMOTE = "https://gardiemaker.github.io";
 //----------------------------------------------
 
 $(document).ready(function iniciaTodo() {
@@ -34,16 +27,10 @@ $(document).ready(function iniciaTodo() {
 		document.getElementsByClassName("news-latest")[0].innerHTML = estado;
 	});
 
-	const requestInfo = new XMLHttpRequest();
-	requestInfo.open("GET", "/data/groupInfo.json");
-	requestInfo.responseType = "json";
-	requestInfo.send();
+	const requestInfo = new XMLHttpRequest();requestInfo.open("GET", REMOTE + "/data/groupInfo.json");requestInfo.responseType = "json";requestInfo.send();
 	requestInfo.onload = function() {tempDB = requestInfo.response;countDB(tempDB, "info");}
 
-	const requestList = new XMLHttpRequest();
-	requestList.open("GET", "/data/groupList.json");
-	requestList.responseType = "json";
-	requestList.send();
+	const requestList = new XMLHttpRequest();requestList.open("GET", REMOTE + "/data/groupList.json");requestList.responseType = "json";requestList.send();
 	requestList.onload = function() {tempDB = requestList.response;countDB(tempDB, "list");}
 
 });
@@ -73,14 +60,11 @@ function getCustom() {
 			window.location.href = "wardrobe";
 		};
 	};
-
 };
 
 function unselectAll() {
 	var lista = document.getElementsByClassName("marketplace-abstract marketplace-search-item selected");
-	if (lista.length == 1) {
-		lista[0].setAttribute("class","marketplace-abstract marketplace-search-item");
-	}
+	if (lista.length == 1) lista[0].setAttribute("class","marketplace-abstract marketplace-search-item");
 	
 	posicionReemplazo = "none";
 	limpiarCanvas();
@@ -164,8 +148,7 @@ function searchtoSelect(code) {
 
 function nuevoCanvas() {
 
-	var temp = groupList.filter(function(v){return v.itemId == selectedCode});
-	var img;
+	var temp = groupList.filter(function(v){return v.itemId == selectedCode}), img;
 
 	switch (tipo) {
 		case "Pieles": img = URL_SRC + URL_SKIN + URL_FULL + temp[0].itemURL; break;
@@ -176,11 +159,10 @@ function nuevoCanvas() {
 	};
 	
 	var newimg = img;
-	//var tipo = document.getElementsByClassName("abstract-type")[n].innerHTML;
 
 	if (tipo == "Fondos") {
+		hayFondo = true;
 		document.getElementById("marketplace-avatar-background-preview").style.backgroundImage = "url('" + newimg + "')";
-		//
 	} else {
 	//*------------------
 		var canvas = document.createElement("canvas");
@@ -203,9 +185,7 @@ function nuevoCanvas() {
 
 	var cont = document.getElementsByTagName("canvas");
 	for (z = 0; z < cont.length; z++) {
-		if (cont[z].getAttribute("id") == selectedCode) {
-			hijo = z;
-		};
+		if (cont[z].getAttribute("id") == selectedCode) hijo = z;
 	};
 };
 
@@ -232,19 +212,21 @@ function cargarArray(i) {
 		};
 
 		if (filtro[0].category == "Fondos") {
+			hayFondo = true;
 			document.getElementById("marketplace-avatar-background-preview").style.backgroundImage = "url('" + img + "')";
 		} else {
 
 			var canvas = document.createElement("canvas");
 			canvas.setAttribute("width", "420");
 			canvas.setAttribute("height", "594");
-			if (i == posicionReemplazo) {
-				canvas.setAttribute("id",selectedCode);
-			} 
+			if (i == posicionReemplazo) canvas.setAttribute("id",selectedCode);
+
 			document.getElementById("marketplace-avatar-preview").appendChild(canvas);
 
 			canvas = document.getElementsByTagName("canvas");
-			var ctx = canvas[i].getContext("2d");
+			var ctx;
+			
+			hayFondo ? ctx = canvas[i-1].getContext("2d") : ctx = canvas[i].getContext("2d")
 
 			img2 = new Image();
 			img2.onload = function() {
@@ -256,7 +238,7 @@ function cargarArray(i) {
 		};
 
 	if (i < customArray.length - 1) {
-		i++
+		i++;
 		cargarArray(i);
 	};
 };
@@ -264,6 +246,7 @@ function cargarArray(i) {
 function limpiarCanvas(){
 
 	document.getElementById("marketplace-avatar-background-preview").removeAttribute("style");
+	hayFondo = false;
 	var child = document.getElementsByTagName("canvas");
 	var parent = document.getElementById("marketplace-avatar-preview");
 
@@ -272,9 +255,7 @@ function limpiarCanvas(){
 	};
 
 	// Si hay algo fijado en array, cargarlo
-	if (customArray.length != 0) {
-		cargarArray(0);
-	};		
+	if (customArray.length != 0) cargarArray(0);
 };
 
 //////////////////////////////////////////////////////////////
@@ -291,9 +272,13 @@ function doMove(place) {
 			padre.insertBefore(nodo, cont[hijo]);
 		}
 	} else if (place == "next") {
-		nodo.parentNode.removeChild(nodo);
-		hijo++;
-		padre.insertBefore(nodo, cont[hijo]);
+		var max;
+		hayFondo ? max = cont.length - 1 : max = cont.length;
+		if (hijo < max) {
+			nodo.parentNode.removeChild(nodo);
+			hijo++;
+			padre.insertBefore(nodo, cont[hijo]);
+		};
 	};
 };
 
@@ -310,7 +295,7 @@ function doSet(code) {
 			} else {
 				customArray.push(selectedCode);
 			};
-			
+
 			var str = "?s=";
 
 			for (i = 0; i < customArray.length; i++) {
@@ -318,7 +303,6 @@ function doSet(code) {
 			};
 
 			history.pushState(null, "", str);
-
 			limpiarCanvas();
 
 		} else {
@@ -335,25 +319,20 @@ function doSet(code) {
 		var str;
 
 		customArray.splice(b,1);
-		if (customArray.length == 0) {
-			window.location.search = "";
-		} else {
-			str = "?s=";
-		};
+		customArray.length == 0 ? window.location.search = "" : str = "?s=";
 
 		for (i = 0; i < customArray.length; i++) {
 			(i == 0)? (str = str + customArray[i]):(str = str + "&" + customArray[i]);
 		};
 		
 		history.pushState(null, "", str);
-
 		limpiarCanvas();
 
 	} else if (setunset == "REEMPLAZAR") {
 		
 		customArray.splice(posicionReemplazo,1);
-
 		var srt = window.location.search;
+
 		if (srt.includes("&" + selectedCode)) {
 			customArray.splice(hijo,0, "&" + selectedCode); //Nueva ubicación
 		} else {
@@ -367,16 +346,13 @@ function doSet(code) {
 		
 		history.pushState(null, "", str);
 		limpiarCanvas();
-
 	};
 
 	unselectAll();
-
 };
 
 function genPerfil() {
 	var str = window.location.search;
-	
 	window.location.href = "./profile" + str;
 }
 
@@ -391,10 +367,10 @@ function crearPagination() {
 	if (itemsxpag == 7) {
 		$("div").remove("#marketplace-search-title");
 		$("div").remove(".marketplace-abstract.marketplace-search-back");
-	}
-		
+	};
+
 	// Cada página tiene 7 elementos)
-	
+
 	if (filterGroup.length <= itemsxpag) {
 
 		paginas = 0;
@@ -406,10 +382,7 @@ function crearPagination() {
 		resto = filterGroup.length % itemsxpag;
 
 		// Comprobar si hay páginas incompletas
-		if (resto != 0) {
-			paginas = Math.ceil(paginas);
-		};
-
+		if (resto != 0) paginas = Math.ceil(paginas);
 	};
 
 		// --------------------------------------------------
@@ -421,7 +394,7 @@ function crearPagination() {
 
 	if (paginas <= 12) {
 		var indice = 0;
-			
+
 		for (i = 1; i <= paginas; i++) {
 			// Crear elementos
 			var page = document.createElement("div");
@@ -468,12 +441,10 @@ function crearPagination() {
 				if ((Number(pregunta) - 1) == Number(selectedPage)) {
 
 					if (i == 0) {
-
 						document.getElementsByClassName("page")[i].setAttribute("class", "page selected");
 						break;
 
 					} else {
-
 						document.getElementsByClassName("page")[i - 1].setAttribute("class", "page selected");
 						break;
 
@@ -493,22 +464,17 @@ function searchBack() {
 	updateFilters();
 
 }
-	
+
 function limpiaElementos() {
 	var itemsVisibles = document.getElementsByClassName("marketplace-abstract marketplace-search-item");
 	for (i = 0; i < 7; i++) {
 		itemsVisibles[i].innerHTML = "";
 		itemsVisibles[i].removeAttribute("style");
-		//itemsVisibles[i].style.display = "none";
 
-		if (itemsVisibles[i].style.display == "none") {
-				itemsVisibles[i].removeAttribute("style");
-			};
+		if (itemsVisibles[i].style.display == "none") itemsVisibles[i].removeAttribute("style");
 	};
 
-	if (itemsxpag == 6) {
-		itemsVisibles[6].style.display = "none";
-	}
+	if (itemsxpag == 6) itemsVisibles[6].style.display = "none";
 };
 
 function selectPage(n) {
@@ -519,11 +485,10 @@ function selectPage(n) {
 	if (submenu == false) {
 		mainPageI = n;
 		updateFilters();
-		
+
 	} else {
 		crearPagination();
-	}
-	
+	};
 };
 
 function hacerTruncation() {
@@ -610,11 +575,7 @@ function cargaItems(pagsel) {
 		ultimoItem = filterGroup.length;
 		itemLooper = 0;
 		for (item = primerItem; item < ultimoItem; item++) {
-			
-			getInfo();
-			getItems();
-			itemLooper++;
-
+			getInfo();getItems();itemLooper++;
 		};
 
 		for (item = itemLooper; item < 7; item++) {
@@ -626,9 +587,7 @@ function cargaItems(pagsel) {
 		ultimoItem = resto;
 		itemLooper = 0;
 		for (item = primerItem; item < ultimoItem; item++) {
-			getInfo();
-			getItems();
-			itemLooper++;
+			getInfo();getItems();itemLooper++;
 		};
 
 		for (item = itemLooper; item < 7; item++) {
@@ -644,14 +603,10 @@ function cargaItems(pagsel) {
 			if (document.getElementsByClassName("marketplace-abstract marketplace-search-item")[itemLooper].style.display == "none") {
 				document.getElementsByClassName("marketplace-abstract marketplace-search-item")[itemLooper].removeAttribute("style");
 			};
-			getInfo();
-			getItems();
-			itemLooper++;
 
+			getInfo();getItems();itemLooper++;
 		};
-
 	};
-
 };
 
 function getItems() {
@@ -672,21 +627,11 @@ function getItems() {
 		itemRarity.setAttribute("class", "anim-marker");
 	} else {
 		switch (getRareza) {
-			case "Común":
-				itemRarity.setAttribute("class", "rarity-marker-common");
-				break;
-			case "Raro":
-				itemRarity.setAttribute("class", "rarity-marker-rare");
-				break;
-			case "Épico":
-				itemRarity.setAttribute("class", "rarity-marker-epic");
-				break;
-			case "Legendario":
-				itemRarity.setAttribute("class", "rarity-marker-legendary");
-				break;
-			case "Evento":
-				itemRarity.setAttribute("class", "rarity-marker-event");
-				break;
+			case "Común":itemRarity.setAttribute("class", "rarity-marker-common");break;
+			case "Raro":itemRarity.setAttribute("class", "rarity-marker-rare");break;
+			case "Épico":itemRarity.setAttribute("class", "rarity-marker-epic");break;
+			case "Legendario":itemRarity.setAttribute("class", "rarity-marker-legendary");break;
+			case "Evento":itemRarity.setAttribute("class", "rarity-marker-event");break;
 		};
 	};
 
@@ -697,20 +642,11 @@ function getItems() {
 
 		var itemEspecial = document.createElement("div");
 		switch (getEspecial) {
-			case "Brillante":
-				itemEspecial.setAttribute("class", "tooltip guard-gem guard-1");
-				break;
-			case "Obsidiana":
-				itemEspecial.setAttribute("class", "tooltip guard-gem guard-2");
-				break;
-			case "Absenta":
-				itemEspecial.setAttribute("class", "tooltip guard-gem guard-3");
-				break;
-			case "Sombra":
-				itemEspecial.setAttribute("class", "tooltip guard-gem guard-4");
-				break;
-			default:
-			break;
+			case "Brillante":itemEspecial.setAttribute("class", "tooltip guard-gem guard-1");break;
+			case "Obsidiana":itemEspecial.setAttribute("class", "tooltip guard-gem guard-2");break;
+			case "Absenta":itemEspecial.setAttribute("class", "tooltip guard-gem guard-3");break;
+			case "Sombra":itemEspecial.setAttribute("class", "tooltip guard-gem guard-4");break;
+			default:break;
 		};
 		document.getElementsByClassName("img-container")[itemLooper].appendChild(itemEspecial);
 	};
@@ -754,7 +690,7 @@ function getItems() {
 		document.getElementsByClassName("abstract-code")[itemLooper].appendChild(itemCode);
 
 	} else {
-		
+
 		itemEX.setAttribute("data-itemid", getCodigo);
 
 		// Codigo
@@ -776,7 +712,7 @@ function getItems() {
 function getInfo() {
 
 	getGrupo = filterGroup[item].groupId;
-	
+
 	try {
 		filtro = groupInfo.filter(function(v){return v.groupId == getGrupo});
 
@@ -785,63 +721,41 @@ function getInfo() {
 		(filterGroup[item].rarity == undefined)?(getRareza = filtro[0].rarity):(getRareza = filterGroup[item].rarity);
 		(filterGroup[item].note == undefined)?(getNota = filtro[0].note):(getNota = filterGroup[item].note);
 		(filterGroup[item].especial == undefined)?(getEspecial = filtro[0].especial):(getEspecial = filterGroup[item].especial);
-		
 
 		switch (getCategoria) {
-			case "Pieles":
-				imgurl = URL_SRC + URL_SKIN + URL_ICON + filterGroup[item].itemURL;
-				break;
-			case "Bocas":
-				imgurl = URL_SRC + URL_MOUTH + URL_ICON + filterGroup[item].itemURL;
-				break;
-			case "Ojos":
-				imgurl = URL_SRC + URL_EYES + URL_ICON + filterGroup[item].itemURL;
-				break;
-			case "Cabello":
-				imgurl = URL_SRC + URL_HAIR + URL_ICON + filterGroup[item].itemURL;
-				break;
-			default:
-				imgurl = URL_SRC + URL_CLOTHES + URL_ICON + filterGroup[item].itemURL;
-		
+			case "Pieles":imgurl = URL_SRC + URL_SKIN + URL_ICON + filterGroup[item].itemURL;break;
+			case "Bocas":imgurl = URL_SRC + URL_MOUTH + URL_ICON + filterGroup[item].itemURL;break;
+			case "Ojos":imgurl = URL_SRC + URL_EYES + URL_ICON + filterGroup[item].itemURL;break;
+			case "Cabello":imgurl = URL_SRC + URL_HAIR + URL_ICON + filterGroup[item].itemURL;break;
+			default:imgurl = URL_SRC + URL_CLOTHES + URL_ICON + filterGroup[item].itemURL;
 		};
 
 	} catch {
-
 		alert("Se ha producido un error, la página se actualizará.");
 		location.reload();
-
 	};
-
 };
 
 $(function() { 
 
 	// Filtros
-		$("#filter-codeOptions").change(function() {
-			selectedPage = 1;
-			itemsxpag = 7;
-			submenu = false;
-			document.getElementById("filter-orderOptions").style.display = "inline-block";
-			updateFilters();
-		});
 		$("#filter-bodyLocationOptions").change(function() {
-			selectedPage = 1;
-			itemsxpag = 7;
-			submenu = false;
+			selectedPage = 1;itemsxpag = 7;submenu = false;
 			document.getElementById("filter-orderOptions").style.display = "inline-block";
+			$("#filter-guardOptions").val("");
+			$("#filter-rarityOptions").val("");
+			$("#filter-itemName").val("");
+
 			updateFilters();
 		});
 		$("#filter-guardOptions").change(function() {
-			selectedPage = 1;
-			itemsxpag = 7;
-			submenu = false;
+			selectedPage = 1;itemsxpag = 7;submenu = false;
 			document.getElementById("filter-orderOptions").style.display = "inline-block";
+			if ($("#filter-guardOptions").val() == "Arcoíris" ) $("#filter-bodyLocationOptions").val("");
 			updateFilters();
 		});
 		$("#filter-rarityOptions").change(function() {
-			selectedPage = 1;
-			itemsxpag = 7;
-			submenu = false;
+			selectedPage = 1;itemsxpag = 7;submenu = false;
 			document.getElementById("filter-orderOptions").style.display = "inline-block";
 			updateFilters();
 		});
@@ -851,10 +765,9 @@ $(function() {
 			updateFilters();
 		});
 		$("#filter-itemName").change(function() {
-			selectedPage = 1;
-			itemsxpag = 7;
-			submenu = false;
+			selectedPage = 1;itemsxpag = 7;submenu = false;
 			document.getElementById("filter-orderOptions").style.display = "inline-block";
+			if (!isNaN($("#filter-itemName").val()) ) $("#filter-bodyLocationOptions").val("");
 			updateFilters();
 		});
 
@@ -871,7 +784,7 @@ $(function() {
 
 				$(this).addClass("selected");
 
-				if ($("#filter-codeOptions").val() != "submenu" || filterGroup[0].itemId == Number($("#filter-itemName").val()) || $("#filter-guardOptions").val() == "Arcoíris") {
+				if (filterGroup[0].itemId == Number($("#filter-itemName").val()) || $("#filter-guardOptions").val() == "Arcoíris") {
 
 					limpiarCanvas();
 					searchtoSelect(selectedCode);
@@ -922,18 +835,14 @@ $(function() {
 					} else {
 						limpiarCanvas();
 						searchtoSelect(selectedCode);
-
 					};
-
 				};
 
 			} else {
 				unselectAll();
 				$(this).removeClass("selected");
 			};
-
 	})});
-
 });
 
 
@@ -942,7 +851,6 @@ function updateFilters() {
 	$("span").remove("#empty");
 	unselectAll();
 
-	fGrupos = $("#filter-codeOptions").val();				// item / grupo
 	fCategorias = $("#filter-bodyLocationOptions").val();	// categorias
 	fEspecial = $("#filter-guardOptions").val();			// Guardias / Premio del mes
 	fRareza = $("#filter-rarityOptions").val();				// rareza
@@ -957,44 +865,22 @@ function updateFilters() {
 
 	// Grupo --------------------------------------------
 
-	if (fEspecial == "Arcoíris") {
-		fGrupos = "all";
-	}
-
-	if (fName != "" && !(isNaN(fName)) ) {
-		fGrupos = "all";	
-	}
-
 	try {
 
-		if (fGrupos == "first" || fGrupos == "submenu") {
+		if (fEspecial == "Arcoíris" || (!(isNaN(fName)) && fName != "") ) {
+			for (b = 0; b < groupList.length; b++) {
+				filterA.push(groupList[b]);
+			};
 
+		} else {
 			for (i = 0; i < groupInfo.length; i++) {
 				for (b = 0; b < groupList.length; b++) {
 					if (groupInfo[i].groupId == groupList[b].groupId) {
 						filterA.push(groupList[b]);
-					break;
+						break;
 					};
-				};
+				};	
 			};			
-
-		} else if (fGrupos == "all") {
-
-			for (i = 0; i < groupList.length; i++) {
-				filterA.push(groupList[i]);
-
-				var s = filterA[i].itemId;
-				if (typeof(s) === "string") {
-
-					if ( s.charAt(s.length - 1) == "s") {
-						s = s.slice(0,-1);
-						filterA[filterA.length - 1].itemId = s;
-					};
-
-				};
-				
-			};
-
 		};
 
 	} catch {
@@ -1017,9 +903,7 @@ function updateFilters() {
 				if (filterA[i].groupId == currentGroup[0].groupId) {
 					filterB.push(filterA[i]);
 				};
-
 			};
-
 		};
 
 	} else {
@@ -1062,9 +946,7 @@ function updateFilters() {
 				if (filterA[i].groupId == currentGroup[0].groupId) {
 					filterB.push(filterA[i]);
 				};
-
 			};
-
 		};
 
 	} else {
@@ -1080,9 +962,7 @@ function updateFilters() {
 	if (fName != "") {
 		if (isNaN(fName) ) {
 			// Buscar por Nombre
-
 			var nombre = normalize(fName).toLowerCase();
-
 
 			if (!fName.includes(":")) {
 				// Busqueda normal
@@ -1095,11 +975,8 @@ function updateFilters() {
 						if (filterB[i].groupId == currentGroup[0].groupId) {
 							filterA.push(filterB[i]);
 						};
-
 					};
-
 				};
-			
 			} else {
 
 				// Reiniciar todos los filtros
@@ -1136,19 +1013,15 @@ function updateFilters() {
 						if (filterB[i].groupId == currentGroup[0].groupId) {
 							filterA.push(filterB[i]);
 						};
-
 					};
-
 				};
-
-			}
+			};
 
 		// -----------------------------------------------------------
 
 		} else {
 			// Reiniciar todos los filtros
 
-			//fGrupos = $("#filter-codeOptions").val("all");		// item / grupo
 			fCategorias = $("#filter-bodyLocationOptions").val("");	// categorias
 			fEspecial = $("#filter-guardOptions").val("");			// Guardias / Premio del mes
 			fRareza = $("#filter-rarityOptions").val("");			// rareza
@@ -1165,7 +1038,6 @@ function updateFilters() {
 						break;
 					};
 				};
-
 			};
 
 		// -----------------------------------------------------------
@@ -1177,19 +1049,13 @@ function updateFilters() {
 		for (i = 0; i < filterB.length; i++) {
 			filterA.push(filterB[i]);
 		};
-
 	};
 
 	filterB.length = 0;
 
 	// Orden --------------------------------------------
 
-	if (fOrden == "newest") {
-		filterA.reverse();
-
-	} else {
-
-	};
+	if (fOrden == "newest") filterA.reverse();
 
 	// Pasar todo a filterGroup ---------------------------
 
@@ -1199,10 +1065,7 @@ function updateFilters() {
 
 	$("#footer-links").html("Mostrando " + filterGroup.length + " artículos de los " + groupList.length + " artículos disponibles.");
 
-	if (submenu == true) {
-		selectedPage = 1;
-	}
-	
+	if (submenu == true) selectedPage = 1;
 	crearPagination();
 };
 
