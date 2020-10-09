@@ -18,7 +18,6 @@ var catEs, tipo, seReemplaza = [], posicionReemplazo = "none";
 // Determina si el submenu está abierto o no
 var submenu = false;
 var getGroupId, mainPage, mainPageI, itemsxpag = 7;
-var REMOTE = "https://gardiemaker.github.io";
 //----------------------------------------------
 
 $(document).ready(function iniciaTodo() {
@@ -27,10 +26,10 @@ $(document).ready(function iniciaTodo() {
 		document.getElementsByClassName("news-latest")[0].innerHTML = estado;
 	});
 
-	const requestInfo = new XMLHttpRequest();requestInfo.open("GET", REMOTE + "/data/groupInfo.json");requestInfo.responseType = "json";requestInfo.send();
+	const requestInfo = new XMLHttpRequest();requestInfo.open("GET", "/data/groupInfo.json");requestInfo.responseType = "json";requestInfo.send();
 	requestInfo.onload = function() {tempDB = requestInfo.response;countDB(tempDB, "info");}
 
-	const requestList = new XMLHttpRequest();requestList.open("GET", REMOTE + "/data/groupList.json");requestList.responseType = "json";requestList.send();
+	const requestList = new XMLHttpRequest();requestList.open("GET", "/data/groupList.json");requestList.responseType = "json";requestList.send();
 	requestList.onload = function() {tempDB = requestList.response;countDB(tempDB, "list");}
 
 });
