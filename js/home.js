@@ -60,7 +60,7 @@ function featured(json) {
     document.getElementById("portrait").src = json.img;
     document.getElementById("index-featured-title").innerHTML = 'ID : <a href="' + json.idURL + '">' + json.id + '</a></div>'
     document.getElementById("index-featured-info").innerHTML = 'De: <a href="' + json.authorURL + '">'
-    + json.author + '</a><br><br>Abrir en: <a href="/es/wardrobe?s="'
+    + json.author + '</a><br><br>Abrir en: <a href="/es/wardrobe?s='
     + json.code + '">Vestidor</a> | <a href="/es/profile?s='
     + json.code + '">Perfil</a><br><br><a href="'
     + json.img + '" target="_blank">Ver en tamaño completo</a>'
