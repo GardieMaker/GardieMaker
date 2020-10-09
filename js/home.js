@@ -3,6 +3,9 @@ $(document).ready(function iniciaTodo() {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
+    const gd = new XMLHttpRequest();gd.open("GET", "/data/status/featured.json");gd.responseType = "json";gd.send();
+    gd.onload = function() {featured(gd.response);};
+
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
         document.getElementById("footer-links").innerHTML = afiliados;
     });
@@ -51,6 +54,17 @@ function get(blogger) {
     $(document).ready(function () {
         document.getElementById("news-list").innerHTML = html;
     });
+};
+
+function featured(json) {
+    document.getElementById("portrait").src = json.img;
+    document.getElementById("index-featured-title").innerHTML = 'ID : <a href="' + json.idURL + '">' + json.id + '</a></div>'
+    document.getElementById("index-featured-info").innerHTML = 'De: <a href="' + json.authorURL + '">'
+    + json.author + '</a><br><br>Abrir en: <a href="/es/wardrobe?s="'
+    + json.code + '">Vestidor</a> | <a href="/es/profile?s='
+    + json.code + '">Perfil</a><br><br><a href="'
+    + json.img + '" target="_blank">Ver en tamaño completo</a>'
+
 };
 
 $(function() { 
