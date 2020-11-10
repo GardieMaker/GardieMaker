@@ -3,7 +3,7 @@ $(document).ready(function iniciaTodo() {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    const gd = new XMLHttpRequest();gd.open("GET", "/data/status/featured.json");gd.responseType = "json";gd.send();
+    const gd = new XMLHttpRequest();gd.open("GET", "https://gardiemaker.github.io/data/status/featured.json");gd.responseType = "json";gd.send();
     gd.onload = function() {featured(gd.response);};
 
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
@@ -58,6 +58,7 @@ function get(blogger) {
 
 function featured(json) {
     document.getElementById("portrait").src = json.img;
+    document.getElementById("portrait").style.background = "url('" + json.bg +  "') top center";
     document.getElementById("index-featured-title").innerHTML = 'ID : <a href="' + json.idURL + '">' + json.id + '</a></div>'
     document.getElementById("index-featured-info").innerHTML = 'De: <a href="' + json.authorURL + '">'
     + json.author + '</a><br><br>Abrir en: <a href="/es/wardrobe?s='

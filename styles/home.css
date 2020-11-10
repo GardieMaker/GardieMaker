@@ -39,9 +39,10 @@ input[type="submit"]:hover {
 }
 
 #portrait {
-	left: -280px;
 	position: relative;
-	top: -180px;
+	width: 630px;
+	left: -180px;
+	top: -130px;
 }
 
 
