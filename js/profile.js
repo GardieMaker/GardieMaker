@@ -9,6 +9,7 @@ const URL_HAIR = "player/hair/";
 
 const URL_ICON = "icon/";
 const URL_FULL ="web_full/";
+const URL_HD = "web_hd/";
 const URL_PORTRAIT = "web_portrait/";
 var imgurl;
 
@@ -16,6 +17,7 @@ var dbCount = 0, groupInfo, groupList, groupPet, groupFriend;
 var i = 0;
 var str, portraitMin = false;
 var galor;
+var REMOTE = "https://gardiemaker.github.io";
 //================================================================
 
 $(document).ready(function iniciaTodo() {
@@ -24,25 +26,25 @@ $(document).ready(function iniciaTodo() {
     });
 
     const requestInfo = new XMLHttpRequest();
-    requestInfo.open("GET", "/data/groupInfo.json");
+    requestInfo.open("GET", REMOTE + "/data/groupInfo.json");
     requestInfo.responseType = "json";
     requestInfo.send();
     requestInfo.onload = function() {tempDB = requestInfo.response;countDB(tempDB, "info");};
 
     const requestList = new XMLHttpRequest();
-    requestList.open("GET", "/data/groupList.json");
+    requestList.open("GET", REMOTE + "/data/groupList.json");
     requestList.responseType = "json";
     requestList.send();
     requestList.onload = function() {tempDB = requestList.response;countDB(tempDB, "list");};
 
     const requestPet = new XMLHttpRequest();
-    requestPet.open("GET", "/data/groupPet.json");
+    requestPet.open("GET", REMOTE + "/data/groupPet.json");
     requestPet.responseType = "json";
     requestPet.send();
     requestPet.onload = function() {tempDB = requestPet.response;countDB(tempDB, "pet");};
 
     const requestFriend = new XMLHttpRequest();
-    requestFriend.open("GET", "/data/groupFriend.json");
+    requestFriend.open("GET", REMOTE + "/data/groupFriend.json");
     requestFriend.responseType = "json";
     requestFriend.send();
     requestFriend.onload = function() {tempDB = requestFriend.response;countDB(tempDB, "friend");};
@@ -198,12 +200,12 @@ function cargarPortrait(n) {
     if (portraitMin == false) {
 
         switch (getInfo[0].category) {
-            case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_PORTRAIT + getLista[0].itemURL; break;
-            case "Pieles": newimg = URL_SRC + URL_SKIN + URL_PORTRAIT + getLista[0].itemURL; break;
-            case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_PORTRAIT + getLista[0].itemURL; break;
-            case "Ojos": newimg = URL_SRC + URL_EYES + URL_PORTRAIT + getLista[0].itemURL; break;
-            case "Cabello": newimg = URL_SRC + URL_HAIR + URL_PORTRAIT + getLista[0].itemURL; break;
-            default: newimg = URL_SRC + URL_CLOTHES + URL_PORTRAIT + getLista[0].itemURL;
+            case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_HD + getLista[0].itemURL; break;
+            case "Pieles": newimg = URL_SRC + URL_SKIN + URL_HD + getLista[0].itemURL; break;
+            case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_HD + getLista[0].itemURL; break;
+            case "Ojos": newimg = URL_SRC + URL_EYES + URL_HD + getLista[0].itemURL; break;
+            case "Cabello": newimg = URL_SRC + URL_HAIR + URL_HD + getLista[0].itemURL; break;
+            default: newimg = URL_SRC + URL_CLOTHES + URL_HD + getLista[0].itemURL;
         };
 
     } else {
@@ -266,7 +268,8 @@ function cargarPopUp() {
     div.setAttribute("class", "button");
     div.setAttribute("id", "max-size");
     div.setAttribute("onclick", "maxSize()");
-    (portraitMin == false)?(div.innerHTML = "Volver a cargar"):(div.innerHTML = "Ver. 800x1132");
+    //(portraitMin == false)?(div.innerHTML = "Volver a cargar"):(div.innerHTML = "Ver. 800x1132");
+    (portraitMin == false)?(div.innerHTML = "Volver a cargar"):(div.innerHTML = "Ver. 630x891");
     document.getElementById("portrait-buttons").appendChild(div);
 
     div = document.createElement("div");
@@ -294,8 +297,8 @@ function maxSize() {
     $("canvas").remove("#portrait");
     var portrait = document.createElement("canvas");
     portrait.setAttribute("id","portrait");
-    portrait.setAttribute("width", "800");
-    portrait.setAttribute("height", "1132");
+    portrait.setAttribute("width", "630");
+    portrait.setAttribute("height", "891");
     document.getElementById("portraitcontainer").appendChild(portrait);
 
     i = 0;
@@ -305,7 +308,7 @@ function maxSize() {
 function minSize() {
 
     portraitMin = true;
-    $("#max-size").text("Ver. 800x1132");
+    $("#max-size").text("Ver. 630x891");
     $("#min-size").text("Volver a cargar");
 
     $("canvas").remove("#portrait");
