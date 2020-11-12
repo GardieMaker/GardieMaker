@@ -158,12 +158,11 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 
 /* Marcadores de rareza */
 .rarity-marker-common, .rarity-marker-rare, .rarity-marker-epic, .rarity-marker-legendary, .rarity-marker-event, .anim-marker {
-    width: 18px;
-    height: 18px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-repeat: no-repeat;
+    border-width: 18px 18px 0px 0px;
+	border-style: solid;
+	position: absolute;
+	height: 0;
+	width: 0;
 }
 
 .marketplace-abstract .guard-gem, .marketplace-main-container .guard-gem {
@@ -172,23 +171,23 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 }
 
 .rarity-marker-common {
-    background-image: url("https://www.eldarya.es/static/img/marker_common.png");
+    border-color: #aaa transparent transparent transparent;
 }
 
 .rarity-marker-rare {
-    background-image: url("https://www.eldarya.es/static/img/marker_rare.png");
+    border-color: #1f6cff transparent transparent transparent;   
 }
 
 .rarity-marker-epic {
-    background-image: url("https://www.eldarya.es/static/img/marker_epic.png");
+    border-color: #e04cff transparent transparent transparent;
 }
 
 .rarity-marker-legendary {
-    background-image: url("https://www.eldarya.es/static/img/marker_legendary.png");
+    border-color: #f2b82f transparent transparent transparent;
 }
 
 .rarity-marker-event {
-    background-image: url("https://www.eldarya.es/static/img/marker_event.png");
+    border-color: #58d700 transparent transparent transparent;
 }
 
 .guard-gem.guard-1{
@@ -211,6 +210,7 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 .anim-marker {
     width: 20px;
     height: 19px;
+    border-width: 0;
     background-image: url("https://www.eldarya.es/static/img/marker_anim.png");
 }
 /* Fin marcadores de rareza */
