@@ -19,11 +19,12 @@ strong, em, i, u, span, b, sub, sup, a, label, tt, var {
 }
 
 body{
-	background: #34386f url("https://www.eldarya.es/assets/img/item/player/web_full/db28c830f7176d59b26856ba831ec0fb.jpg") fixed top center;
-    	/*background: #34386f url("https://www.eldarya.es/static/img/home/adventure/background.jpg") fixed top center;*/
-    	/*background: #34386f url(" https://www.eldarya.es/static/event/2020/summer/img/site-background/background_day.jpg") fixed center;*/
-   
-	background-size: cover;
+	/*background: #34386f url("https://www.eldarya.es/assets/img/item/player/web_hd/db28c830f7176d59b26856ba831ec0fb.jpg");*/
+    background: #34386f url("https://www.eldarya.es/assets/img/item/player/web_hd/1e11c28081f45135ee37c635ae948904.jpg");
+    background-attachment: fixed;
+    background-position: top center;
+    background-size: cover;
+
 	overflow-y: scroll;
 	transition: background-image 4s linear;
     /*-------------------*/
