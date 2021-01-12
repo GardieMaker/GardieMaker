@@ -3,8 +3,11 @@ $(document).ready(function iniciaTodo() {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    const gd = new XMLHttpRequest();gd.open("GET", "https://gardiemaker.github.io/data/status/featured.json");gd.responseType = "json";gd.send();
-    gd.onload = function() {featured(gd.response);};
+    const gd = new XMLHttpRequest();gd.open("GET", "https://gardiemaker.github.io/data/usr/featured.json");gd.responseType = "json";gd.send();
+    gd.onload = function() {
+        const lista = new XMLHttpRequest();lista.open("GET", "https://gardiemaker.github.io/data/usr/entries.json");lista.responseType = "json";lista.send();
+        lista.onload = function() {featured(gd.response, lista.response);};
+    };
 
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
         document.getElementById("footer-links").innerHTML = afiliados;
@@ -56,15 +59,25 @@ function get(blogger) {
     });
 };
 
-function featured(json) {
-    document.getElementById("portrait").src = json.img;
-    document.getElementById("portrait").style.background = "url('" + json.bg +  "') top center";
-    document.getElementById("index-featured-title").innerHTML = 'ID : <a href="' + json.idURL + '">' + json.id + '</a></div>'
-    document.getElementById("index-featured-info").innerHTML = 'De: <a href="' + json.authorURL + '">'
-    + json.author + '</a><br><br>Abrir en: <a href="/es/wardrobe?s='
-    + json.code + '">Vestidor</a> | <a href="/es/profile?s='
-    + json.code + '">Perfil</a><br><br><a href="'
-    + json.img + '" target="_blank">Ver en tamaño completo</a>'
+function featured(feat, entries) {
+
+    var entry = entries.filter(function(v){return v.id == feat[0].entry});
+
+
+    document.getElementById("portrait").src = entry[0].info.png;
+    document.getElementById("portrait").style.background = "url('" + entry[0].info.background +  "') top center";
+
+    if (entry[0].info.name == null) {
+        document.getElementById("index-featured-title").innerHTML = 'ID : <a href="archive?e=' + entry[0].id + '">' + entry[0].id + '</a></div>'
+    } else {
+        document.getElementById("index-featured-title").innerHTML = '<a href="archive?e=' + entry[0].id + '">' + entry[0].info.name + '</a></div>'
+    }
+
+    document.getElementById("index-featured-info").innerHTML = 'De: <a href="archive?u=' + entry[0].alias + '">'
+    + entry[0].alias + '</a><br><br>Abrir en: <a href="/es/wardrobe?s='
+    + entry[0].info.code + '">Vestidor</a> | <a href="/es/profile?s='
+    + entry[0].info.code + '">Perfil</a><br><br><a href="'
+    + entry[0].info.png + '" target="_blank">Ver en tamaño completo</a>';
 
 };
 
