@@ -72,7 +72,6 @@ canvas {
 .marketplace-itemDetail-cont, .marketplace-itemDetail-cont2 {
 	margin: 0 0 0 10px;
 	width: 140px;
-	display: inline-block;
 	font-family: Rubik, cursive;
 	font-size: 16px;
 	color: rgb(552, 56, 111);
@@ -107,6 +106,14 @@ canvas {
     color: #fff;
 }
 
+.marketplace-search-back-arrow {
+	border-color: transparent #34386f transparent transparent;
+	border-width: 7px 14px 7px 0;
+	border-style: solid;
+	display: inline-block;
+	position: relative;
+}
+
 .marketplace-search-back {
     font-family: Rubik;
     font-size: 18px;
@@ -114,7 +121,14 @@ canvas {
     padding: 10px;
     margin: 5px;
     width: 480px;
-    cursor: pointer;
+	cursor: pointer;
+	position: relative;
+	display: flex;
+}
+
+.marketplace-search-back p {
+	position: relative;
+	margin: 0px 9px;
 }
 
 .marketplace-search-back:hover {
@@ -266,7 +280,7 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 	color: rgb(52, 56, 111);
 }
 
-.universalCode{
+.universalCode, .universal-code {
 	font-size: 20px;
 }
 
@@ -325,4 +339,19 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 	text-align: center;
 	text-decoration: none;
 	margin-right: 3px;
+}
+
+#aux-buttons {
+	float: right;
+	width: 358px;
+}
+
+#button-img-link-container {
+	position: relative;
+	float: left;
+}
+
+#link-profile {
+	position: relative;
+	float: right;
 }
