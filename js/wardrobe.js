@@ -530,6 +530,7 @@ function mostrarPrenda(tipo, prenda, categoria, c, cambio = null) {
                 var temporalIndex = $(".temporal-replace").index();
                 if (temporalIndex == c ) {
                     ctx.clearRect(0, 0, 420, 594);
+                    $("canvas").eq(c).attr("temporal-dataid", prenda);
 
                 } else {
                     limpiarTemporales();
