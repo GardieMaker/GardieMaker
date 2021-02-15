@@ -25,12 +25,11 @@ $(document).ready(function () {
                 users = u.response; entrys = e.response; feat = f.response;
                 normalizeURL();
                 cargarSelect(users);
+                cargarRanking();
                 cargarListas(0);
-                
             };
         };
     };
-
 });
 
 // Preparación de la interfaz
@@ -38,7 +37,9 @@ function cargarSelect(user) {
     var texto = "<option hidden selected>Filtrar por usuario...</option>";
 
     for (i = 0; i < user.length; i++) {
-        texto += "<option value='" + user[i].alias + "'>" + user[i].alias + "</option>";
+        var p = entrys.filter(v => {return v.alias == user[i].alias});
+        p = p.length;
+        texto += "<option value='" + user[i].alias + "'>" + user[i].alias + " (" + p + ")</option>";
     }
     
     $("#menu-user").html(texto);
@@ -72,6 +73,44 @@ function normalizeURL() {
 
     selectMenu(str.slice(1,2), str.slice(3));
 }
+
+function cargarRanking() {
+    var top1 = ["", 0], top2 = ["", 0], top3 = ["", 0];
+
+    for (a = 0; a < users.length; a++) {
+        if (users[a].alias != "Zunay") {
+            var p = entrys.filter(v => {return v.alias == users[a].alias});
+            p = p.length;
+    
+            if (top1[1] < p) {
+                top3[0] = top2[0];
+                top3[1] = top2[1];
+        
+                top2[0] = top1[0];
+                top2[1] = top1[1];
+        
+                top1[0] = users[a].alias;
+                top1[1] = p;
+    
+            } else if (top2[1] < p) {
+                top3[0] = top2[0];
+                top3[1] = top2[1];
+        
+                top2[0] = users[a].alias;
+                top2[1] = p;
+    
+            } else if (top3[1] < p) {
+                top3[0] = users[a].alias;
+                top3[1] = p;
+            };
+        };
+    };
+
+    $("#top1").html('<a href="?u=' + top1[0] + '">' + top1[0] + '</a><span class="top-number">' + top1[1] + '</span>');
+    $("#top2").html('<a href="?u=' + top2[0] + '">' + top2[0] + '</a><span class="top-number">' + top2[1] + '</span>');
+    $("#top3").html('<a href="?u=' + top3[0] + '">' + top3[0] + '</a><span class="top-number">' + top3[1] + '</span>');
+
+};
 
 function selectMenu(cat, val) {
     var str = "?" + cat + "=" + val;
@@ -127,7 +166,7 @@ function cargarListas(pag) {
             };
             break;
     };
-
+/*
     // Si es perfil mostrar menu
     if (uCAT == "u") {
 
@@ -136,14 +175,14 @@ function cargarListas(pag) {
 
         //Pendiente V2
         if ($("#archive-menu-user")) $("div").remove("#archive-menu-user");
-        var mUSR = '<div id="archive-menu-user"><p>Mostrando todos los aportes de <b>' + existe[0].alias + '</b>.</div>';
-        $("#archive-menu-container").append(mUSR);
+        var mUSR = '<div id="archive-menu-user" class="menu-section"><p>Mostrando todos los aportes de <b>' + existe[0].alias + '</b>.</div>';
+        $("#archive-thumbnail-content").append(mUSR);
         
 
     } else if ($("#archive-menu-user")) {
         $("div").remove("#archive-menu-user");
     };
-
+*/
     // Cargar posts en tablas segun paginacion
     dibujaTabla(entry, uVAL, pag);
 
@@ -153,6 +192,16 @@ function cargarListas(pag) {
 }
 
 function dibujaTabla(entry, uVAL, pag) {
+
+    $("#archive-thumbnail-content").html("");
+
+    // Si es perfil, mostrar titulo de filtro
+    var str = window.location.search;
+    if (str.includes("?u=")) {
+        str = str.slice(3);
+        str = '<p>Mostrando todos los aportes de <b>' + unescape(str) + '</b>.</p>';
+        $("#archive-thumbnail-content").append(str);
+    };
 
     var tabla = "<table>";
     var filtroP = [];
@@ -214,7 +263,7 @@ function dibujaTabla(entry, uVAL, pag) {
     };
 
     tabla += "</table>";
-    $("#archive-thumbnail-content").html(tabla);
+    $("#archive-thumbnail-content").append(tabla);
 
     // Pagination    
     //var pagesTEST = 14; // PRUEBAS TRUNCATION PAGES

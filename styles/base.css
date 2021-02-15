@@ -105,7 +105,6 @@ html, body{
 
 #news-infos {
     background-image: url("https://www.eldarya.es/static/img/design/player-infos-background-middle.png");
-    background-repeat-y: no-repeat;
     padding: 0 10px 0 10px;
     text-align: center;
 }
@@ -125,14 +124,18 @@ html, body{
     -webkit-transform: skew(-14deg);
     -moz-transform: skew(-14deg);
     -o-transform: skew(-14deg);
+    transform: skew(-14deg);
     -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 #news-infos .news-title .news-title-content {
     -webkit-transform: skew(14deg);
     -moz-transform: skew(14deg);
     -o-transform: skew(14deg);
+    transform: skew(14deg);
     -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     padding: 0 70px 0 15px;
 }
 
@@ -279,6 +282,7 @@ body a{
     -o-transition: background-color 0.3s ease-in, color 0.3s ease-in;
     transition: background-color 0.3s ease-in, color 0.3s ease-in;
     margin: 0 5px;
+    user-select: none;
 }
 
 .button:hover {

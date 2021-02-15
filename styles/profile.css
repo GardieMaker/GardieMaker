@@ -192,6 +192,16 @@ select, input {
     margin: 4px;
 }
 
+#player-actions-tab li:nth-child(1) {
+    position: absolute;
+    left: 100px;
+}
+
+#player-actions-tab li:nth-child(5) {
+    position: absolute;
+    right: 100px;
+}
+
 #player-left-tab {
 	float: left;
 	margin: 10px 10px 0 84px;

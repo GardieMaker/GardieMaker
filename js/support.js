@@ -1,4 +1,4 @@
-var str, num;
+var str;
 
 $(document).ready(function(){
 
@@ -32,29 +32,21 @@ $(document).ready(function(){
 	};
 
 	if (str.includes("q1")) {
-		num = 1;
-		abrePregunta();
+		abrePregunta(1);
 	} else if (str.includes("q2")) {
-		num = 2;
-		abrePregunta();
+		abrePregunta(2);
 	} else if (str.includes("q3")) {
-		num = 3;
-		abrePregunta();
+		abrePregunta(3);
 	} else if (str.includes("q4")) {
-		num = 4;
-		abrePregunta();
+		abrePregunta(4);
 	} else if (str.includes("q5")) {
-		num = 5;
-		abrePregunta();
+		abrePregunta(5);
 	} else if (str.includes("q6")) {
-		num = 6;
-		abrePregunta();
+		abrePregunta(6);
 	} else if (str.includes("q7")) {
-		num = 7;
-		abrePregunta();
+		abrePregunta(7);
 	} else if (str.includes("q8")) {
-		num = 8;
-		abrePregunta();
+		abrePregunta(8);
 	};
 
 	if (str.includes("general")) {
@@ -69,7 +61,7 @@ $(document).ready(function(){
 
 });
 
-$(function() { 
+$(function() {
 	$("#menu-general").click(function(){
 		str = "?general";
 		document.getElementsByClassName("on")[0].removeAttribute("class");
@@ -100,62 +92,54 @@ $(function() {
 
 
 	$("#support-category-content").on("click", "#q1", function(){
-		num = 1;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 1);
+		abrePregunta(1);
 	});
 
 	$("#support-category-content").on("click", "#q2", function(){
-		num = 2;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 2);
+		abrePregunta(2);
 	});
 
 	$("#support-category-content").on("click", "#q3", function(){
-		num = 3;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 3);
+		abrePregunta(3);
 	});
 
 	$("#support-category-content").on("click", "#q4", function(){
-		num = 4;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 4);
+		abrePregunta(4);
 	});
 
 	$("#support-category-content").on("click", "#q5", function(){
-		num = 5;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 5);
+		abrePregunta(5);
 	});
 
 	$("#support-category-content").on("click", "#q6", function(){
-		num = 6;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 6);
+		abrePregunta(6);
 	});
 
 	$("#support-category-content").on("click", "#q7", function(){
-		num = 7;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 7);
+		abrePregunta(7);
 	});
 
 	$("#support-category-content").on("click", "#q8", function(){
-		num = 8;
-		history.pushState(null, "", str + "=q" + num);
-		abrePregunta();
+		history.pushState(null, "", str + "=q" + 8);
+		abrePregunta(8);
 	});
 
 });
 
 
-function abrePregunta() {
+function abrePregunta(num) {
 	if (document.getElementsByClassName("question")[num - 1].getAttribute("class") != "question active") {
 		cierraActivo();
 		document.getElementsByClassName("question")[num - 1].setAttribute("class", "question active");
 		document.getElementsByClassName("answer")[num - 1].style.display = "block";
-		
+
 	} else {
 		cierraActivo();
 	};
@@ -201,11 +185,11 @@ function cierraActivo() {
 
 var infoGeneral = [
 	{'question':'¿Qué es GardieMaker?','answer':'GardieMaker es una aplicación web que cree con la finalidad de juntar la mayor cantidad posible de prendas que están disponibles en Eldarya. Mi objetivo era crear un vestidor gigante y libre de limitaciones en el cual puedes crear y vestir a tu guardiana como siempre has querido hacerlo; teniendo acceso, además, a items exclusivos de eventos pasados y del servidor francés. Este es un proyecto ambicioso en el cual trabajo día a día con la intención de superarme y mejorar poco a poco todo esto.<br><br>Este proyecto fue realizado por mí con fines de aprendizaje, sin fines de lucro y con la mera intención de entretener. Las imagenes y los diseños utilizados son propiedad de Beemoov y en ningún momento pretendo apropiarme de los mismos.'},
-	{'question':'¿Cómo puedo hacer un aporte?','answer':'Para saber más sobre los tipos de aportes y cómo hacerlo puedes <a href="https://gardiemaker.blogspot.com/2020/04/como-aportar.html">leer esto.</a>'},
-	{'question':'He aportado hace unos días y no veo las prendas en el vestidor.','answer':'Generalmente, las prendas son agregadas cuando el "grupo" está completo. Cada grupo contiene las diferentes variaciones de colores de cada prenda. Si solo aportaste una prenda, es probable que yo no cuente con todas sus variaciones de colores como para agregarla al vestidor.'},
+	/*{'question':'¿Cómo puedo hacer un aporte?','answer':'Para saber más sobre los tipos de aportes y cómo hacerlo puedes <a href="https://gardiemaker.blogspot.com/2020/04/como-aportar.html">leer esto.</a>'},*/
+	/*{'question':'He aportado hace unos días y no veo las prendas en el vestidor.','answer':'Generalmente, las prendas son agregadas cuando el "grupo" está completo. Cada grupo contiene las diferentes variaciones de colores de cada prenda. Si solo aportaste una prenda, es probable que yo no cuente con todas sus variaciones de colores como para agregarla al vestidor.'},*/
 	{'question':'¿Cómo reportar?', 'answer':'Para reportar algún error o problema que encuentres en el funcionamiento del vestidor o del perfil, puedes dejar un <a href="https://gardiemaker.blogspot.com/p/reportar-un-problema.html">comentario aquí</a> o enviar un email a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> con el asunto "Reporte". Ten en cuenta que, si se trata de un error de funcionamiento, es necesario que detalles el contexto que te llevó a dicho error (si quitaste una prenda, cambiaste algún filtro, etc) y cual es el error (no cargó, cargó mal algo, etc).'},
 	{'question':'Páginas amigas / Afiliaciones', 'answer':'<h4>¿Qué es una afiliación?</h4>Se le llama afiliación (también conocido como “páginas amigas”) a un acuerdo amistoso entre dos personas o dos grupos de personas, en el cual ambos acuerdan promocionar el blog/página de la otra persona a cambio de que la otra persona promocione el blog/página propio, con la única finalidad de publicitarse mutuamente.<br><br><h4>¿Cómo podemos afiliarnos?</h4>Es muy sencillo, solo tienes que enviarme un email a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> con el asunto "Afiliación" y envíame el link de tu blog/página + un banner/botón para que yo pueda promocionarte aquí. Por supuesto, la afiliación deberá ser mutua, así que verificaré que cuentes con algún banner mío antes de agregar el tuyo.<br><br><h4>Banners de GardieMaker</h4><a href="https://64.media.tumblr.com/a4026aa525a63eaf98bd34ca36f98ce0/tumblr_inline_qcf3hrcRaT1wxxmsr_500.png" target="_blank" title="70x70"><img src="https://64.media.tumblr.com/a4026aa525a63eaf98bd34ca36f98ce0/tumblr_inline_qcf3hrcRaT1wxxmsr_500.png"></a> <a href="https://64.media.tumblr.com/da8dd9efb4fd8c6376ad00a1c84c437e/tumblr_inline_qcf3i6GPJE1wxxmsr_500.png" target="_blank" title="150x70"><img src="https://64.media.tumblr.com/da8dd9efb4fd8c6376ad00a1c84c437e/tumblr_inline_qcf3i6GPJE1wxxmsr_500.png"></a><br><br><u>NOTA:</u> Si vas afiliarme, por favor utiliza el enlace limpio (https://gardiemaker.github.io).'},
-	/*{'question':'Translations (en-US / pt-BR / fr-FR)','answer':"Me encantaría traducir GardieMaker a otros idiomas pero no puedo hacerlo yo misma. Si te gustaría ayudar a traducir GardieMaker al idioma de tu servidor, envía un correo electrónico a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> (español o inglés si es posible).<br></br><b>Servidor US:</b> Necesito ayuda para traducir la interfaz y la totalidad de los nombres de la ropa.<br></br><b>Servidor BR / FR:</b> Necesito ayuda para traducir al menos la interfaz. Las wikis están bastante completas, pero si quieren también pueden ayudarme con los nombres de la ropa.<br><br><h3>English (Google!)</h3>I would love to translate GardieMaker into other languages but I can't do it myself. If you would like to help translate GardieMaker into your server language, please email <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> (Spanish or English if possible).<br><br><b>US Server:</b> I need help translating the interface and all of the clothing names.<br><br><b>BR / FR Server:</b> I need help to translate at least the interface. The wikis are quite complete, but if you want you can also help me with the names of the clothes."},*/
+	{'question':'Servidores / Traducciones (en-US / pt-BR / fr-FR)','answer':'Me encantaría traducir GardieMaker a otros idiomas pero me es imposible hacerlo yo misma. Si estás interesado y te gustaría ayudar a traducir GardieMaker al idioma de tu servidor, envía un correo electrónico a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> (español o inglés si es posible) haciéndomelo saber.<br></br><b>Servidor BR / FR:</b> Necesito ayuda para traducir al menos la interfaz. Las wikis están bastante completas, pero si quieren también pueden ayudarme con los nombres de la ropa.<br><br><b>Otros servidores:</b> Necesito ayuda para traducir la interfaz y la totalidad de los nombres de la ropa.<br></br><b>IMPORTANTE</b><br>No está demás decir que a menudo cambio algún que otro texto de la interfaz, por lo que deberás estar realmente comprometido a mantener las traducciones al día.'},
 	{'question':'¿Dudas?','answer':'Cualquier inquietud, idea o sugerencia que tengas sobre cualquier cosa, no dudes en escribirme a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a>.'}
 ]
 
@@ -221,17 +205,16 @@ var infoWardrobe = [
 ]
 
 var infoProfile = [
-	{'question':'¿Cómo puedo guardar a mi Gardienne?','answer':'Para ver y guardar un render de tu Gardienne tienes que hacer clic en "Guardar PNG". Esto abrirá un pop-up que te permitirá guardar la imagen en la resolución que más te guste. Ten en cuenta que esto no funciona en dispositivos móviles y solo podrás guardarla desde un ordenador.'},
+	{'question':'¿Cómo puedo guardar a mi Gardienne?','answer':'Para ver y guardar un render de tu Gardienne tienes que hacer clic en "Guardar". Esto abrirá un pop-up que te permitirá guardar la imagen en la resolución que más te guste. Ten en cuenta que esto no funciona en dispositivos móviles y solo podrás guardarla desde un ordenador.'},
 	{'question':'¿Para qué sirve el código?','answer':'Si te gustó tu gardi y la quieres compartir (o solo guardarla), puedes guardar este código para volver a generarla más tarde. Este código lo pegas debajo del perfil, dónde dice "Cargar guardiana".'}
 ]
 
 var infoContests = [
-	{'question':'Información general.','answer':'Los actividades realizadas en el blog son única y exclusivamente realizadas por mí (o algún voluntario) y para ustedes. La cantidad y periodicidad de las mismas dependerá del feedback y la participación que se reciba.'},
-	
-	{'question':'Sobre la Guardiana Destacada.',
-	'answer':'La Guardiana Destacada es la única actividad que siempre estará activa y, como no hay feedback suficiente para realizar votaciones, la guardiana será elegida mediante sorteo. No habrá premios en maanas ni MO a menos que se indique lo contrario. La participación es completamente voluntaria y puedes realizar tantos aportes como gustes. Cada guardiana permanecerá en la portada durante una semana y cambiará todos los miércoles a la hora de la recarga.<br><br>Para participar solo tienes que rellenar <a href="https://forms.gle/VUFf7V88hFkJyz7g8" target="_blank">ESTE FORMULARIO</a>. <br><br><h4>Sobre los campos del formulario:</h4><p>A partir de ahora se te solicitará un correo electrónico REAL y VÁLIDO al que tengas acceso. Este no será público y será utilizado como medida de seguridad.</p><ul><li><u>Alias:</u> Este es tu nombre visible. Puedes poner tu nombre de usuario de Eldarya o elegir un "Alias" si quieres mantener tu privacidad. Ya no se aceptan aportes anónimos.</li><li><u>Código:</u> Aquí solo tienes que pegar el código para generar a tu guardiana. Este puedes obtenerlo en el perfil con el botón "Copiar código" o incluso desde la barra de direcciones. El código no debe generar ningún error, pero si le das a copiar y pegar no tienes de qué preocuparte.</li><li><u>Nombre de personaje o conjunto:</u> Este campo es opcional, si la guardiana o el conjunto que estás enviando tiene algún nombre puedes ponerlo aquí. </li></ul><br>Todas las nuevas guardianas serán "archivadas" en un nuevo catálogo, al cual puedes acceder desde el menú en la parte superior. <br><br><b>IMPORTANTE</b><br>Algunas de las guardianas alojadas en el antiguo catálogo no han sido transladadas al nuevo, ya que las he considerado spam. No son muchas así que las he agrupado a todas bajo la etiqueta de <a  target="_blank" href="https://gm-catalogo.blogspot.com/search/label/SPAM">SPAM</a>, puedes ir a echar un vistazo y hacer algún reclamo si ves la tuya ahí. Los reclamos pueden hacerlos ya sea por email o mediante un comentario en el blog. <br><br>Por cualquier duda o problema que tengas siempre puedes consultarme en el blog o escribiéndome a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a>.'},
-	
-	{'question':'¿Cómo participar en un concurso/sorteo?','answer':'Cada actividad tendrá un post en el blog que indicará la temática o los pasos a seguir para participar. Si no sueles visitar el blog, podrás ver cuando haya actividades disponibles en el indicador de actividades que se encuentra en la página.'},
-	{'question':'¿Puedo realizar alguna actividad/concurso con tu vestidor?','answer':'¡Por supuesto! El vestidor es de libre uso para quien quiera realizar actividades con el.<br><br>Si tu interés es organizar alguna actividad aquí mismo, no dudes en enviarme un email a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> con los detalles y veremos qué se puede hacer.'},
-	{'question':'Sobre los premios.','answer':'Los premios pueden ser maanas, MO o algún otro premio especial (a específicar). Estos podrían requerir o no el ingreso a tu cuenta para la compra de codes o la transferencia mediante el mercado según se especifique en cada actividad. Si no cuentas con el mercado desbloqueado o si no estás de acuerdo con esto, deberías abstenerte de participar.<br><br><h4>¿Cómo reclamo mi premio?</h4>Si resultas ser el ganador de alguna de las actividades, podrás reclamar tu premio enviando un email a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a>. En el mensaje deberás especificar los datos según el tipo de premio, ya sea usuario y contraseña temporal (para la compra de codes) u horarios para coordinar en el mercado.<br><br> Si tienes alguna duda al respecto siempre puedes consultar primero, ya sea vía email o dejando un comentario en el blog.<br><br><h4>Premio vacante.</h4>Si el ganador no reclama su premio o si su reclamo es "sospechoso", el premio no pasará al segundo puesto ni se resorteará. La actividad quedará anulada.'}
+	{'question':'¿Qué es el Catálogo de Guardianas?','answer':'El catálogo funciona como un "archivo" en el cual las personas pueden enviar y "almacenar" sus creaciones o conjuntos con la mera intención de compartirlo con la comunidad. A su vez, todas las guardianas recibidas participarán en los sorteos para ser Guardiana Destacada.'},
+	{'question':'Sobre la Guardiana Destacada.','answer':'La Guardiana Destacada es la única actividad que siempre estará activa y, como no hay feedback suficiente para realizar votaciones, la guardiana será elegida mediante sorteo. No habrá premios en maanas ni MO a menos que se indique lo contrario. La participación es completamente voluntaria y puedes realizar tantos aportes como gustes. Cada guardiana permanecerá en la portada durante una semana y cambiará todos los miércoles a la hora de la recarga.'},
+	{'question':'¿Cómo participo?','answer':'Para participar tanto en el Catálogo de Guardianas como en los sorteos de la Guardiana Destacada, solo tienes que rellenar <a href="https://forms.gle/VUFf7V88hFkJyz7g8" target="_blank">ESTE FORMULARIO</a>. <br><br><h4>Sobre los campos del formulario:</h4><p>A partir de ahora se te solicitará un correo electrónico REAL y VÁLIDO al que tengas acceso. Este no será público y será utilizado como medida de seguridad.</p><ul><li><u>Alias:</u> Este es tu nombre visible. Puedes poner tu nombre de usuario de Eldarya o elegir un "Alias" si quieres mantener tu privacidad. Ya no se aceptan aportes anónimos.</li><li><u>Código:</u> Aquí solo tienes que pegar el código para generar a tu guardiana. Este puedes obtenerlo en el perfil con el botón "Copiar código" o incluso desde la barra de direcciones. El código no debe generar ningún error, pero si le das a copiar y pegar no tienes de qué preocuparte.</li><li><u>Nombre de personaje o conjunto:</u> Este campo es opcional, si la guardiana o el conjunto que estás enviando tiene algún nombre puedes ponerlo aquí. </li></ul><br>Todas las nuevas guardianas serán "archivadas" en un nuevo catálogo, al cual puedes acceder desde el menú en la parte superior. <br><br><b>IMPORTANTE</b><br>Algunas de las guardianas alojadas en el antiguo catálogo no han sido transladadas al nuevo, ya que las he considerado spam. No son muchas así que las he agrupado a todas bajo la etiqueta de <a  target="_blank" href="https://gm-catalogo.blogspot.com/search/label/SPAM">SPAM</a>, puedes ir a echar un vistazo y hacer algún reclamo si ves la tuya ahí. Los reclamos pueden hacerlos ya sea por email o mediante un comentario en el blog. <br><br>Por cualquier duda o problema que tengas siempre puedes consultarme en el blog o escribiéndome a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a>.'},
+	{'question':'Todo sobre las cuentas.','answer':'<b>¿Cómo consigo una cuenta?</b><br>Tu cuenta es creada al momento de realizar tu primer aporte.<br><br><b>¿Qué son las cuentas verificadas? / ¿Cómo verifico mi cuenta? </b><br>Una cuenta puede estar verificada por dos razones: 1- Tener un email asociado o, 2- haber aportado más de una vez. Todos los nuevos aportes realizados con el nuevo formulario estarán asociados a un email y, por lo tanto, dichas cuentas estarán automáticamente verificadas.<br><br>Si ya tienes guardiana/s en el catálogo basta con completar el formulario normalmente (con el mismo alias) y el nuevo correo que ingreses será vinculado a tu "cuenta".<br><br><b>¿Cómo cambio mi alias?</b><br>Si ya no te gusta tu alias o simplemente quieres cambiarlo, puedes rellenar <a href="https://forms.gle/YnFtmvsZkxC9XJEz8" target="_blank">ESTE FORMULARIO</a> y realizaré el cambio en cuanto me sea posible. Una vez rellenado y enviado el formulario, ya podrás utilizar tu nuevo alias para realizar aportes.'},
+	/*{'question':'¿Cómo participar en un concurso/sorteo?','answer':'Cada actividad tendrá un post en el blog que indicará la temática o los pasos a seguir para participar. Si no sueles visitar el blog, podrás ver cuando haya actividades disponibles en el indicador de actividades que se encuentra en la página.'},*/
+	{'question':'¿Puedo realizar alguna actividad/concurso con tu vestidor?','answer':'¡Por supuesto! El vestidor es de libre uso para quien quiera realizar actividades con el.<br><br>Si tu interés es organizar alguna actividad aquí mismo, no dudes en enviarme un email a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a> con los detalles y veremos qué se puede hacer.'}
+	/*{'question':'Sobre los premios.','answer':'Los premios pueden ser maanas, MO o algún otro premio especial (a específicar). Estos podrían requerir o no el ingreso a tu cuenta para la compra de codes o la transferencia mediante el mercado según se especifique en cada actividad. Si no cuentas con el mercado desbloqueado o si no estás de acuerdo con esto, deberías abstenerte de participar.<br><br><h4>¿Cómo reclamo mi premio?</h4>Si resultas ser el ganador de alguna de las actividades, podrás reclamar tu premio enviando un email a <a href="mailto:gardiemaker@gmail.com">gardiemaker@gmail.com</a>. En el mensaje deberás especificar los datos según el tipo de premio, ya sea usuario y contraseña temporal (para la compra de codes) u horarios para coordinar en el mercado.<br><br> Si tienes alguna duda al respecto siempre puedes consultar primero, ya sea vía email o dejando un comentario en el blog.<br><br><h4>Premio vacante.</h4>Si el ganador no reclama su premio o si su reclamo es "sospechoso", el premio no pasará al segundo puesto ni se resorteará. La actividad quedará anulada.'}*/
 ]

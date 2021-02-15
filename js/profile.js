@@ -1,68 +1,42 @@
-const URL_SRC = "https://www.eldarya.es/assets/img/";
-const URL_PJ = "https://www.eldarya.es/assets/img/npc/mood/web/";
-
-const URL_CLOTHES = "item/player/";
-const URL_SKIN = "player/skin/";
-const URL_MOUTH = "player/mouth/";
-const URL_EYES = "player/eyes/";
-const URL_HAIR = "player/hair/";
-
-const URL_ICON = "icon/";
-const URL_FULL ="web_full/";
-const URL_HD = "web_hd/";
-const URL_PORTRAIT = "web_portrait/";
-var imgurl;
-
-var dbCount = 0, groupInfo, groupList, groupPet, groupFriend;
-var i = 0;
-var str, portraitMin = false;
-var galor;
+const URL_SRC = "https://www.eldarya.es/assets/img/", URL_PJ = "https://www.eldarya.es/assets/img/npc/mood/web/";
+const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/", URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
+const URL_ICON = "icon/", URL_FULL ="web_full/", URL_HD = "web_hd/", URL_PORTRAIT = "web_portrait/";
 var REMOTE = "https://gardiemaker.github.io";
+
+var groupInfo, groupList, groupPet, groupFriend;
+var str, portraitMin = false;
+var imgurl, galor;
+
 //================================================================
 
-$(document).ready(function iniciaTodo() {
+$(document).ready(function () {
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/activities", function(estado, success, xhr) {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    const requestInfo = new XMLHttpRequest();
-    requestInfo.open("GET", REMOTE + "/data/groupInfo.json");
-    requestInfo.responseType = "json";
-    requestInfo.send();
-    requestInfo.onload = function() {tempDB = requestInfo.response;countDB(tempDB, "info");};
+    const requestInfo = new XMLHttpRequest(); requestInfo.open("GET", REMOTE + "/data/groupInfo.json");
+    requestInfo.responseType = "json"; requestInfo.send(); requestInfo.onload = function() {
 
-    const requestList = new XMLHttpRequest();
-    requestList.open("GET", REMOTE + "/data/groupList.json");
-    requestList.responseType = "json";
-    requestList.send();
-    requestList.onload = function() {tempDB = requestList.response;countDB(tempDB, "list");};
+        const requestList = new XMLHttpRequest(); requestList.open("GET", REMOTE + "/data/groupList.json");
+        requestList.responseType = "json"; requestList.send(); requestList.onload = function() {
 
-    const requestPet = new XMLHttpRequest();
-    requestPet.open("GET", REMOTE + "/data/groupPet.json");
-    requestPet.responseType = "json";
-    requestPet.send();
-    requestPet.onload = function() {tempDB = requestPet.response;countDB(tempDB, "pet");};
+            const requestPet = new XMLHttpRequest(); requestPet.open("GET", REMOTE + "/data/groupPet.json");
+            requestPet.responseType = "json"; requestPet.send(); requestPet.onload = function() {
 
-    const requestFriend = new XMLHttpRequest();
-    requestFriend.open("GET", REMOTE + "/data/groupFriend.json");
-    requestFriend.responseType = "json";
-    requestFriend.send();
-    requestFriend.onload = function() {tempDB = requestFriend.response;countDB(tempDB, "friend");};
+                const requestFriend = new XMLHttpRequest(); requestFriend.open("GET", REMOTE + "/data/groupFriend.json");
+                requestFriend.responseType = "json"; requestFriend.send(); requestFriend.onload = function() {
+                    
+                    groupInfo = requestInfo.response;
+                    groupList = requestList.response;
+                    groupPet = requestPet.response;
+                    groupFriend = requestFriend.response;
 
-});
-
-
-function countDB(db, name) {
-    
-    switch (name) {
-        case "info":groupInfo = db;dbCount++;break;
-        case "list":groupList = db;dbCount++;break;
-        case "pet":groupPet = db;dbCount++;break;
-        case "friend":groupFriend = db;dbCount++;
+                    getCustom(); optPet(); optFriend();
+                };
+            };
+        };
     };
-    
-    if (dbCount == 4) {getCustom();optPet();optFriend();};
-};
+});
 
 function getCustom() {
 	str = window.location.search;
@@ -73,19 +47,19 @@ function getCustom() {
 		
 		if (customArray.length == 1) {
             document.getElementById("player-display-draggable").style.display = "none";
-            $("#player-actions-tab li").eq(2).hide();
+            $("#player-actions-tab li").eq(1).hide();
         }
-        cargarCanvas(customArray[0]);
+        cargarCanvas(0);
 
         $("#footer-links").html(customArray.length + " items en uso.");
 
-        document.getElementById("backC").setAttribute("href","wardrobe" + window.location.search);
+        document.getElementById("edit-code").setAttribute("href","wardrobe" + window.location.search);
 
 	} else {
 
         $("#footer-links").html("Ningún item en uso.");
         document.getElementById("player-display-draggable").style.display = "none";
-        $("#player-actions-tab li").eq(2).hide();
+        $("#player-actions-tab li").eq(1).hide();
     };
 
     dragGardienne('player-display-draggable');
@@ -96,12 +70,12 @@ function getCustom() {
 
 };
 
-function cargarCanvas(n) {
+function cargarCanvas(n = 0) {
 
     var error = "";
 
     try {
-    	var getLista = groupList.filter(function(v){return v.itemId == n});
+    	var getLista = groupList.filter(function(v){return v.itemId == customArray[n]});
         (getLista.length == 0)?(error = "Código incorrecto"):("");
     	var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
     	
@@ -110,7 +84,7 @@ function cargarCanvas(n) {
         if (error != "") {
             alert("El código introducido no es correcto o está corrupto.");
             document.getElementById("player-display-draggable").style.display = "none";
-            $("#player-actions-tab li").eq(2).hide();
+            $("#player-actions-tab li").eq(1).hide();
 
         } else {
             alert("Se ha producido un error, la página se actualizará.");
@@ -134,7 +108,7 @@ function cargarCanvas(n) {
 		var fondo = document.getElementsByClassName("player-element background-element")[0];
 
 		fondo.style.background = "url('" + newimg + "')";
-		//
+
 	} else {
 	//*------------------
 		var canvas = document.getElementsByTagName("canvas")[0];
@@ -144,13 +118,12 @@ function cargarCanvas(n) {
     	img.onload = function() {
 			ctx.drawImage(img, 0, 0);
 		};
-        
-		img.src = newimg;
+
+        img.src = newimg;
 	};
 
-	if (i < customArray.length - 1) {
-		i++;
-		cargarCanvas(customArray[i]);
+	if (n < customArray.length - 1) {
+		n++; cargarCanvas(n);
 	};
 };
 
@@ -191,9 +164,9 @@ function optFriend() {
     selF.add(option);
 };
 
-function cargarPortrait(n) {
+function cargarPortrait(n = 0) {
 
-    var getLista = groupList.filter(function(v){return v.itemId == n});
+    var getLista = groupList.filter(function(v){return v.itemId == customArray[n]});
     var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
     var newimg;
 
@@ -237,9 +210,9 @@ function cargarPortrait(n) {
         img.src = newimg;
     };
 
-    if (i < customArray.length - 1) {
-        i++;
-        cargarPortrait(customArray[i]);
+    if (n < customArray.length - 1) {
+        n++;
+        cargarPortrait(n);
     };
 };
 
@@ -301,8 +274,7 @@ function maxSize() {
     portrait.setAttribute("height", "891");
     document.getElementById("portraitcontainer").appendChild(portrait);
 
-    i = 0;
-    cargarPortrait(customArray[i]);
+    cargarPortrait(0);
 };
 
 function minSize() {
@@ -318,8 +290,7 @@ function minSize() {
     portrait.setAttribute("height", "594");
     document.getElementById("portraitcontainer").appendChild(portrait);
 
-    i = 0;
-    cargarPortrait(customArray[i]);
+    cargarPortrait(0);
 };
 
 function cargarPet(select, check, owner) {
@@ -620,7 +591,7 @@ function dragPet(id) {
 // ------------------------------------
 
 $(function() { 
-    $("#reLoad").click(function() { 
+    $("#reload").click(function() { 
 
         var child = document.getElementsByTagName("canvas")[0];
         var parent = document.getElementsByClassName("playerProfileAvatar")[0];
@@ -632,11 +603,10 @@ $(function() {
         canvas.height = 594;
         parent.appendChild(canvas);
 
-        i = 0;
-        cargarCanvas(customArray[i]);
+        cargarCanvas(0);
     });
 
-    $("#borderRad").click(function() {
+    $("#border-rad").click(function() {
         var esquina = document.getElementById("player-display");
 
         if (esquina.getAttribute("style") == "border-radius: 0px") {
@@ -646,7 +616,7 @@ $(function() {
         };
     });
 
-    $("#getPortrait").click(function() {
+    $("#get-portrait").click(function() {
         cargarPopUp();
 
         if (portraitMin == false) {
@@ -656,7 +626,7 @@ $(function() {
         }
     });
 
-    $("#getCode").click(function() {
+    $("#get-code").click(function() {
         var aux = document.createElement("input");
         aux.setAttribute("value",str);
         document.body.appendChild(aux);
@@ -764,8 +734,8 @@ $(function() {
         muevePosicion("sube");
     });
 
-    $("#loadCode").click(function() {
-        var inCode = $("#inputCode").val();
+    $("#load-code").click(function() {
+        var inCode = $("#input-code").val();
         window.location.search = "?s=" + inCode;
         
     });
