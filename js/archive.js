@@ -234,7 +234,7 @@ function dibujaTabla(entry, uVAL, pag) {
                         tabla += " featured' style='background-image:url(" + bg 
                         + ")'><span class='feat'>DESTACADA</span>";
                     } else {tabla += "'>";};
-                    tabla += "<img src='" + entry[suma].info.png + "'></div></td>"
+                    tabla += "<img src='https://docs.zoho.com/docs/orig/" + entry[suma].info.png + "'></div></td>"
                 } else {
                     tabla += "<td></td>";
                 }
@@ -252,7 +252,7 @@ function dibujaTabla(entry, uVAL, pag) {
                     // Mostrar lista de featured
                     tabla += "<td><div id='" + feat[suma].entry + "' class='abstract-thumbnail feat-page'"
                     + " style='background-image:url(" + bg 
-                    + ")'><span class='feat-title'>" + feat[suma].title + "</span><img src='" + entrada[0].info.png + "'></div></td>";
+                    + ")'><span class='feat-title'>" + feat[suma].title + "</span><img src='https://docs.zoho.com/docs/orig/" + entrada[0].info.png + "'></div></td>";
                 } else {
                     tabla += "<td></td>";
                 }       
@@ -427,7 +427,7 @@ function abrirPopup(elmnt) {
     + '<div id="entry-info-container" style="background-image: url(' + entry[0].info.background + ')">'
 
     // Gardienne + nombre || id
-    + '<img src="' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
+    + '<img src="https://docs.zoho.com/docs/orig/' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
     if (entry[0].info.name) {html += '<h2>' + entry[0].info.name + '</h2><p>ID: ' + entry[0].id + '</p>'} 
     else {html += '<h2>ID: ' + entry[0].id + '</h2>'};
     
