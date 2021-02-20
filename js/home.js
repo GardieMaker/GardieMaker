@@ -64,7 +64,7 @@ function featured(feat, entries) {
     var entry = entries.filter(function(v){return v.id == feat[0].entry});
 
 
-    document.getElementById("portrait").src = entry[0].info.png;
+    document.getElementById("portrait").src = "https://docs.zoho.com/docs/orig/" + entry[0].info.png;
     document.getElementById("portrait").style.background = "url('" + entry[0].info.background +  "') top center";
 
     if (entry[0].info.name == null) {
@@ -76,7 +76,7 @@ function featured(feat, entries) {
     document.getElementById("index-featured-info").innerHTML = 'De: <a href="archive?u=' + entry[0].alias + '">'
     + entry[0].alias + '</a><br><br>Abrir en: <a href="/es/wardrobe?s='
     + entry[0].info.code + '">Vestidor</a> | <a href="/es/profile?s='
-    + entry[0].info.code + '">Perfil</a><br><br><a href="'
+    + entry[0].info.code + '">Perfil</a><br><br><a href="https://docs.zoho.com/docs/orig/'
     + entry[0].info.png + '" target="_blank">Ver en tamaño completo</a>';
 
 };
