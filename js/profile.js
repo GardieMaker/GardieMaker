@@ -1,4 +1,4 @@
-const URL_SRC = "https://www.eldarya.es/assets/img/", URL_PJ = "https://www.eldarya.es/assets/img/npc/mood/web/";
+const URL_SRC = "https://www.eldarya.com/assets/img/", URL_PJ = "https://www.eldarya.com/assets/img/npc/mood/web/";
 const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/", URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
 const URL_ICON = "icon/", URL_FULL ="web_full/", URL_HD = "web_hd/", URL_PORTRAIT = "web_portrait/";
 var REMOTE = "https://gardiemaker.github.io";
@@ -334,7 +334,7 @@ function cargarPet(select, check, owner) {
         };
 
         imagep.src = "";
-        imagep.src = "https://www.eldarya.es/assets/img/pet/mood/profile/" + imgPet;
+        imagep.src = "https://www.eldarya.com/assets/img/pet/mood/profile/" + imgPet;
         
         if (select == "Galorze") {
             imagep.style.margin = "-300px 0 -200px -100px";

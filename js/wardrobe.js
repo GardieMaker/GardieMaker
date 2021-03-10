@@ -1,6 +1,6 @@
 // Variables globales
 var groupInfo = [], groupList = [], hayFondo = false;
-const URL_SRC = "https://www.eldarya.es/assets/img/"; 
+const URL_SRC = "https://www.eldarya.com/assets/img/"; 
 const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/",URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
 const URL_ICON = "icon/", URL_FULL ="web_full/", URL_PORTRAIT = "web_hd/";
 // --------------------------------------------------

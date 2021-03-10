@@ -226,7 +226,7 @@ function dibujaTabla(entry, uVAL, pag) {
                     // Fondo pequeño
                     var bg = entry[suma].info.background;
                     bg = bg.slice(55);
-                    bg = "https://www.eldarya.es/assets/img/item/player/icon/" + bg;
+                    bg = "https://www.eldarya.com/assets/img/item/player/icon/" + bg;
 
                     tabla += "<td><div id='" + entry[suma].id + "' class='abstract-thumbnail"
 
@@ -247,7 +247,7 @@ function dibujaTabla(entry, uVAL, pag) {
                     // Fondo pequeño
                     var bg = entrada[0].info.background;
                     bg = bg.slice(55);
-                    bg = "https://www.eldarya.es/assets/img/item/player/icon/" + bg;
+                    bg = "https://www.eldarya.com/assets/img/item/player/icon/" + bg;
 
                     // Mostrar lista de featured
                     tabla += "<td><div id='" + feat[suma].entry + "' class='abstract-thumbnail feat-page'"

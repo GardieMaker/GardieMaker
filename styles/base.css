@@ -19,8 +19,8 @@ strong, em, i, u, span, b, sub, sup, a, label, tt, var {
 }
 
 body{
-	/*background: #34386f url("https://www.eldarya.es/assets/img/item/player/web_hd/db28c830f7176d59b26856ba831ec0fb.jpg");*/
-    background: #34386f url("https://www.eldarya.es/assets/img/item/player/web_hd/8ff0e65dbdb21d7c4d0aa0cf9b881082.jpg");
+	/*background: #34386f url("https://www.eldarya.com/assets/img/item/player/web_hd/db28c830f7176d59b26856ba831ec0fb.jpg");*/
+    background: #34386f url("https://www.eldarya.com/assets/img/item/player/web_hd/8ff0e65dbdb21d7c4d0aa0cf9b881082.jpg");
     background-attachment: fixed;
     background-position: top center;
     background-size: cover;
@@ -104,7 +104,7 @@ html, body{
 }
 
 #news-infos {
-    background-image: url("https://www.eldarya.es/static/img/design/player-infos-background-middle.png");
+    background-image: url("https://www.eldarya.com/static/img/design/player-infos-background-middle.png");
     padding: 0 10px 0 10px;
     text-align: center;
 }
@@ -244,7 +244,7 @@ body a{
 
 #container h1 {
     position: relative;
-    background-image: url("https://www.eldarya.es/static/img/design/h1.png");
+    background-image: url("https://www.eldarya.com/static/img/design/h1.png");
     height: 45px;
     line-height: 45px;
     display: inline-block;
@@ -257,7 +257,7 @@ body a{
 }
 
 #container h1 .title-end{
-    background-image: url("https://www.eldarya.es/static/img/design/h1-end.png");
+    background-image: url("https://www.eldarya.com/static/img/design/h1-end.png");
     position: absolute;
     right: -25px;
     top:0;

@@ -1,5 +1,5 @@
-const URL_SRC = "https://www.eldarya.es/assets/img/player/hair/icon/";
-const URL_FULL = "https://www.eldarya.es/assets/img/player/hair/web_portrait/";
+const URL_SRC = "https://www.eldarya.com/assets/img/player/hair/icon/";
+const URL_FULL = "https://www.eldarya.com/assets/img/player/hair/web_portrait/";
 var trackingList, tracking = "all";
 //================================================================
 $(document).ready(function () {

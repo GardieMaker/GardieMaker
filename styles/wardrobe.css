@@ -205,19 +205,19 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 }
 
 .guard-gem.guard-1{
-	background-image: url("https://www.eldarya.es/static/img/design/guard/marker-guard-1.png");
+	background-image: url("https://www.eldarya.com/static/img/design/guard/marker-guard-1.png");
 }
 
 .guard-gem.guard-2{
-	background-image: url("https://www.eldarya.es/static/img/design/guard/marker-guard-2.png");
+	background-image: url("https://www.eldarya.com/static/img/design/guard/marker-guard-2.png");
 }
 
 .guard-gem.guard-3{
-	background-image: url("https://www.eldarya.es/static/img/design/guard/marker-guard-3.png");
+	background-image: url("https://www.eldarya.com/static/img/design/guard/marker-guard-3.png");
 }
 
 .guard-gem.guard-4{
-	background-image: url("https://www.eldarya.es/static/img/design/guard/marker-guard-4.png");
+	background-image: url("https://www.eldarya.com/static/img/design/guard/marker-guard-4.png");
 }
 
 /* Premio del mes*/
@@ -225,7 +225,7 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
     width: 20px;
     height: 19px;
     border-width: 0;
-    background-image: url("https://www.eldarya.es/static/img/marker_anim.png");
+    background-image: url("https://www.eldarya.com/static/img/marker_anim.png");
 }
 /* Fin marcadores de rareza */
 
