@@ -420,11 +420,14 @@ function abrirPopup(elmnt) {
     // Cargar elemento
     var entry = entrys.filter(function(v) {return v.id == elmnt});
 
+    var fondo = entry[0].info.background;
+    fondo = fondo.replace(".es", ".com");
+
     // Contenedor de fondo > Contenedor de ventana + botón de cierre
     var html = '<div id="popupBG"><a class="nav-box-prev"></a><div id="popupW"><div id="button-close" onclick="cierraPopup()"></div>'
 
     // Div principal
-    + '<div id="entry-info-container" style="background-image: url(' + entry[0].info.background + ')">'
+    + '<div id="entry-info-container" style="background-image: url(' + fondo + ')">'
 
     // Gardienne + nombre || id
     + '<img src="https://docs.zoho.com/docs/orig/' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';

@@ -65,7 +65,9 @@ function featured(feat, entries) {
 
 
     document.getElementById("portrait").src = "https://docs.zoho.com/docs/orig/" + entry[0].info.png;
-    document.getElementById("portrait").style.background = "url('" + entry[0].info.background +  "') top center";
+    var fondo = entry[0].info.background;
+    fondo = fondo.replace(".es", ".com");
+    document.getElementById("portrait").style.background = "url('" + fondo +  "') top center";
 
     if (entry[0].info.name == null) {
         document.getElementById("index-featured-title").innerHTML = 'ID : <a href="archive?e=' + entry[0].id + '">' + entry[0].id + '</a></div>'
