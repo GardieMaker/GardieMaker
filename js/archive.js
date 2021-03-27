@@ -80,6 +80,7 @@ function cargarRanking() {
     for (a = 0; a < users.length; a++) {
         if (users[a].alias != "Zunay") {
             var p = entrys.filter(v => {return v.alias == users[a].alias});
+            p = p.filter(v => {return v.type != "cosplay"});
             p = p.length;
     
             if (top1[1] < p) {
@@ -160,29 +161,19 @@ function cargarListas(pag) {
                 uVAL = toBoolean(uVAL);
                 entry = entrys.filter(function(v){return v.featured === uVAL});
             } else {
-                for (i = 0; i < entrys.length; i ++) {
-                    entry.push(entrys[i]);
-                };
+                if (uVAL == "guardians") {
+                    entry = entrys.filter(function(v){return v.type != "cosplay"});
+                } else if (uVAL == "cosplay") {
+                    entry = entrys.filter(function(v){return v.type == "cosplay"});
+                } else {
+                    for (i = 0; i < entrys.length; i ++) {
+                        entry.push(entrys[i]);
+                    };
+                };           
             };
             break;
     };
-/*
-    // Si es perfil mostrar menu
-    if (uCAT == "u") {
 
-        var existe = users.filter(function(v){return v.alias == uVAL});
-        (existe.length != 0) ? $("#menu-user").val(uVAL) : window.location.search = "?p=all";
-
-        //Pendiente V2
-        if ($("#archive-menu-user")) $("div").remove("#archive-menu-user");
-        var mUSR = '<div id="archive-menu-user" class="menu-section"><p>Mostrando todos los aportes de <b>' + existe[0].alias + '</b>.</div>';
-        $("#archive-thumbnail-content").append(mUSR);
-        
-
-    } else if ($("#archive-menu-user")) {
-        $("div").remove("#archive-menu-user");
-    };
-*/
     // Cargar posts en tablas segun paginacion
     dibujaTabla(entry, uVAL, pag);
 
@@ -233,6 +224,8 @@ function dibujaTabla(entry, uVAL, pag) {
                     if (entry[suma].featured === true) {
                         tabla += " featured' style='background-image:url(" + bg 
                         + ")'><span class='feat'>DESTACADA</span>";
+                    } else if (entry[suma].type == "cosplay") {
+                        tabla += " cosplay'><span class='cplay'>COSPLAY</span>";
                     } else {tabla += "'>";};
                     tabla += "<img src='https://docs.zoho.com/docs/orig/" + entry[suma].info.png + "'></div></td>"
                 } else {
@@ -393,6 +386,16 @@ $(function() {
         selectMenu("p","all");
         cargarListas(0);
     });
+
+    $("#menu-guardians").click(function(){
+        selectMenu("p","guardians");
+        cargarListas(0);
+    });
+
+    $("#menu-cosplay").click(function(){
+        selectMenu("p","cosplay");
+        cargarListas(0);
+    });
     
     $("#menu-user").change(function() {
         selectMenu("u", $("#menu-user").val() );
@@ -431,6 +434,11 @@ function abrirPopup(elmnt) {
 
     // Gardienne + nombre || id
     + '<img src="https://docs.zoho.com/docs/orig/' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
+
+    if (entry[0].type == "cosplay") {
+        html += '<span id="entry-info-cosplay">COSPLAY</span>';
+    }
+
     if (entry[0].info.name) {html += '<h2>' + entry[0].info.name + '</h2><p>ID: ' + entry[0].id + '</p>'} 
     else {html += '<h2>ID: ' + entry[0].id + '</h2>'};
     
