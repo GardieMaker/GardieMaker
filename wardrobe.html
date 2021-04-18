@@ -5,7 +5,8 @@
         <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
 
-        <link href="https://fonts.googleapis.com/css?family=Rubik:400&display=swap&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Rubik:400&display=swap&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&display=swap" rel="stylesheet"> 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script type="text/javascript" src="js/wardrobe.js"></script>
 
@@ -54,6 +55,8 @@
         <!-- content -->
         <div id="content">
             <div id="container">
+                <div id="change-lang" class="button" current-lang="es" title="Algunas prendas no están traducidas.">Nombres en inglés</div>
+                <div id="filter-help" title="Filtros manuales" class="button">?</div>
                 <div class="page-main-container marketplace-main-container">
                     <h1>Buscar
                         <span class="title-end"></span>
@@ -177,6 +180,25 @@
         <div id="footer" itemscope="" itemtype="https://schema.org/WPFooter">
             <div id="footer-in">2021 | GardieMaker
                 <span id="footer-links">Cargando...</span>
+            </div>
+        </div>
+
+        <!-- popup -->
+        <div id="popup-bg">
+            
+            <div id="popup-container">
+                <div id="close-popup" class="button">x</div>
+                <div class="popup-title">Filtros manuales</div>
+                <p>Para más opciones de filtrado, el vestidor cuenta con filtros manuales. Para usar cualquiera de estos, basta con escribir su respectivo comando en el buscador. Los filtros disponibles son los siguientes:</p>
+                <h4>CÓDIGOS</h4>
+                <p>Las prendas pueden buscarse por sus códigos exactos.</p>
+                <h4>ARCOÍRIS</h4>
+                <p>Los cabellos arcoíris pueden filtrarse escribiendo <span class="filter-body-markup">#rainbow</span> en el buscador.</p>
+                <h4>ÓPALOS</h4>
+                <p>Escribe <span class="filter-body-markup">#shiny</span> para filtrar las prendas con estos colores.</p>
+                <h4>EVENTOS</h4>
+                <p>Puedes filtrar las prendas por eventos específicos, por año o ambos. Para utilizarlo, debes seguir la fórmula <span class="filter-body-markup">SIGLAS:AÑO</span>. Por ejemplo, para filtrar las prendas de San Valentín 2018 puedes hacerlo con <span class="filter-body-markup">SV:2018</span>. A su vez, quitando las siglas o el año, puedes filtrar por uno o por otro.</p>
+                <p><u>Siglas disponibles:</u> A = 1 de Abril, SV = San Valentín, P = Pascua, M = Música, JE = Japan Expo, PM = Pride Month, V = Verano, BF = Black Friday, H = Halloween, N = Navidad</p>
             </div>
         </div>
 

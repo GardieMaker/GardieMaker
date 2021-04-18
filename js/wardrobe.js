@@ -3,9 +3,12 @@ var groupInfo = [], groupList = [], hayFondo = false;
 const URL_SRC = "https://www.eldarya.com/assets/img/"; 
 const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/",URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
 const URL_ICON = "icon/", URL_FULL ="web_full/", URL_PORTRAIT = "web_hd/";
+var localization = "";
+
 // --------------------------------------------------
 
 $(document).ready(function () {
+    localization = $("#change-lang").attr("current-lang");
 
 	$.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/activities", function(estado, success, xhr) {
 		document.getElementsByClassName("news-latest")[0].innerHTML = estado;
@@ -124,7 +127,14 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
             if (buscador != "") {
                 if (!buscador.includes(":")) {
                     var nombre = normalize(buscador).toLowerCase();
-                    info = info.filter(function(v){return (normalize(v.name).toLowerCase()).includes(nombre)});
+
+                    if (localization == "es") {
+                        info = info.filter(function(v){return (normalize(v.spanish).toLowerCase()).includes(nombre)});
+                    } else if (localization == "en") {
+                        info = info.filter(function(v){return (normalize(v.english).toLowerCase()).includes(nombre)});
+                    } else if (localization == "fr") {
+                        // Pendiente
+                    }
 
                 } else {
                     // Búqueda por evento
@@ -275,8 +285,28 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
         var dibuja = '<li class="marketplace-abstract marketplace-search-item" data-groupid="' 
         + currentGrupo[0].groupId + '" data-itemid="' + currentPrenda[looper].itemId 
         + '"><div class="img-container"><img class="abstract-icon" src="' + img + '"/>' + rarity 
-        + '</div><div class="abstract-container"><div class="abstract-name">' + currentGrupo[0].name 
-        + '</div><div class="abstract-content"><div class="abstract-type">' + currentGrupo[0].category 
+        + '</div><div class="abstract-container">'; 
+
+        if (localization == "es") {
+            var esp = currentGrupo[0].spanish;
+            if (esp.includes("(x)")) { // No tiene traducción o no es oficial
+                esp = esp.slice(3);
+                dibuja+= '<div class="abstract-name undefined">' + esp;
+            } else { // Disponible en español
+                dibuja+= '<div class="abstract-name">' + currentGrupo[0].spanish;
+            }
+            
+        } else if (localization == "en") {
+            var eng = currentGrupo[0].english;
+            if (eng.includes("(x)")) { // No tiene traducción o no es oficial
+                eng = eng.slice(3);
+                dibuja+= '<div class="abstract-name undefined">' + eng;
+            } else { // Disponible en inglés
+                dibuja+= '<div class="abstract-name">' + currentGrupo[0].english;
+            }
+        }
+
+        dibuja += '</div><div class="abstract-content"><div class="abstract-type">' + currentGrupo[0].category 
         + '</div><div class="abstract-code"><div class="code-info"> COD. <span class="universal-code">'
         + currentPrenda[looper].itemId + '</span></div></div></div><div class="abstract-note">'
         + leyenda + '</div></div></li>';
@@ -845,8 +875,64 @@ function fijarPrenda() {
     };
 };
 
+function changeLang() {
+    for (i = 0; i < $(".marketplace-search-item").length; i++) {
+        // Obtener grupo
+        var temp = $(".marketplace-search-item").eq(i).attr("data-groupid");
+        temp = groupInfo.filter(v => {return v.groupId == temp});
+
+        if (localization == "es") {    
+            temp = temp[0].spanish;
+
+            if (temp.includes("(x)")) {
+                $(".abstract-name").eq(i).attr("class", "abstract-name undefined");
+                temp = temp.slice(3);
+                $(".abstract-name").eq(i).text(temp);
+
+            } else {
+                $(".abstract-name").eq(i).attr("class", "abstract-name");
+                $(".abstract-name").eq(i).text(temp);
+            }
+
+        } else if (localization == "en") {
+            temp = temp[0].english;
+
+            if (temp.includes("(x)")) {
+                $(".abstract-name").eq(i).attr("class", "abstract-name undefined");
+                temp = temp.slice(3);
+                $(".abstract-name").eq(i).text(temp);
+
+            } else {
+                $(".abstract-name").eq(i).attr("class", "abstract-name");
+                $(".abstract-name").eq(i).text(temp);
+            };
+        };
+    };
+
+};
 
 $(function() {
+    $("#change-lang").click(function() {
+        var lang = $(this).attr("current-lang");
+        if (lang == "en") {
+            // Cambiar a español
+            $(this).removeClass("active");
+            $(this).attr("current-lang", "es");
+            localization = "es";
+
+        } else if (lang == "es") {
+            // Cambiar a inglés
+            $(this).addClass("active");
+            $(this).attr("current-lang", "en");
+            localization = "en";
+        }
+        changeLang();
+    });
+
+    // Abre y cierra popup
+    $("#filter-help").click(function() {$("#popup-bg").fadeIn(300);});
+    $("#close-popup").click(function() {$("#popup-bg").fadeOut(200);});
+
     $("#filter-bodyLocationOptions").change(function() {
         $("#filter-guardOptions").val("");
 		$("#filter-rarityOptions").val("");
