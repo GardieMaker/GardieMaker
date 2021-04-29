@@ -65,7 +65,7 @@ input[type="submit"]:hover {
 }
 
 .index-image {
-	background: url("../assets/img/z-home.png");
+	background-image: url("../assets/img/z-home.png");
 	background-position-y: -253%;
 	background-position-x: -205%;
 	background-size: 453%;
@@ -73,6 +73,18 @@ input[type="submit"]:hover {
 	height: 215px;
 	position: relative;
 	float: left;
+
+	/* VER 2 */
+	/*background-image: url("https://docs.zohopublic.com/docs/orig/9eiqybf92fccdd7cd4577a9db42c28f0ff7aa");*/
+	background-position-y: -160px;
+	background-position-x: -245px;
+	width: 655px;
+	height: 215px;
+	position: absolute;
+	float: left;
+	background-size: 630px;
+	background-repeat: no-repeat;
+	/* */
 }
 
 .index-side {
@@ -80,6 +92,10 @@ input[type="submit"]:hover {
 	width: 80%;
 	float: right;
 	height: 100%;
+
+	/* VER 2 */
+	width: 70%;
+	/* */
 }
 
 .index-bio-title {

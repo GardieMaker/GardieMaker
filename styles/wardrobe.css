@@ -163,7 +163,6 @@ canvas {
     background: #b9f8fa;
 }
 
-
 #marketplace-search-items li{
 	width: 500px;
 	height: 75px;
@@ -396,13 +395,18 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 }
 
 .abstract-tags {
-	position: relative;
-	text-transform: uppercase;
-	font-size: 10px;
-	background-color: #bbb;
-	padding: 1px 5px;
-	float: right;
-	margin-left: 2px;
+    position: relative;
+	padding: 2px 5px;
+	font-size: 12px;
+	background-color: #888;
+	color: #fff;
+	border-radius: 5px;
+	margin: 0 2px 2px 0;
+	float: left;
+}
+
+.abstract-tags.incomplete {
+    background-color: #d00000;
 }
 
 #popup-bg {

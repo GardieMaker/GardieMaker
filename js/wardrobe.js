@@ -14,10 +14,10 @@ $(document).ready(function () {
 		document.getElementsByClassName("news-latest")[0].innerHTML = estado;
 	});
 
-    const requestInfo = new XMLHttpRequest();requestInfo.open("GET", "https://gardiemaker.github.io/data/groupInfo.json");
+    const requestInfo = new XMLHttpRequest();requestInfo.open("GET", "../data/groupInfo.json");
     requestInfo.responseType = "json";requestInfo.send();requestInfo.onload = function() {
 
-        const requestList = new XMLHttpRequest();requestList.open("GET", "https://gardiemaker.github.io/data/groupList.json");
+        const requestList = new XMLHttpRequest();requestList.open("GET", "../data/groupList.json");
         requestList.responseType = "json";requestList.send();requestList.onload = function() {
             
             groupList = requestList.response; groupInfo = requestInfo.response;
@@ -175,12 +175,8 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
 
             } else if (buscador.includes("#")) {
                 // Busqueda de opalos o arcoiris (>1 resultado)
-                if (buscador.includes("shiny")) {
-                    prenda = prenda.filter(v => {return v.color == "shiny"});
-                } else if (buscador.includes ("rainbow")) {
-                    prenda = prenda.filter(v => {return v.especial == "Arcoíris"});
-                } else {prenda.length = 0};
-
+                var color = buscador.slice(1);
+                prenda = prenda.filter(v => {return v.color == color});
             };
 
             $("#footer-links").html("Mostrando " + prenda.length + " artículos de los " + groupList.length + " artículos disponibles.");
@@ -309,7 +305,20 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
         dibuja += '</div><div class="abstract-content"><div class="abstract-type">' + currentGrupo[0].category 
         + '</div><div class="abstract-code"><div class="code-info"> COD. <span class="universal-code">'
         + currentPrenda[looper].itemId + '</span></div></div></div><div class="abstract-note">'
-        + leyenda + '</div></div></li>';
+        + leyenda + '</div></div><div class="abstract-tags-container">';
+
+        if (currentPrenda[looper].color != undefined) {
+            dibuja += '<div class="abstract-tags">#' + currentPrenda[looper].color + '</div>';
+        }
+        
+        if (subCheck(currentGrupo[0].groupId)) {
+            if (currentGrupo[0].tag == "incomplete") {dibuja += '<div class="abstract-tags incomplete">GRUPO INCOMPLETO</div>'};
+            var cuenta = groupList.filter(v => {return v.groupId == currentGrupo[0].groupId});
+            cuenta = cuenta.length;
+            dibuja += '<div class="abstract-tags">' + cuenta + ' colores</div>';  
+        };
+        
+        dibuja += '</div></li>';
 
         $("#marketplace-search-items").append(dibuja);
     };
