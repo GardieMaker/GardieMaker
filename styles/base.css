@@ -314,13 +314,26 @@ body a{
     background: #34386f;
 }
 
-#footer #footer-links{
+#footer-links {
+    position: relative;
+    display: inline-block;
+}
+
+#footer-links li {
+    display: inline-block;
+}
+
+#footer-links li:nth-child(n+2) {
+    margin-left: 25px;
+}
+
+#footer #footer-info {
     position: absolute;
     right: 0;
 
 }
 
-#footer-links a img {
+#footer-info a img {
     height: 28px;
     float: right;
     padding: 7px 7px 7px 0;

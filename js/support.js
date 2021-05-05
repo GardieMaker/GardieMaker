@@ -7,7 +7,7 @@ $(document).ready(function(){
 	});
 
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
-        document.getElementById("footer-links").innerHTML = afiliados;
+        document.getElementById("footer-info").innerHTML = afiliados;
     });
 
 	str = window.location.search;

@@ -162,7 +162,7 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
                 
             };
 
-            $("#footer-links").html("Mostrando " + info.length + " artículos de los " + groupList.length + " artículos disponibles.");
+            $("#footer-info").html("Mostrando " + info.length + " artículos de los " + groupList.length + " artículos disponibles.");
 
         } else { // Busquedas manuales (25746, #shiny, #rainbow)
             // Filtrar desde groupList
@@ -179,7 +179,7 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
                 prenda = prenda.filter(v => {return v.color == color});
             };
 
-            $("#footer-links").html("Mostrando " + prenda.length + " artículos de los " + groupList.length + " artículos disponibles.");
+            $("#footer-info").html("Mostrando " + prenda.length + " artículos de los " + groupList.length + " artículos disponibles.");
         };
     
     } else {
@@ -187,7 +187,7 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
         info = groupInfo.filter(v => {return v.groupId == sub});
         prenda = groupList.filter(v => {return v.groupId == sub});
 
-        $("#footer-links").html("Mostrando " + prenda.length + " artículos de los " + groupList.length + " artículos disponibles.");
+        $("#footer-info").html("Mostrando " + prenda.length + " artículos de los " + groupList.length + " artículos disponibles.");
     };
 
     // Dibujar DOM

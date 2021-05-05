@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     // Cargar afiliados
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
-        document.getElementById("footer-links").innerHTML = afiliados;
+        document.getElementById("footer-info").innerHTML = afiliados;
     });
 
     // Cargar usuarios, entradas y destacadas
@@ -430,7 +430,7 @@ function abrirPopup(elmnt) {
     var html = '<div id="popupBG"><a class="nav-box-prev"></a><div id="popupW"><div id="button-close" onclick="cierraPopup()"></div>'
 
     // Div principal
-    + '<div id="entry-info-container" style="background-image: url(' + fondo + ')">'
+    + '<div id="entry-info-container" entry-dataid="' + entry[0].id + '" style="background-image: url(' + fondo + ')">'
 
     // Gardienne + nombre || id
     + '<img src="https://docs.zoho.com/docs/orig/' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
@@ -468,7 +468,9 @@ function abrirPopup(elmnt) {
     // Cierre + flechas
     html += '</div></div></div></div><a class="nav-box-next"></a></div>';
 
-    $("body").append(html)
+    $("body").append(html);
+    var enlace = "https://docs.google.com/forms/d/e/1FAIpQLScHNJ91Bn3QSDk6IsK0J_ZB9Ja5ieWh8s1FdPIYX3HzF7Hwuw/viewform?usp=pp_url&entry.952360021=" + entry[0].id;
+    if (entry[0].type != "cosplay") {$("#entry-info-container").append('<span class="cosplay-report"><a href="' + enlace + '" target="_blank">Notificar cosplay</a></span>')};
     $("#popupBG").fadeIn(300);
 }
 

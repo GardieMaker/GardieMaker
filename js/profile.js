@@ -51,13 +51,13 @@ function getCustom() {
         }
         cargarCanvas(0);
 
-        $("#footer-links").html(customArray.length + " items en uso.");
+        $("#footer-info").html(customArray.length + " items en uso.");
 
         document.getElementById("edit-code").setAttribute("href","wardrobe" + window.location.search);
 
 	} else {
 
-        $("#footer-links").html("Ningún item en uso.");
+        $("#footer-info").html("Ningún item en uso.");
         document.getElementById("player-display-draggable").style.display = "none";
         $("#player-actions-tab li").eq(1).hide();
     };
