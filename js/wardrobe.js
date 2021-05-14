@@ -338,9 +338,9 @@ function pagination(activa, paginas) {
         for (s = 0; s < paginas; s++) {
             var num = s + 1;
             if (s == activa) {
-                pagination.push('<div class="page selected">' + num + '</div>');
+                pagination.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
             } else {
-                pagination.push('<div class="page">' + num + '</div>');
+                pagination.push('<div class="page" page-number="' + num + '">' + num + '</div>');
             };
         };
 
@@ -352,9 +352,9 @@ function pagination(activa, paginas) {
                 var num = i + 1;
                 if (i != 9) {
                     if (i == activa) {
-                        pagination.push('<div class="page selected">' + num + '</div>');
+                        pagination.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
                     } else {
-                        pagination.push('<div class="page">' + num + '</div>');
+                        pagination.push('<div class="page" page-number="' + num + '">' + num + '</div>');
                     };
 
                 } else {
@@ -373,11 +373,11 @@ function pagination(activa, paginas) {
                     if (m == 2) m = (parseInt(activa) - 4);
                 } else {
                     if (m == activa) {
-                        pagination.push('<div class="page selected">' + num + '</div>');
+                        pagination.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
                     } else if (m == (parseInt(activa) + 4)) {
                         m = paginas - 4;
                     } else {
-                        pagination.push('<div class="page">' + num + '</div>');
+                        pagination.push('<div class="page" page-number="' + num + '">' + num + '</div>');
                     };
                 };
             };
@@ -391,9 +391,9 @@ function pagination(activa, paginas) {
                     f = (paginas - 10);
                 } else {
                     if (f == activa) {
-                        pagination.push('<div class="page selected">' + num + '</div>');
+                        pagination.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
                     } else {
-                        pagination.push('<div class="page">' + num + '</div>');
+                        pagination.push('<div class="page" page-number="' + num + '">' + num + '</div>');
                     };
                 };
             };
@@ -959,7 +959,7 @@ $(function() {
         var grupo = $(this).attr("data-groupid");
         var code = $(this).attr("data-itemid");
         var tieneSub = subCheck(grupo);
-        var page = $(".page.selected").text();
+        var page = parseInt($(".page.selected").attr("page-number"));
         page--;
         
         if (tieneSub) {
@@ -992,7 +992,7 @@ $(function() {
     // Selecciona página
     $(".pagination").on("click", ".page", function() {
         if ($(this).attr("class") != "page selected") {
-            var pagina = $(this).html() - 1;
+            var pagina = parseInt($(this).attr("page-number")) - 1;
 
             // Si existe es sublista, si no es lista
             if ($(".marketplace-search-back").length == 1) {
@@ -1020,8 +1020,15 @@ $(function() {
 function getFiltros() {
     var a = $("#filter-bodyLocationOptions").val();
     var b = $("#filter-guardOptions").val();
-    var c = $("#filter-rarityOptions option:selected").text();
-    if (c == "Todas las rarezas") c = "";
+    var c = $("#filter-rarityOptions").val();
+    switch (c) {
+        case "common": c = "Común"; break;
+        case "rare": c = "Raro"; break;
+        case "epic": c = "Épico"; break;
+        case "legendary": c = "Legendario"; break;
+        case "event": c = "Evento"; break;
+        default: c = "";
+    };
     var d = $("#filter-orderOptions").val();
     var e = $("#filter-itemName").val();
 

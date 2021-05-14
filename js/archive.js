@@ -293,9 +293,9 @@ function hacerPagination(activa, paginas) {
         for (s = 0; s <=paginas; s++) {
             var num = s + 1;
             if (s == activa) {
-                truncation.push('<div class="page selected">' + num + '</div>');
+                truncation.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
             } else {
-                truncation.push('<div class="page">' + num + '</div>');
+                truncation.push('<div class="page" page-number="' + num + '">' + num + '</div>');
             };
         };
         
@@ -309,9 +309,9 @@ function hacerPagination(activa, paginas) {
                 var num = i + 1;
                 if (i != 11){
                     if (i == activa) {
-                        truncation.push('<div class="page selected">' + num + '</div>');
+                        truncation.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
                     } else {
-                        truncation.push('<div class="page">' + num + '</div>');
+                        truncation.push('<div class="page" page-number="' + num + '">' + num + '</div>');
                     };
                 } else {
                     truncation.push('<span class="truncation">...</span>');
@@ -328,12 +328,12 @@ function hacerPagination(activa, paginas) {
                     if (m == 2) m = (activa - 5) ;
                 } else {
                     if (m == activa) {
-                        truncation.push('<div class="page selected">' + num + '</div>');
+                        truncation.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
                     } else if (m == (activa + 5)) {
                         m = paginas - 3;
 
                     } else {
-                        truncation.push('<div class="page">' + num + '</div>');
+                        truncation.push('<div class="page" page-number="' + num + '">' + num + '</div>');
                     };
                 }
             }
@@ -349,15 +349,13 @@ function hacerPagination(activa, paginas) {
                     f = (paginas - 11);
                 } else {
                     if (f == activa) {
-                        truncation.push('<div class="page selected">' + num + '</div>');
+                        truncation.push('<div class="page selected" page-number="' + num + '">' + num + '</div>');
                     } else {
-                        truncation.push('<div class="page">' + num + '</div>');
+                        truncation.push('<div class="page" page-number="' + num + '">' + num + '</div>');
                     }
                 };
             }
-
         }
-
     }
 /*
     !!! CATALOGO !!!
@@ -409,7 +407,7 @@ $(function() {
 
     $("#archive-thumbnail-content").on("click", ".page", function() {
         if ($(this).attr("class") != "page selected") {
-            var pagina = ($(this).text() - 1);
+            var pagina = parseInt($(this).attr("page-number")) - 1;
             cargarListas(pagina);
         }
     });
