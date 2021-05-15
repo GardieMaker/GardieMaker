@@ -961,6 +961,7 @@ $(function() {
         var tieneSub = subCheck(grupo);
         var page = parseInt($(".page.selected").attr("page-number"));
         page--;
+        if (isNaN(page)) page = 0;
         
         if (tieneSub) {
             // Cargar sublista
