@@ -56,6 +56,10 @@ select, input {
 	left: 295px;
 }
 
+#friend-display-draggable {
+    left: 220px;
+}
+
 .playerProfileAvatar {
 	width: 420px;
 	height: 594px;

@@ -1,4 +1,4 @@
-const URL_SRC = "https://www.eldarya.com/assets/img/", URL_PJ = "https://www.eldarya.com/assets/img/npc/mood/web/";
+const URL_SRC = "https://www.eldarya.com/assets/img/";
 const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/", URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
 const URL_ICON = "icon/", URL_FULL ="web_full/", URL_HD = "web_hd/", URL_PORTRAIT = "web_portrait/";
 var REMOTE = "https://gardiemaker.github.io";
@@ -14,16 +14,16 @@ $(document).ready(function () {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    const requestInfo = new XMLHttpRequest(); requestInfo.open("GET", REMOTE + "/data/groupInfo.json");
+    const requestInfo = new XMLHttpRequest(); requestInfo.open("GET", "../data/groupInfo.json");
     requestInfo.responseType = "json"; requestInfo.send(); requestInfo.onload = function() {
 
-        const requestList = new XMLHttpRequest(); requestList.open("GET", REMOTE + "/data/groupList.json");
+        const requestList = new XMLHttpRequest(); requestList.open("GET", "../data/groupList.json");
         requestList.responseType = "json"; requestList.send(); requestList.onload = function() {
 
-            const requestPet = new XMLHttpRequest(); requestPet.open("GET", REMOTE + "/data/groupPet.json");
+            const requestPet = new XMLHttpRequest(); requestPet.open("GET", "../data/groupPet.json");
             requestPet.responseType = "json"; requestPet.send(); requestPet.onload = function() {
 
-                const requestFriend = new XMLHttpRequest(); requestFriend.open("GET", REMOTE + "/data/groupFriend.json");
+                const requestFriend = new XMLHttpRequest(); requestFriend.open("GET", "../data/groupFriend.json");
                 requestFriend.responseType = "json"; requestFriend.send(); requestFriend.onload = function() {
                     
                     groupInfo = requestInfo.response;
@@ -147,21 +147,20 @@ function optPet() {
 };
 
 function optFriend() {
-    var selF = document.getElementById("select-friend");
-    
-    var option = document.createElement("option");
-    option.text = "Ninguno";
-    selF.add(option);
+
+    $("#select-friend").append('<option value="">Ninguno</option>');
+    $("#select-friend").append('<optgroup id="friend-new-era" label="A New Era"></optgroup>');
+    $("#select-friend").append('<optgroup id="friend-origins" label="The Origins"></optgroup>');
 
     for (f = 0; f < groupFriend.length; f++) {
-        option = document.createElement("option");
-        option.text = groupFriend[f].name;
-        selF.add(option);
+        if (groupFriend[f].category == "origins") {
+            $("#friend-origins").append('<option value="' + groupFriend[f].id + '">' + groupFriend[f].name + '</option>');
+        } else {
+            $("#friend-new-era").append('<option value="' + groupFriend[f].id + '">' + groupFriend[f].name + '</option>');
+        };
     };
 
-    option = document.createElement("option");
-    option.text = "Otro...";
-    selF.add(option);
+    $("#select-friend").append('<option value="add-new">Otro...</option>');
 };
 
 function cargarPortrait(n = 0) {
@@ -334,7 +333,7 @@ function cargarPet(select, check, owner) {
         };
 
         imagep.src = "";
-        imagep.src = "https://www.eldarya.com/assets/img/pet/mood/profile/" + imgPet;
+        imgPet.includes("eldarya") ? imagep.src = imgPet : imagep.src = "https://www.eldarya.com/assets/img/pet/mood/profile/" + imgPet;
         
         if (select == "Galorze") {
             imagep.style.margin = "-300px 0 -200px -100px";
@@ -359,22 +358,16 @@ function cargarFriend(nombre, i) {
     var img = document.getElementById("img-friend");
 
     if(i != "url") {
-
-        var filtro = groupFriend.filter(function(v){return v.name == nombre});        
-        img.setAttribute("src", URL_PJ + filtro[0].version[i - 1]);
+        var filtro = groupFriend.filter(function(v){return v.id == parseInt(nombre)});        
+        img.setAttribute("src", filtro[0].version[i - 1]);
         img.style.height = filtro[0].altura;
-
-        alert("Un momento...");
 
         var cuenta = ((210 - img.clientWidth)/2);
         img.style.marginLeft = cuenta + "px";
 
     } else {
-
         img.setAttribute("src", nombre);
         img.style.height = $("#input-height").val() + "px";
-
-        alert("Un momento...");
 
         var cuenta = ((210 - img.clientWidth)/2);
         img.style.marginLeft = cuenta + "px";
@@ -385,7 +378,7 @@ function cargarFriend(nombre, i) {
 function rellenaSelectPosicion() {
 
     var pet1 = $("#select-player-pet :selected").text();
-    var friend = $("#select-friend :selected").text();
+    var friend = $("#select-friend").val();
     var pet2 = $("#select-friend-pet :selected").text();
 
     var select = document.getElementById("position-player");
@@ -404,7 +397,7 @@ function rellenaSelectPosicion() {
         select.add(option);
     };
 
-    if (friend != "Ninguno") {
+    if (friend != "") {
         var option = document.createElement("option");
         option.text = "Compañero";
         select.add(option);
@@ -669,19 +662,19 @@ $(function() {
 
         document.getElementById("img-friend").setAttribute("src","");
         $('#select-version option').remove();
-        var a = $("#select-friend :selected").text();
+        var a = $("#select-friend").val();
         var selV = document.getElementById("select-version");
         document.getElementById("otro-container").style.display = "none";
 
-        if(a != "Ninguno"){
+        if(a != ""){
             document.getElementById("button-centrar").style.display = "revert";
         } else {
             document.getElementById("button-centrar").style.display = "none";
         };
 
-        if(a != "Ninguno" && a != "Otro...") {
+        if(a != "" && a != "add-new") {
             document.getElementById("friend-display-draggable").style.display = "block";
-            var filtro = groupFriend.filter(function(v){return v.name == a});
+            var filtro = groupFriend.filter(function(v){return v.id == parseInt(a)}); // MODIFICAR AQUI
 
             for (f = 1; f <= filtro[0].version.length; f++) {
                 option = document.createElement("option");
@@ -694,7 +687,7 @@ $(function() {
 
             cargarFriend(a,b);
 
-        } else if (a == "Otro...") {
+        } else if (a == "add-new") {
 
             selV.style.display = "none";
             document.getElementById("friend-display-draggable").style.display = "none";
@@ -709,7 +702,7 @@ $(function() {
     });
     $("#select-version").change(function() {
         document.getElementById("img-friend").setAttribute("src","");
-        var a = $("#select-friend :selected").text();
+        var a = $("#select-friend").val();
         var b = $("#select-version :selected").text();
         cargarFriend(a,b);
     });
