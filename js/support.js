@@ -59,6 +59,8 @@ $(document).ready(function(){
 		str = "?contests";
 	};
 
+	alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
+
 });
 
 $(function() {

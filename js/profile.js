@@ -25,6 +25,8 @@ $(document).ready(function () {
 
                 const requestFriend = new XMLHttpRequest(); requestFriend.open("GET", "../data/groupFriend.json");
                 requestFriend.responseType = "json"; requestFriend.send(); requestFriend.onload = function() {
+
+                    alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
                     
                     groupInfo = requestInfo.response;
                     groupList = requestList.response;

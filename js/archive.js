@@ -7,19 +7,21 @@ $(document).ready(function () {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
+    alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
+
     // Cargar afiliados
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
         document.getElementById("footer-info").innerHTML = afiliados;
     });
 
     // Cargar usuarios, entradas y destacadas
-    const u = new XMLHttpRequest();u.open("GET", "https://gardiemaker.github.io/data/usr/users.json");
+    const u = new XMLHttpRequest();u.open("GET", "../data/usr/users.json");
     u.responseType = "json";u.send();u.onload = function() {
 
-        const e = new XMLHttpRequest();e.open("GET", "https://gardiemaker.github.io/data/usr/entries.json");
+        const e = new XMLHttpRequest();e.open("GET", "../data/usr/entries.json");
         e.responseType = "json";e.send();e.onload = function() {
             
-            const f = new XMLHttpRequest();f.open("GET", "https://gardiemaker.github.io/data/usr/featured.json");
+            const f = new XMLHttpRequest();f.open("GET", "../data/usr/featured.json");
             f.responseType = "json";f.send();f.onload = function() {
 
                 users = u.response; entrys = e.response; feat = f.response;
