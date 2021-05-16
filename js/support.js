@@ -58,9 +58,6 @@ $(document).ready(function(){
 	} else if (str.includes("contests")) {
 		str = "?contests";
 	};
-
-	alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
-
 });
 
 $(function() {

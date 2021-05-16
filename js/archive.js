@@ -7,8 +7,6 @@ $(document).ready(function () {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
-
     // Cargar afiliados
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
         document.getElementById("footer-info").innerHTML = afiliados;

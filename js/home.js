@@ -3,11 +3,9 @@ $(document).ready(function iniciaTodo() {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
-
-    const gd = new XMLHttpRequest();gd.open("GET", "https://gardiemaker.github.io/data/usr/featured.json");gd.responseType = "json";gd.send();
+    const gd = new XMLHttpRequest();gd.open("GET", "../data/usr/featured.json");gd.responseType = "json";gd.send();
     gd.onload = function() {
-        const lista = new XMLHttpRequest();lista.open("GET", "https://gardiemaker.github.io/data/usr/entries.json");lista.responseType = "json";lista.send();
+        const lista = new XMLHttpRequest();lista.open("GET", "../data/usr/entries.json");lista.responseType = "json";lista.send();
         lista.onload = function() {featured(gd.response, lista.response);};
     };
 

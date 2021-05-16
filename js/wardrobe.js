@@ -23,7 +23,6 @@ $(document).ready(function () {
             groupList = requestList.response; groupInfo = requestInfo.response;
 
             // Comprobar si URL valida + comprobar si hay que cargar gardi
-            alert("¡Alerta roja! \nGARDIEMAKER HA MUERTO. \nBueno no skdjskd, más información en el blog.");
 
             if (checkURL()) {
                 $("#link-profile").attr("href", "profile" + window.location.search);
