@@ -310,9 +310,10 @@ function cargarLista(pag = 0, sub = 0, pagSub = null) {
         if (currentPrenda[looper].color != undefined) {
             dibuja += '<div class="abstract-tags">#' + currentPrenda[looper].color + '</div>';
         }
+
+        if (currentGrupo[0].tag == "incomplete") {dibuja += '<div class="abstract-tags incomplete">GRUPO INCOMPLETO</div>'};
         
         if (subCheck(currentGrupo[0].groupId)) {
-            if (currentGrupo[0].tag == "incomplete") {dibuja += '<div class="abstract-tags incomplete">GRUPO INCOMPLETO</div>'};
             var cuenta = groupList.filter(v => {return v.groupId == currentGrupo[0].groupId});
             cuenta = cuenta.length;
             dibuja += '<div class="abstract-tags">' + cuenta + ' colores</div>';  

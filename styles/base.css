@@ -83,6 +83,13 @@ html, body{
     width: 100%;
 }
 
+#fb-icon {
+    position: absolute;
+    right: 70px;
+    top: 7px;
+    height: 25px;
+}
+
 /* Novedades */
 #header-news {
     position: absolute;
