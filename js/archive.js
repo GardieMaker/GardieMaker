@@ -145,7 +145,12 @@ function cargarListas(pag) {
     // Hay POPUP ?
     var popo = [];
     if (uCAT == "e") {
-        popo = entrys.filter(function(v){return v.id == uVAL})
+        if (uVAL[0] != "s") {
+            popo = entrys.filter(function(v){return v.id == uVAL});
+        } else {
+            popo = feat.filter(function(v){return v.entry == uVAL});
+        };
+        
         history.pushState(null, "", "?p=all");
         uVALP = uVAL; uCAT = "p"; uVAL = "all";
     };
@@ -159,7 +164,8 @@ function cargarListas(pag) {
         case "p":
             if (uVAL == "featured") {
                 uVAL = toBoolean(uVAL);
-                entry = entrys.filter(function(v){return v.featured === uVAL});
+                //entry = entrys.filter(function(v){return v.featured === uVAL});
+                entry = feat; // Cargar post desde featuredDB
             } else {
                 if (uVAL == "guardians") {
                     entry = entrys.filter(function(v){return v.type != "cosplay"});
@@ -233,22 +239,32 @@ function dibujaTabla(entry, uVAL, pag) {
                 }
                     
             } else {
-                
+
                 if (feat[c + startPage]) {
-                    var entrada = entry.filter(function(v){return v.id == feat[c + startPage].entry});
+
+                    var entrada = "";
+                    
+                    if ((feat[suma].entry[0]) == "s") { // Entradas por actividad / especiales
+                        entrada = feat[suma].entryInfo;
+
+                    } else { // Entradas normales
+                        entrada = entrys.filter(function(v){return v.id == feat[c + startPage].entry});
+                        entrada = entrada[0].info;
+                    };
 
                     // Fondo pequeño
-                    var bg = entrada[0].info.background;
-                    bg = bg.slice(55);
+                    var bg = entrada.background;
+                    bg = bg.slice(56);
                     bg = "https://www.eldarya.com/assets/img/item/player/icon/" + bg;
 
                     // Mostrar lista de featured
                     tabla += "<td><div id='" + feat[suma].entry + "' class='abstract-thumbnail feat-page'"
-                    + " style='background-image:url(" + bg 
-                    + ")'><span class='feat-title'>" + feat[suma].title + "</span><img src='https://docs.zoho.com/docs/orig/" + entrada[0].info.png + "'></div></td>";
+                    + " style='background-image:url(" + bg + ")'><span class='feat-title'>" + feat[suma].title + 
+                    "</span><img src='https://docs.zoho.com/docs/orig/" + entrada.png + "'></div></td>";
+                    
                 } else {
                     tabla += "<td></td>";
-                }       
+                }
             }
         };
 
@@ -419,55 +435,92 @@ function abrirPopup(elmnt) {
     $("body").css("overflow", "hidden");
 
     // Cargar elemento
-    var entry = entrys.filter(function(v) {return v.id == elmnt});
-
-    var fondo = entry[0].info.background;
-    fondo = fondo.replace(".es", ".com");
 
     // Contenedor de fondo > Contenedor de ventana + botón de cierre
-    var html = '<div id="popupBG"><a class="nav-box-prev"></a><div id="popupW"><div id="button-close" onclick="cierraPopup()"></div>'
+    var html = '<div id="popupBG"><a class="nav-box-prev"></a><div id="popupW"><div id="button-close" onclick="cierraPopup()"></div>';
 
-    // Div principal
-    + '<div id="entry-info-container" entry-dataid="' + entry[0].id + '" style="background-image: url(' + fondo + ')">'
+    var entry = "";
+    if (elmnt[0] == "s") { // Siempre son destacadas
+        entry = feat.filter(v => {return v.entry == elmnt});
+        var fondo = entry[0].entryInfo.background;
 
-    // Gardienne + nombre || id
-    + '<img src="https://docs.zoho.com/docs/orig/' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
+        // Div principal
+        html += '<div id="entry-info-container" entry-dataid="' + entry[0].entry + '" style="background-image: url(' + fondo + ')">';
 
-    if (entry[0].type == "cosplay") {
+        // Gardienne + nombre || id
+        html += '<img src="https://docs.zoho.com/docs/orig/' + entry[0].entryInfo.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
+
+        // Cuadro blanco
+        html += '<h2>' + entry[0].entryInfo.field[0] + '</h2>';
+        for (a = 1; a < entry[0].entryInfo.field.length; a++) {
+            html += '<p>' + entry[0].entryInfo.field[a] + '</p>';
+        };
+
+        html += '<p>Abrir en: <a href="profile?s=' + entry[0].entryInfo.code + '"> Perfil</a> | <a href="wardrobe?s=' + entry[0].entryInfo.code + '">Vestidor</a></p></div>';
+        
+
+    } else {
+        entry = entrys.filter(function(v) {return v.id == elmnt});
+        var fondo = entry[0].info.background;
+
+        // Div principal
+        html += '<div id="entry-info-container" entry-dataid="' + entry[0].id + '" style="background-image: url(' + fondo + ')">';
+
+        // Gardienne + nombre || id
+        html += '<img src="https://docs.zoho.com/docs/orig/' + entry[0].info.png + '"><div id="entry-info-menu"><div id="entry-info-quote">';
+
+        if (entry[0].type == "cosplay") {
         html += '<span id="entry-info-cosplay">COSPLAY</span>';
-    }
+        };
 
-    if (entry[0].info.name) {html += '<h2>' + entry[0].info.name + '</h2><p>ID: ' + entry[0].id + '</p>'} 
-    else {html += '<h2>ID: ' + entry[0].id + '</h2>'};
-    
-    // Estado e info de cuenta
-    var user = users.filter(function(v) {return v.alias == entry[0].alias});
-    html += '<p> Enviada por: <a href="?u=' + entry[0].alias + '">' + entry[0].alias + '</a><span class="';
-    user[0].verified ? html += 's-verified" title="Cuenta verificada"></span></p>' : html += 's-pending" title="Cuenta sin verificar"></span></p>';
-    html += '<p>Fecha: ' + entry[0].info.date + '</p><p>Abrir en: <a href="profile?s=' + entry[0].info.code + '"> Perfil</a> | <a href="wardrobe?s=' + entry[0].info.code + '">Vestidor</a></p></div>';
+        if (entry[0].info.name) {html += '<h2>' + entry[0].info.name + '</h2><p>ID: ' + entry[0].id + '</p>'} 
+        else {html += '<h2>ID: ' + entry[0].id + '</h2>'};
 
+        // Estado e info de cuenta
+        var user = users.filter(function(v) {return v.alias == entry[0].alias});
+        html += '<p> Enviada por: <a href="?u=' + entry[0].alias + '">' + entry[0].alias + '</a><span class="';
+        user[0].verified ? html += 's-verified" title="Cuenta verificada"></span></p>' : html += 's-pending" title="Cuenta sin verificar"></span></p>';
+        html += '<p>Fecha: ' + entry[0].info.date + '</p><p>Abrir en: <a href="profile?s=' + entry[0].info.code + '"> Perfil</a> | <a href="wardrobe?s=' + entry[0].info.code + '">Vestidor</a></p></div>';
+    };
     
+
     // Destacada ?
-    if (entry[0].featured) {
-        var ft = feat.filter(function(v){return v.entry == entry[0].id});
+    var checkFeat = feat.filter(v => {return v.entry == elmnt});
+
+    if (checkFeat.length == 1) {
         html += '<div id="entry-info-featured"><h2>★ Guardiana Destacada ★</h2>';
-        var titulo = ft[0].title;
-        if ((titulo).includes("Semana")) {
-            titulo = "En portada durante la " + titulo.replace("Semana", "semana");
+        if (checkFeat[0].entry[0] == "s") {
+            var titulo = "Por actividad: <a href='" + checkFeat[0].postInfo.enlace + "'>" + checkFeat[0].postInfo.actividad + "</a>"
+            html += '<p><i>' + titulo + '.</i></p>'
+            + '<p>Fecha: ' + checkFeat[0].date + '</p>';
+            
         } else {
-            titulo = "Portada especial: " + titulo.replace("Semana", "semana");
+            var ft = feat.filter(function(v){return v.entry == entry[0].id});
+            var titulo = ft[0].title;
+            if ((titulo).includes("Semana")) {
+                titulo = "En portada durante la " + titulo.replace("Semana", "semana");
+            } else {
+                titulo = "Portada especial: " + titulo.replace("Semana", "semana");
+            }
+            html += '<p><i>' + titulo + '.</i></p>'
+            + '<p>Fecha: ' + ft[0].date + '</p>';
+            //"entry-info-featured"
         }
-        html += '<p><i>' + titulo + '.</i></p>'
-        + '<p>Fecha: ' + ft[0].date + '</p>';
-        //"entry-info-featured"
+
     }
-    
 
     // Cierre + flechas
     html += '</div></div></div></div><a class="nav-box-next"></a></div>';
 
     $("body").append(html);
-    var enlace = "https://docs.google.com/forms/d/e/1FAIpQLScHNJ91Bn3QSDk6IsK0J_ZB9Ja5ieWh8s1FdPIYX3HzF7Hwuw/viewform?usp=pp_url&entry.952360021=" + entry[0].id;
+
+    var enlace = "https://docs.google.com/forms/d/e/1FAIpQLScHNJ91Bn3QSDk6IsK0J_ZB9Ja5ieWh8s1FdPIYX3HzF7Hwuw/viewform?usp=pp_url&entry.952360021=";
+    if (elmnt[0] == "s") {
+        enlace += checkFeat[0].entry;
+    } else {
+        enlace += entry[0].id;
+    }
+    
     if (entry[0].type != "cosplay") {$("#entry-info-container").append('<span class="cosplay-report"><a href="' + enlace + '" target="_blank">Notificar cosplay</a></span>')};
     $("#popupBG").fadeIn(300);
 }
