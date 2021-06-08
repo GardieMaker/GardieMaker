@@ -490,7 +490,7 @@ function abrirPopup(elmnt) {
     if (checkFeat.length == 1) {
         html += '<div id="entry-info-featured"><h2>★ Guardiana Destacada ★</h2>';
         if (checkFeat[0].entry[0] == "s") {
-            var titulo = "Por actividad: <a href='" + checkFeat[0].postInfo.enlace + "'>" + checkFeat[0].postInfo.actividad + "</a>"
+            var titulo = "Por actividad: <a href='" + checkFeat[0].postInfo.enlace + "' target='_blank'>" + checkFeat[0].postInfo.actividad + "</a>"
             html += '<p><i>' + titulo + '.</i></p>'
             + '<p>Fecha: ' + checkFeat[0].date + '</p>';
             
