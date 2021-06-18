@@ -62,7 +62,7 @@ function checkURL() {
     } else {return true};
 };
 
-function cargarGuardiana(p = 0) {
+function cargarGuardiana(p = 0, edit = false) {
     var img, img2; 
     var str = window.location.search;
     str = str.slice(3);
@@ -81,13 +81,26 @@ function cargarGuardiana(p = 0) {
     };
 
     if (grupo[0].category == "Fondos") {
-        $("#marketplace-avatar-background-preview").attr("style", "background-image:url('" + img + "')");
+        if (edit == false) { $("#marketplace-avatar-background-preview").css("background-image", "url(" + img + ")");} 
+        else { 
+            $("#edit-clothes-popup").css("background-image", "url(" + img + ")"); 
+            $("#edit-clothes-popup").attr("data-bgpreviewid", prenda[0].itemId);
+        };
         hayFondo = true;
     } else {
         // Crear canvas
-        var canvas = '<canvas width="420" height="594"></canvas>';
-        $("#marketplace-avatar-preview").append(canvas);
-        canvas = document.getElementsByTagName("canvas");
+        var canvas = "";
+        if (edit) {
+            canvas = '<canvas class="canvas-preview" data-previewid="' + prenda[0].itemId + '" width="420" height="594"></canvas>';
+            $("#edit-preview").append(canvas);
+            canvas = document.getElementsByClassName("canvas-preview");
+        } else {
+            canvas = '<canvas width="420" height="594"></canvas>';
+            $("#marketplace-avatar-preview").append(canvas);
+            canvas = document.getElementsByTagName("canvas");
+        }
+        
+        
         
         var ctx;
         
@@ -100,7 +113,8 @@ function cargarGuardiana(p = 0) {
     };
     
     // Cargar prenda siguiente
-    p++;if (p < customArray.length) cargarGuardiana(p);
+    p++;
+    if (p < customArray.length) {edit ? cargarGuardiana(p, true) : cargarGuardiana(p);};
 };
 
 function cargarLista(pag = 0, sub = 0, pagSub = null) {
@@ -479,7 +493,8 @@ function checkPrenda(nuevaPrenda, nuevoGrupo) {
 
 function mostrarPrenda(tipo, prenda, categoria, c, cambio = null) {
     // TIPO = remove, replace, set
-    $("#marketplace-itemDetail").css("display", "block");
+    $("#marketplace-itemDetail").show();
+    $("#edit-clothes").hide();
     var img, img2;
 
     var imageName = groupList.filter(v => {return v.itemId == prenda});
@@ -685,12 +700,12 @@ function recuperaPrenda(elmnt) {
 
     var temporal = "";
 
-    if (elmnt.includes("background")) {
+    if (elmnt.includes("background")) { // PENDIENTE
         // Fondo
         
         var temporal = $(elmnt).attr("style");
         temporal = temporal.slice(22);
-        temporal = temporal.slice(0,55);
+        temporal = temporal.slice(0,56); // Modificado por ".com"
         original = temporal + original;
 
         $(elmnt).css("background-image", "url('" + original + "')");
@@ -879,7 +894,8 @@ function fijarPrenda() {
         };
 
         if ($(".marketplace-search-item.selected").length) {$(".marketplace-search-item").removeClass("selected")};
-        $("#marketplace-itemDetail").css("display", "none");
+        $("#marketplace-itemDetail").hide();
+        $("#edit-clothes").show();
         $("#button-img-link-container").css("display", "none");
         $("#link-profile").attr("href", "profile" + window.location.search);
     };
@@ -919,6 +935,154 @@ function changeLang() {
         };
     };
 
+};
+
+function obtenerListaPreview() {
+    var arrayPreview = [];
+    var canvas = $(".canvas-preview");
+
+    if (canvas.length != 0) {
+
+        for (c = 0; c < canvas.length; c++) {
+            arrayPreview.push(parseInt(canvas.eq(c).attr("data-previewid")));
+        };
+
+        arrayPreview.reverse();   
+
+        for (e = 0; e < arrayPreview.length; e++) {
+            $("#edit-menu-list").append('<div class="draggable-preview"></div>');
+            $(".draggable-preview").eq(e).attr("data-previewid", arrayPreview[e]);
+
+            // Obtener imagen 
+            var url = groupList.filter(v => {return v.itemId == arrayPreview[e]});
+            var grupo = groupInfo.filter(v => {return v.groupId == url[0].groupId});
+            url = url[0].itemURL;
+
+            switch (grupo[0].category) {
+                case "Pieles": url = URL_SRC + URL_SKIN + URL_ICON + url; break;
+                case "Bocas": url = URL_SRC + URL_MOUTH + URL_ICON + url; break;
+                case "Ojos": url = URL_SRC + URL_EYES + URL_ICON + url; break;
+                case "Cabello": url = URL_SRC + URL_HAIR + URL_ICON + url; break;
+                default: url = URL_SRC + URL_CLOTHES + URL_ICON + url;
+            };
+
+            $(".draggable-preview").eq(e).append('<img class="draggable-preview-icon"><div class="draggable-preview-info"></div>');
+            $(".draggable-preview-icon").eq(e).attr("src", url);
+
+            if (localization == "es") {
+                var esp = grupo[0].spanish;
+                if (esp.includes("(x)")) { // No tiene traducción o no es oficial
+                    esp = esp.slice(3);
+                    $(".draggable-preview-info").eq(e).append('<div class="draggable-preview-name undefined">' + esp + '</div>');
+                } else { // Disponible en español
+                    $(".draggable-preview-info").eq(e).append('<div class="draggable-preview-name">' + esp + '</div>');
+                };
+            } else if (localization == "en") {
+                var eng = grupo[0].english;
+                if (eng.includes("(x)")) { // No tiene traducción o no es oficial
+                    eng = eng.slice(3);
+                    $(".draggable-preview-info").eq(e).append('<div class="draggable-preview-name undefined">' + eng + '</div>');
+                } else { // Disponible en inglés
+                    $(".draggable-preview-info").eq(e).append('<div class="draggable-preview-name">' + eng + '</div>');
+                }
+            };
+
+            // Botones para mover
+            $(".draggable-preview-info").eq(e).append('<div class="draggable-move-buttons"></div>');
+            if (e == 0 && arrayPreview.length != 1) {
+                // Boton bajar
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda bajar-prenda button" data-position="' + e +'"><span class="fa fa-chevron-down"></span></div>');
+
+            } else if (e == (arrayPreview.length - 1) && arrayPreview.length != 1) {
+                // Boton subir
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda subir-prenda button" data-position="' + e +'"><span class="fa fa-chevron-up"></span></div>');
+
+            } else if (arrayPreview.length != 1) {
+                // Ambos botones
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda subir-prenda button" data-position="' + e +'"><span class="fa fa-chevron-up"></span></div>');
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda bajar-prenda button" data-position="' + e +'"><span class="fa fa-chevron-down"></span></div>');
+            };
+
+            $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda quitar-prenda button" data-position="' + e +'"><span class="fa fa-times"></span></div>');
+        };
+
+    } else {
+        $("#edit-menu-list").append('<span style="text-align: center;width: calc(100% - 20px);display: inline-block;margin: 20px 10px;color: #d5bbaf;"><i>No hay ningún elemento fijado.</i></span>');
+        $("#editOK").remove();
+    };
+
+};
+
+function actualizaBotonesPreview() {
+    $(".draggable-move-buttons").remove();
+
+    if ($(".draggable-preview").length != 0) {
+
+        for (e = 0; e < $(".draggable-preview").length; e++) {
+
+            $(".draggable-preview-info").eq(e).append('<div class="draggable-move-buttons"></div>');
+            if (e == 0 && ($(".draggable-preview").length != 1)) {
+                // Boton bajar
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda bajar-prenda button" data-position="' + e +'"><span class="fa fa-chevron-down"></span></div>');
+
+            } else if ((e == ($(".draggable-preview").length - 1)) && ($(".draggable-preview").length != 1)) {
+                // Boton subir
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda subir-prenda button" data-position="' + e +'"><span class="fa fa-chevron-up"></span></div>');
+
+            } else if ($(".draggable-preview").length != 1) {
+                // Ambos botones
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda subir-prenda button" data-position="' + e +'"><span class="fa fa-chevron-up"></span></div>');
+                $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda bajar-prenda button" data-position="' + e +'"><span class="fa fa-chevron-down"></span></div>');
+            };
+
+            $(".draggable-move-buttons").eq(e).append('<div class="mueve-prenda quitar-prenda button" data-position="' + e +'"><span class="fa fa-times"></span></div>');
+
+        };
+    } else {
+        $("#edit-menu-list").append('<span style="text-align: center;width: calc(100% - 20px);display: inline-block;margin: 20px 10px;color: #d5bbaf;"><i>Se han quitado todas las prendas.</i></span>');    
+    }
+
+    
+};
+
+function editarPreview(tipo, index) {
+    // Cuenta canvas 
+    var numCanvas = $(".canvas-preview").length - 1;
+    var posicionCanvas = numCanvas - index; // Index del canvas
+    var nuevo = "", nuevoPCanvas = "";
+        
+    if (tipo == "subir") {
+        nuevo = index - 1; // Nueva posición en la lista / Posición en lista
+        nuevoPCanvas = posicionCanvas + 2; // Nueva posición en canvas
+
+    } else if (tipo == "bajar") {
+        nuevo = index + 2;
+        nuevoPCanvas = posicionCanvas - 1;
+
+    } else if (tipo == "quitar") {
+        posicionCanvas = numCanvas - index;
+        $(".draggable-preview").eq(index).remove();
+        $(".canvas-preview").eq(posicionCanvas).remove();
+        actualizaBotonesPreview();
+    };
+
+
+    if (tipo != "quitar") {
+
+        // Actualizar lista
+        var nodo = document.getElementsByClassName("draggable-preview")[index];
+        var padre = document.getElementById("edit-menu-list");
+        var cont = document.getElementsByClassName("draggable-preview");
+        padre.insertBefore(nodo, cont[nuevo]);
+        actualizaBotonesPreview();
+
+        // Actualizar canvas
+        nodo = document.getElementsByClassName("canvas-preview")[posicionCanvas];
+        padre = document.getElementById("edit-preview");
+        cont = document.getElementsByClassName("canvas-preview");
+        padre.insertBefore(nodo, cont[nuevoPCanvas]);
+
+    };
 };
 
 $(function() {
@@ -983,7 +1147,8 @@ $(function() {
                 checkPrenda(code, grupo);
                 
             } else {
-                $("#marketplace-itemDetail").css("display", "none");
+                $("#marketplace-itemDetail").hide();
+                $("#edit-clothes").show();
                 $("#button-img-link-container").css("display", "none");
                 limpiarTemporales();
                 
@@ -1014,6 +1179,80 @@ $(function() {
         var pagina = $(this).attr("data-page");
         if (pagina < 0) pagina = 0;
         cargarLista(pagina);
+    });
+
+
+    // POPUPEDIT - Carga
+    $("#edit-clothes").click(function() {
+        $(".marketplace-container").eq(0).append('<div id="edit-clothes-layout"><div id="edit-clothes-popup"></div></div>');
+
+        // Cargar guardiana
+        $("#edit-clothes-popup").append('<div id="edit-preview"></div>');
+        if (window.location.search != "") {
+            hayFondo = false;
+            cargarGuardiana(0, true);    
+        };
+
+        // Cargar menu y obtener lista
+        $("#edit-clothes-popup").append('<div id="edit-menu-container"></div>');
+        $("#edit-menu-container").append('<div id="edit-menu-list"></div>');
+        $("#edit-menu-container").append('<div id="edit-menu-buttons"><div id="editOK" class="button">APLICAR</div><div id="editNO" class="button">CANCELAR</div></div>');
+        obtenerListaPreview();
+
+    });
+
+    // POPUPEDIT - Función de los botones
+
+    $(".marketplace-container").on("click", ".subir-prenda", function() {
+        var index = parseInt($(this).attr("data-position"));
+        editarPreview("subir", index);
+    });
+    $(".marketplace-container").on("click", ".bajar-prenda", function() {
+        var index = parseInt($(this).attr("data-position"));
+        editarPreview("bajar", index);
+    });
+    $(".marketplace-container").on("click", ".quitar-prenda", function() {
+        var index = parseInt($(this).attr("data-position"));
+        editarPreview("quitar", index);
+    });
+
+
+    $(".marketplace-container").on("click", "#editNO", function() {
+        // Cancelar cambios
+        $("#edit-clothes-layout").remove();
+    });
+
+    $(".marketplace-container").on("click", "#editOK", function() {
+        // Aplicar cambios
+        var newArray = [];
+        // Obtener CODES
+        for (c = 0; c < $(".canvas-preview").length; c++) {
+            newArray.push(parseInt($(".canvas-preview").eq(c).attr("data-previewid")));
+        };
+
+        var cadena = "";
+
+        if (newArray.length != 0) {
+            cadena = "wardrobe?s=" + newArray.join("&");
+        } else {
+            cadena = "wardrobe";
+        }
+
+        // Obtener BG
+        var bgPreview = $("#edit-clothes-popup").attr("data-bgpreviewid");
+        if (bgPreview != undefined ) {
+            if (cadena.includes("?s=")) {cadena += ("&" + bgPreview)}
+            else {cadena += "?s=" + bgPreview};
+        };
+
+        history.replaceState(null, "", cadena);
+        $("#edit-clothes-layout").remove();
+        $("canvas").remove();
+        $("#marketplace-avatar-background-preview").removeAttr("style");
+        hayFondo = false;
+
+        if (cadena != "wardrobe") {limpiarTemporales(); cargarGuardiana()};
+        $("#link-profile").attr("href", "profile" + window.location.search);
     });
 });
 

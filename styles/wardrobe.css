@@ -110,6 +110,118 @@ canvas {
 	width: 90% !important;
 }
 
+#edit-clothes {
+	padding: 6px 3px 3px 6px;
+	bottom: 4px;
+	position: absolute;
+	font-size: 18px;
+	border-radius: 5px;
+}
+
+#edit-clothes-layout {
+	background: #000000a3;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 2;
+	border-radius: 6px;
+}
+
+#edit-clothes-popup {
+	width: 800px;
+	height: 600px;
+	left: 105px;
+	position: relative;
+	top: 76px;
+
+	border-radius: 10px;
+	border: 2px solid #fff;
+	box-shadow: inset 0px 0 20px #fff;
+	background-color: #f2e9e9;
+}
+
+#edit-menu-container {
+    background-color: #fff;
+    width: 320px;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    bottom: 50px;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 10px #bbb;
+}
+
+#edit-menu-list {
+    height: 420px;
+    overflow: auto;
+    scrollbar-width: thin;
+    border: 1px solid #ddd;
+}
+
+#edit-menu-buttons {
+    text-align: center;
+    top: 18px;
+    position: relative;
+}
+
+.draggable-preview {
+	display: flex;
+	height: 80px;
+	border-right: 1px dashed #d5bbaf;
+    border-bottom: 1px dashed #d5bbaf;
+	border-left: 1px dashed #d5bbaf;
+	user-select: none;
+}
+
+.draggable-preview:nth-child(1) {
+    border-top: 1px dashed #d5bbaf;
+}
+
+.draggable-preview-icon {
+    width: 80px;
+    background-color: #f9f9f9;
+    border-right: 1px dashed #d5bbaf;
+    position: relative;
+}
+
+.draggable-preview-info {
+	position: relative;
+	width: 100%;
+}
+
+.draggable-preview-name {
+	margin: 10px;
+}
+
+.draggable-move-buttons {
+    position: absolute;
+    display: inline-flex;
+    bottom: 6px;
+	right: 6px;
+}
+
+.mueve-prenda.button {
+    padding: 3px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.mueve-prenda.quitar-prenda.button {
+    width: 12px;
+    text-align: center;
+    background-color: crimson;
+    border-color: crimson;
+}
+
+.mueve-prenda.quitar-prenda.button:hover {
+    background-color: #fff;
+    color: crimson;
+}
+
 /* end------------------------------------ */
 
 .marketplace-abstract{
@@ -278,7 +390,7 @@ li.marketplace-search-item, li.marketplace-sales-item, li.marketplace-auctions-i
 	padding: 5px;
 }
 
-.marketplace-abstract .abstract-name.undefined{
+.marketplace-abstract .abstract-name.undefined, .draggable-preview-name.undefined {
 	color: #a21c1c;
 }
 .marketplace-abstract .abstract-content{
