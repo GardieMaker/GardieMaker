@@ -1,6 +1,6 @@
 // Variables globales
 var groupInfo = [], groupList = [], hayFondo = false;
-const URL_SRC = "https://www.eldarya.com/assets/img/"; 
+const URL_SRC = "https://www.eldarya.es/assets/img/"; 
 const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/",URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
 const URL_ICON = "icon/", URL_FULL ="web_full/", URL_PORTRAIT = "web_hd/";
 var localization = "";
@@ -38,21 +38,45 @@ $(document).ready(function () {
 // Funciones de carga
 function checkURL() {
     // Comprueba si la URL es válida
-    var str = window.location.search; 
+
+    var str = window.location.search;
+
     if (str != "") {
         if (str.includes("?s=") && (str != "?s=")) {
 
-            str = str.slice(3);
             var checkN = str.split("&");
             var valido = true;
 
-            checkN.forEach((element, i) => {checkN[i] = parseInt(element)});
+            // Comprobar si es código antiguo
+            var busca = [];
+            if (checkN[1] != undefined) busca = groupList.filter(v => {return v.itemId == checkN[1]});
 
-            for (e = 0; e < checkN.length; e++) {
-                var existe = groupList.filter(v => {return v.itemId == checkN[e]});
-                if (existe.length != 1) {
-                    alert("El código no es válido.\n El vestidor se reiniciará.");
-                    valido = false; break;
+            if (busca.length == 1) {
+                // Es código antiguo
+                var mensaje = '<p>Hola, hemos actualizado nuestro sistema de carga de guardianas.</p><p>Si estás leyendo este mensaje, es probable que hayas utilizado un código de carga con el formato antiguo. '
+                + 'Estos códigos pueden fallar, por lo que es recomendable dejar de usarlos.</p>'
+                + '<p>Se intentará actualizar el código y se recargará la página. Si se presenta algún problema, intenta cargar el código desde el PERFIL o desde el HOME.</p>'
+                + '<p>Gracias por su comprensión y disculpen las molestias.</p>';
+
+                $("body").append('<div id="alert-code-format"><span>' + mensaje + '<p><a class="button" onclick="reloadNewCode()">ACEPTAR</a></p></span></div>');
+
+            } else if (checkN[0].includes("?s=")) {
+                // Lo que contenga CheckN[1] debe quitarse de la URL
+                if (checkN[1] != undefined) {
+                    history.replaceState(null, "", checkN[0]);
+                };
+
+                checkN = checkN[0].slice(3);
+                checkN = checkN.split("i");
+
+                checkN.forEach((element, i) => {checkN[i] = parseInt(element)});
+
+                for (e = 0; e < checkN.length; e++) {
+                    var existe = groupList.filter(v => {return v.itemId == checkN[e]});
+                    if (existe.length != 1) {
+                        alert("El código no es válido.\n El vestidor se reiniciará.");
+                        valido = false; break;
+                    };
                 };
             };
 
@@ -62,11 +86,24 @@ function checkURL() {
     } else {return true};
 };
 
+function reloadNewCode(code = "") {
+    if (code == "") {
+        code = window.location.search;
+        code = code.replace(/&/g, "i");
+        window.location.search = code;    
+    } else {
+        var code = $("#input-code").val()
+        code = code.replace(/&/g, "i");
+        window.location.search = "?s=" + code;
+    };
+};
+
+
 function cargarGuardiana(p = 0, edit = false) {
     var img, img2; 
     var str = window.location.search;
     str = str.slice(3);
-    var customArray = str.split("&");
+    var customArray = str.split("i");
 
     // Obtener y preparar datos
     var prenda = groupList.filter(function(v){return v.itemId == customArray[p]});
@@ -430,7 +467,7 @@ function pagination(activa, paginas) {
 // Funciones de interaccion (cargas y clasificaciones de prendas)
 function checkPrenda(nuevaPrenda, nuevoGrupo) {
     var str = window.location.search;
-    str = str.slice(3); var checkArray = str.split("&");
+    str = str.slice(3); var checkArray = str.split("i");
 
     var temp = groupInfo.filter(v => {return v.groupId == nuevoGrupo});
     var nuevaCategoria = temp[0].category;
@@ -700,12 +737,12 @@ function recuperaPrenda(elmnt) {
 
     var temporal = "";
 
-    if (elmnt.includes("background")) { // PENDIENTE
+    if (elmnt.includes("background")) {
         // Fondo
         
         var temporal = $(elmnt).attr("style");
         temporal = temporal.slice(22);
-        temporal = temporal.slice(0,56); // Modificado por ".com"
+        temporal = temporal.slice(0,55); // 55 .es / 56 ".com"
         original = temporal + original;
 
         $(elmnt).css("background-image", "url('" + original + "')");
@@ -812,7 +849,7 @@ function fijarPrenda() {
 
     var temp = window.location.search, customArray = [];
     if (temp != "") {
-        temp = temp.slice(3); customArray = temp.split("&");
+        temp = temp.slice(3); customArray = temp.split("i");
     };
 
     if (tipo == ".temporal-canvas") {
@@ -821,7 +858,7 @@ function fijarPrenda() {
 			temp = "?s=";
 
 			for (i = 0; i < customArray.length; i++) {
-				(i == 0)? (temp = temp + customArray[i]):(temp = temp + "&" + customArray[i]);
+				(i == 0)? (temp = temp + customArray[i]):(temp = temp + "i" + customArray[i]);
             };
 
         } else {
@@ -845,7 +882,7 @@ function fijarPrenda() {
 			temp = "?s=";
 
 			for (i = 0; i < customArray.length; i++) {
-				(i == 0)? (temp = temp + customArray[i]):(temp = temp + "&" + customArray[i]);
+				(i == 0)? (temp = temp + customArray[i]):(temp = temp + "i" + customArray[i]);
             };
 
         } else {
@@ -859,7 +896,7 @@ function fijarPrenda() {
 
             if (customArray.length != 0) {
                 for (i = 0; i < customArray.length; i++) {
-                    (i == 0)? (temp = temp + customArray[i]):(temp = temp + "&" + customArray[i]);
+                    (i == 0)? (temp = temp + customArray[i]):(temp = temp + "i" + customArray[i]);
                 };
             } else {
                 temp = "wardrobe";
@@ -875,7 +912,7 @@ function fijarPrenda() {
 
 		if (customArray.length != 0) {
             for (i = 0; i < customArray.length; i++) {
-                (i == 0)? (temp = temp + customArray[i]):(temp = temp + "&" + customArray[i]);
+                (i == 0)? (temp = temp + customArray[i]):(temp = temp + "i" + customArray[i]);
             };
         } else {
             temp = "wardrobe";
@@ -1233,7 +1270,7 @@ $(function() {
         var cadena = "";
 
         if (newArray.length != 0) {
-            cadena = "wardrobe?s=" + newArray.join("&");
+            cadena = "wardrobe?s=" + newArray.join("i");
         } else {
             cadena = "wardrobe";
         }
@@ -1241,7 +1278,7 @@ $(function() {
         // Obtener BG
         var bgPreview = $("#edit-clothes-popup").attr("data-bgpreviewid");
         if (bgPreview != undefined ) {
-            if (cadena.includes("?s=")) {cadena += ("&" + bgPreview)}
+            if (cadena.includes("?s=")) {cadena += ("i" + bgPreview)}
             else {cadena += "?s=" + bgPreview};
         };
 

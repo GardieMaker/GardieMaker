@@ -1,4 +1,4 @@
-const URL_SRC = "https://www.eldarya.com/assets/img/";
+const URL_SRC = "https://www.eldarya.es/assets/img/";
 const URL_CLOTHES = "item/player/", URL_SKIN = "player/skin/", URL_MOUTH = "player/mouth/", URL_EYES = "player/eyes/", URL_HAIR = "player/hair/";
 const URL_ICON = "icon/", URL_FULL ="web_full/", URL_HD = "web_hd/", URL_PORTRAIT = "web_portrait/";
 var REMOTE = "https://gardiemaker.github.io";
@@ -41,21 +41,40 @@ $(document).ready(function () {
 function getCustom() {
 	str = window.location.search;
 
-	if (str != "") {
-		str = str.slice(3);
-		customArray = str.split("&");
-		
-		if (customArray.length == 1) {
-            document.getElementById("player-display-draggable").style.display = "none";
-            $("#player-actions-tab li").eq(1).hide();
-        }
-        cargarCanvas(0);
 
-        $("#footer-info").html(customArray.length + " items en uso.");
+    if (str != "") {
+        str = str.split("&");
 
-        document.getElementById("edit-code").setAttribute("href","wardrobe" + window.location.search);
+        // Comprobar si es código antiguo
+        var busca = [];
+        if (str[1] != undefined) busca = groupList.filter(v => {return v.itemId == str[1]});
 
-	} else {
+        if (busca.length == 1) {
+            // Es código antiguo
+            var mensaje = '<p>Hola, hemos actualizado nuestro sistema de carga de guardianas.</p><p>Si estás leyendo este mensaje, es probable que hayas utilizado un código de carga con el formato antiguo. '
+            + 'Estos códigos pueden fallar, por lo que es recomendable dejar de usarlos.</p>'
+            + '<p>Se intentará actualizar el código y se recargará la página. Si todo sale bien, utiliza el botón \"Copiar código\" para obtener el código actualizado. Si se presenta algún problema, intenta cargar el código desde el PERFIL o desde el HOME.</p>'
+            + '<p>Gracias por su comprensión y disculpen las molestias.</p>';
+
+            $("body").append('<div id="alert-code-format"><span>' + mensaje + '<p><a class="button" onclick="reloadNewCode()">ACEPTAR</a></p></span></div>');
+
+
+        } else if (str[0].includes("?s=")) {
+            // Carga normal
+
+            str = str[0]; str = str.slice(3);
+            customArray = str.split("i");
+            
+            if (customArray.length == 1) {
+                document.getElementById("player-display-draggable").style.display = "none";
+                $("#player-actions-tab li").eq(1).hide();
+            }
+            cargarCanvas(0);
+            $("#footer-info").html(customArray.length + " items en uso.");
+            document.getElementById("edit-code").setAttribute("href","wardrobe?s=" + str);
+        };
+
+    } else {
 
         $("#footer-info").html("Ningún item en uso.");
         document.getElementById("player-display-draggable").style.display = "none";
@@ -68,6 +87,19 @@ function getCustom() {
     dragPet("player-display-pet");
     dragPet("friend-display-pet");
 
+
+};
+
+function reloadNewCode(code = "") {
+    if (code == "") {
+        code = window.location.search;
+        code = code.replace(/&/g, "i");
+        window.location.search = code;    
+    } else {
+        var code = $("#input-code").val()
+        code = code.replace(/&/g, "i");
+        window.location.search = "?s=" + code;
+    };
 };
 
 function cargarCanvas(n = 0) {
@@ -333,7 +365,7 @@ function cargarPet(select, check, owner) {
         };
 
         imagep.src = "";
-        imgPet.includes("eldarya") ? imagep.src = imgPet : imagep.src = "https://www.eldarya.com/assets/img/pet/mood/profile/" + imgPet;
+        imgPet.includes("eldarya") ? imagep.src = imgPet : imagep.src = "https://www.eldarya.es/assets/img/pet/mood/profile/" + imgPet;
         
         if (select == "Galorze") {
             imagep.style.margin = "-300px 0 -200px -100px";
@@ -729,9 +761,15 @@ $(function() {
 
     $("#load-code").click(function() {
         var inCode = $("#input-code").val();
-        window.location.search = "?s=" + inCode;
-        
-    });
+        if (inCode.includes("&")) {
+            // Este es un código formato antiguo
 
+            var mensaje = '<p>Este código está desactualizado y se recomienda dejar de utilizarlo. Utiliza el botón \"Copiar código\" para obtener el código actualizado.</p>'
+            $("body").append('<div id="alert-code-format"><span>' + mensaje + '<p><a class="button" onclick=\'$("#alert-code-format").fadeOut(300);reloadNewCode("input");\'>CONTINUAR</a></p></span></div>');
+
+        } else {
+            window.location.search = "?s=" + inCode;
+        };
+    });
 });
 

@@ -6,6 +6,32 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     background: transparent;
 }
 
+#alert-code-format {
+    position: fixed;
+    background-color: #000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    height: 100%;
+}
+
+#alert-code-format span {
+    display: block;
+    background-color: #fff;
+    padding: 10px;
+    margin: auto;
+    max-width: 500px;
+    position: relative;
+    top: calc(50% - 116px);
+}
+
+#alert-code-format span p {
+    margin: 10px;
+    text-align: center;
+}
+
 html {
 	height: 100%;
 }

@@ -66,7 +66,7 @@ function featured(feat, entries) {
 
         document.getElementById("portrait").src = "https://docs.zoho.com/docs/orig/" + entry[0].info.png;
         var fondo = entry[0].info.background;
-        fondo = fondo.replace(".es", ".com");
+        //fondo = fondo.replace(".es", ".com");
         document.getElementById("portrait").style.background = "url('" + fondo +  "') top center";
 
         if (entry[0].info.name == null) {
@@ -93,13 +93,26 @@ function featured(feat, entries) {
         + feat[0].entryInfo.png + '" target="_blank">Ver en tamaño completo</a>');
         
     };
-
-    
-
 };
 
+function newFormatCode() {
+        var code = $("#input-code").val()
+        code = code.replace(/&/g, "i");
+        window.location.href = "profile?s=" + code;
+}
+
 $(function() { 
-    $("#load-code").click(function() { 
-        window.location.href = "profile?s=" + $("#input-code").val();
-    })
+    $("#load-code").click(function() {
+        var input = $("#input-code").val();
+
+        if (input.includes("&")) {
+            // Codigo viejo
+            input = input.replace(/&/g, "i")
+            var mensaje = '<p>Este código está desactualizado y se recomienda dejar de utilizarlo. Utiliza el botón \"Copiar código\" en el Perfil para obtener el código actualizado.</p>'
+            $("body").append('<div id="alert-code-format"><span>' + mensaje + '<p><a class="button" onclick=\';newFormatCode("input");\'>CONTINUAR</a></p></span></div>');
+        } else {
+            window.location.href = "profile?s=" + input;    
+        }
+        
+    });
 });
