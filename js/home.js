@@ -1,12 +1,21 @@
+var groupInfo = "", groupList = "";
+
 $(document).ready(function iniciaTodo() {
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/activities", function(estado, success, xhr) {
         document.getElementsByClassName("news-latest")[0].innerHTML = estado;
     });
 
-    const gd = new XMLHttpRequest();gd.open("GET", "../data/usr/featured.json");gd.responseType = "json";gd.send();
-    gd.onload = function() {
-        const lista = new XMLHttpRequest();lista.open("GET", "../data/usr/entries.json");lista.responseType = "json";lista.send();
-        lista.onload = function() {featured(gd.response, lista.response);};
+    const gi = new XMLHttpRequest(); gi.open("GET", "../data/groupInfo.json");gi.responseType = "json"; gi.send();
+    gi.onload = function() { groupInfo = gi.response;
+        const gl = new XMLHttpRequest(); gl.open("GET", "../data/groupList.json");gl.responseType = "json"; gl.send();
+        gl.onload = function() { groupList = gl.response;
+
+            const gd = new XMLHttpRequest();gd.open("GET", "../data/usr/featured.json");gd.responseType = "json";gd.send();
+            gd.onload = function() {
+                const lista = new XMLHttpRequest();lista.open("GET", "../data/usr/entries.json");lista.responseType = "json";lista.send();
+                lista.onload = function() {featured(gd.response, lista.response);};
+            };
+        };
     };
 
     $.get("https://raw.githubusercontent.com/GardieMaker/data/master/status/affiliates", function(afiliados, success, xhr) {
@@ -61,12 +70,15 @@ function get(blogger) {
 
 function featured(feat, entries) {
 
+    // Buscar fondo en el código
+    
+
     if (feat[0].entry[0] != "s") {
         var entry = entries.filter(function(v){return v.id == feat[0].entry});
+        var fondo = buscaFondo(entry[0].info.code);
 
         document.getElementById("portrait").src = "https://docs.zoho.com/docs/orig/" + entry[0].info.png;
-        var fondo = entry[0].info.background;
-        //fondo = fondo.replace(".es", ".com");
+
         document.getElementById("portrait").style.background = "url('" + fondo +  "') top center";
 
         if (entry[0].info.name == null) {
@@ -82,8 +94,10 @@ function featured(feat, entries) {
         + entry[0].info.png + '" target="_blank">Ver en tamaño completo</a>';
 
     } else {
+
+        var fondo = buscaFondo(feat[0].entryInfo.code);
         $("#portrait").attr("src", "https://docs.zoho.com/docs/orig/" + feat[0].entryInfo.png);
-        $("#portrait").css("background", "url(" + feat[0].entryInfo.background + ")");
+        $("#portrait").css("background", "url(" + fondo + ")");
         $("#index-featured-title").html('<a href="archive?e=' + feat[0].entry + '">' + feat[0].entryInfo.field[0] + '</a></div>');
 
         $("#index-featured-info").html('Actividad: <a href="' + feat[0].postInfo.enlace + '" target="_blank">'
@@ -100,6 +114,27 @@ function newFormatCode() {
         code = code.replace(/&/g, "i");
         window.location.href = "profile?s=" + code;
 }
+
+function buscaFondo(code) {
+    var enlace = "";
+    var code = code.split("i");
+    for (a = 0; a < code.length; a++) {
+        var check = groupInfo.filter(v => {return v.groupId == code[a]});
+        if (check.length == 1) {
+            if (check[0].category == "Fondos") {
+                check = groupList.filter(v => {return v.itemId == code[a]});
+                enlace = "https://www.eldarya.es/assets/img/item/player/web_full/" + check[0].itemURL;
+                break;
+            };
+        };
+    };
+
+    if (enlace == "") {
+        enlace = "https://www.eldarya.es/assets/img/item/player/web_full/ebe3cacec9acff9a1ae9d9554a3192c0.jpg";
+    };
+    
+    return enlace;
+};
 
 $(function() { 
     $("#load-code").click(function() {

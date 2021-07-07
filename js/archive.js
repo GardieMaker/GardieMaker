@@ -1,5 +1,6 @@
 // Variables globales
 var users, entrys, feat;
+var groupInfo = "", groupList = "";
 
 $(document).ready(function () {
     // Cargar status
@@ -12,21 +13,28 @@ $(document).ready(function () {
         document.getElementById("footer-info").innerHTML = afiliados;
     });
 
-    // Cargar usuarios, entradas y destacadas
-    const u = new XMLHttpRequest();u.open("GET", "../data/usr/users.json");
-    u.responseType = "json";u.send();u.onload = function() {
+    const gi = new XMLHttpRequest(); gi.open("GET", "../data/groupInfo.json");gi.responseType = "json"; gi.send();
+    gi.onload = function() { groupInfo = gi.response;
+        const gl = new XMLHttpRequest(); gl.open("GET", "../data/groupList.json");gl.responseType = "json"; gl.send();
+        gl.onload = function() { groupList = gl.response;
 
-        const e = new XMLHttpRequest();e.open("GET", "../data/usr/entries.json");
-        e.responseType = "json";e.send();e.onload = function() {
+            // Cargar usuarios, entradas y destacadas
+            const u = new XMLHttpRequest();u.open("GET", "../data/usr/users.json");
+            u.responseType = "json";u.send();u.onload = function() {
+
+                const e = new XMLHttpRequest();e.open("GET", "../data/usr/entries.json");
+                e.responseType = "json";e.send();e.onload = function() {
             
-            const f = new XMLHttpRequest();f.open("GET", "../data/usr/featured.json");
-            f.responseType = "json";f.send();f.onload = function() {
+                    const f = new XMLHttpRequest();f.open("GET", "../data/usr/featured.json");
+                    f.responseType = "json";f.send();f.onload = function() {
 
-                users = u.response; entrys = e.response; feat = f.response;
-                normalizeURL();
-                cargarSelect(users);
-                cargarRanking();
-                cargarListas(0);
+                        users = u.response; entrys = e.response; feat = f.response;
+                        normalizeURL();
+                        cargarSelect(users);
+                        cargarRanking();
+                        cargarListas(0);
+                    };
+                };
             };
         };
     };
@@ -221,9 +229,8 @@ function dibujaTabla(entry, uVAL, pag) {
                 if(entry[suma]) {
                     
                     // Fondo pequeño
-                    var bg = entry[suma].info.background;
-                    bg = bg.slice(55);
-                    bg = "https://www.eldarya.es/assets/img/item/player/icon/" + bg;
+                    var bg = buscaFondo(entry[suma].info.code);
+                    bg = bg.replace("web_full", "icon");
 
                     tabla += "<td><div id='" + entry[suma].id + "' class='abstract-thumbnail"
 
@@ -253,9 +260,8 @@ function dibujaTabla(entry, uVAL, pag) {
                     };
 
                     // Fondo pequeño
-                    var bg = entrada.background;
-                    bg = bg.slice(55);
-                    bg = "https://www.eldarya.es/assets/img/item/player/icon/" + bg;
+                    var bg = buscaFondo(entrada.code);
+                    bg = bg.replace("web_full", "icon");
 
                     // Mostrar lista de featured
                     tabla += "<td><div id='" + feat[suma].entry + "' class='abstract-thumbnail feat-page'"
@@ -430,6 +436,27 @@ $(function() {
 
 });
 
+function buscaFondo(code) {
+    var enlace = "";
+    var code = code.split("i");
+    for (a = 0; a < code.length; a++) {
+        var check = groupInfo.filter(v => {return v.groupId == code[a]});
+        if (check.length == 1) {
+            if (check[0].category == "Fondos") {
+                check = groupList.filter(v => {return v.itemId == code[a]});
+                enlace = "https://www.eldarya.es/assets/img/item/player/web_full/" + check[0].itemURL;
+                break;
+            };
+        };
+    };
+
+    if (enlace == "") {
+        enlace = "https://www.eldarya.es/assets/img/item/player/web_full/ebe3cacec9acff9a1ae9d9554a3192c0.jpg";
+    };
+    
+    return enlace;
+};
+
 function abrirPopup(elmnt) {
 
     $("body").css("overflow", "hidden");
@@ -442,7 +469,7 @@ function abrirPopup(elmnt) {
     var entry = "";
     if (elmnt[0] == "s") { // Siempre son destacadas
         entry = feat.filter(v => {return v.entry == elmnt});
-        var fondo = entry[0].entryInfo.background;
+        var fondo = buscaFondo(entry[0].entryInfo.code);
 
         // Div principal
         html += '<div id="entry-info-container" entry-dataid="' + entry[0].entry + '" style="background-image: url(' + fondo + ')">';
@@ -461,7 +488,7 @@ function abrirPopup(elmnt) {
 
     } else {
         entry = entrys.filter(function(v) {return v.id == elmnt});
-        var fondo = entry[0].info.background;
+        var fondo = buscaFondo(entry[0].info.code);
 
         // Div principal
         html += '<div id="entry-info-container" entry-dataid="' + entry[0].id + '" style="background-image: url(' + fondo + ')">';
