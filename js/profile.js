@@ -69,7 +69,7 @@ function getCustom() {
                 document.getElementById("player-display-draggable").style.display = "none";
                 $("#player-actions-tab li").eq(1).hide();
             }
-            cargarCanvas(0);
+            if (checkArray()) cargarCanvas();
             $("#footer-info").html(customArray.length + " items en uso.");
             document.getElementById("edit-code").setAttribute("href","wardrobe?s=" + str);
         };
@@ -102,62 +102,87 @@ function reloadNewCode(code = "") {
     };
 };
 
-function cargarCanvas(n = 0) {
+//=======================================
+function preloadIMG(src) {
+    return new Promise(resolve => {
+        var img = new Image();
+        img.src = src;
+        img.onload = () => {resolve(img)}; 
+    });
+};
+//=======================================
 
+function checkArray() {
     var error = "";
 
-    try {
-    	var getLista = groupList.filter(function(v){return v.itemId == customArray[n]});
-        (getLista.length == 0)?(error = "Código incorrecto"):("");
-    	var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
-    	
-    } catch {
+    for (c = 0; c < customArray.length; c++) {
+        try {
+            var getLista = groupList.filter(function(v){return v.itemId == customArray[c]});
+            (getLista.length == 0)?(error = "Código incorrecto"):("");
+            var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
+        } catch {
 
-        if (error != "") {
-            alert("El código introducido no es correcto o está corrupto.");
-            document.getElementById("player-display-draggable").style.display = "none";
-            $("#player-actions-tab li").eq(1).hide();
+            if (error != "") {
+                alert("El código introducido no es correcto o está corrupto.");
+                document.getElementById("player-display-draggable").style.display = "none";
+                $("#player-actions-tab li").eq(1).hide();
+                return false;
 
-        } else {
-            alert("Se ha producido un error, la página se actualizará.");
-            location.reload();
-        }
-        
+            } else {
+                alert("Se ha producido un error, la página se actualizará.");
+                location.reload();
+            };
+        };
     };
 
-    var newimg;
-
-	switch (getInfo[0].category) {
-		case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL; break;
-		case "Pieles": newimg = URL_SRC + URL_SKIN + URL_FULL + getLista[0].itemURL; break;
-		case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_FULL + getLista[0].itemURL; break;
-		case "Ojos": newimg = URL_SRC + URL_EYES + URL_FULL + getLista[0].itemURL; break;
-		case "Cabello": newimg = URL_SRC + URL_HAIR + URL_FULL + getLista[0].itemURL; break;
-		default: newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL;
-	};
-
-	if (getInfo[0].category == "Fondos") {
-		var fondo = document.getElementsByClassName("player-element background-element")[0];
-
-		fondo.style.background = "url('" + newimg + "')";
-
-	} else {
-	//*------------------
-		var canvas = document.getElementsByTagName("canvas")[0];
-		var ctx = canvas.getContext("2d");
-		var img = new Image();
-
-    	img.onload = function() {
-			ctx.drawImage(img, 0, 0);
-		};
-
-        img.src = newimg;
-	};
-
-	if (n < customArray.length - 1) {
-		n++; cargarCanvas(n);
-	};
+    return true;
 };
+
+async function cargarCanvas() {
+
+    // Buscar fondo 
+    var iBG = null;
+    for (f = 0; f < customArray.length; f++ ) {
+        var item = groupList.filter(v => {return v.itemId == customArray[f]});
+        var grupo = groupInfo.filter(v => {return v.groupId == item[0].groupId});
+
+        if (grupo[0].category == "Fondos") {
+            var fondo = document.getElementsByClassName("player-element background-element")[0];
+            fondo.style.background = "url('" + URL_SRC + URL_CLOTHES + URL_FULL + item[0].itemURL + "')";
+            iBG = f;
+        };
+    };
+
+    // Cargar canvas
+    for (c = 0; c < customArray.length; c++) {
+        if (c != iBG) {
+
+            var getLista = groupList.filter(function(v){return v.itemId == customArray[c]});
+            var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
+
+            var newimg;
+
+            switch (getInfo[0].category) {
+                case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL; break;
+                case "Pieles": newimg = URL_SRC + URL_SKIN + URL_FULL + getLista[0].itemURL; break;
+                case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_FULL + getLista[0].itemURL; break;
+                case "Ojos": newimg = URL_SRC + URL_EYES + URL_FULL + getLista[0].itemURL; break;
+                case "Cabello": newimg = URL_SRC + URL_HAIR + URL_FULL + getLista[0].itemURL; break;
+                default: newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL;
+            };
+
+            //*------------------
+            var canvas = document.getElementsByTagName("canvas")[0];
+            var ctx = canvas.getContext("2d");
+            //var img = new Image();
+
+            var ready = await preloadIMG(newimg);
+            ctx.drawImage(ready, 0, 0);
+
+        };
+    };
+};
+
 
 function optPet() {
 
@@ -195,55 +220,47 @@ function optFriend() {
     $("#select-friend").append('<option value="add-new">Otro...</option>');
 };
 
-function cargarPortrait(n = 0) {
+async function cargarPortrait() {
 
-    var getLista = groupList.filter(function(v){return v.itemId == customArray[n]});
-    var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
-    var newimg;
+    for (c = 0; c < customArray.length; c++) {
+        var getLista = groupList.filter(function(v){return v.itemId == customArray[c]});
+        var getInfo = groupInfo.filter(function(v){return v.groupId == getLista[0].groupId});
 
-    if (portraitMin == false) {
+        if (getInfo[0].category != "Fondos") {
+            var newimg;
 
-        switch (getInfo[0].category) {
-            case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_HD + getLista[0].itemURL; break;
-            case "Pieles": newimg = URL_SRC + URL_SKIN + URL_HD + getLista[0].itemURL; break;
-            case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_HD + getLista[0].itemURL; break;
-            case "Ojos": newimg = URL_SRC + URL_EYES + URL_HD + getLista[0].itemURL; break;
-            case "Cabello": newimg = URL_SRC + URL_HAIR + URL_HD + getLista[0].itemURL; break;
-            default: newimg = URL_SRC + URL_CLOTHES + URL_HD + getLista[0].itemURL;
+            if (portraitMin == false) {
+
+                switch (getInfo[0].category) {
+                    case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_HD + getLista[0].itemURL; break;
+                    case "Pieles": newimg = URL_SRC + URL_SKIN + URL_HD + getLista[0].itemURL; break;
+                    case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_HD + getLista[0].itemURL; break;
+                    case "Ojos": newimg = URL_SRC + URL_EYES + URL_HD + getLista[0].itemURL; break;
+                    case "Cabello": newimg = URL_SRC + URL_HAIR + URL_HD + getLista[0].itemURL; break;
+                    default: newimg = URL_SRC + URL_CLOTHES + URL_HD + getLista[0].itemURL;
+                };
+
+            } else {
+
+                switch (getInfo[0].category) {
+                    case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL; break;
+                    case "Pieles": newimg = URL_SRC + URL_SKIN + URL_FULL + getLista[0].itemURL; break;
+                    case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_FULL + getLista[0].itemURL; break;
+                    case "Ojos": newimg = URL_SRC + URL_EYES + URL_FULL + getLista[0].itemURL; break;
+                    case "Cabello": newimg = URL_SRC + URL_HAIR + URL_FULL + getLista[0].itemURL; break;
+                    default: newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL;
+                };
+
+            }
+
+            var canvas = document.getElementById("portrait");
+            var ctx = canvas.getContext("2d");
+            var img = new Image();
+
+            var ready = await preloadIMG(newimg);
+            ctx.drawImage(ready, 0, 0);
+
         };
-
-    } else {
-
-        switch (getInfo[0].category) {
-            case "Fondos": newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL; break;
-            case "Pieles": newimg = URL_SRC + URL_SKIN + URL_FULL + getLista[0].itemURL; break;
-            case "Bocas": newimg = URL_SRC + URL_MOUTH + URL_FULL + getLista[0].itemURL; break;
-            case "Ojos": newimg = URL_SRC + URL_EYES + URL_FULL + getLista[0].itemURL; break;
-            case "Cabello": newimg = URL_SRC + URL_HAIR + URL_FULL + getLista[0].itemURL; break;
-            default: newimg = URL_SRC + URL_CLOTHES + URL_FULL + getLista[0].itemURL;
-        };
-
-    }
-
-    if (getInfo[0].category == "Fondos") {
-    } else {
-    //*------------------
-        var canvas = document.getElementById("portrait");
-        var ctx = canvas.getContext("2d");
-        var img = new Image();
-
-        //img.crossOrigin = "";
-    
-        img.onload = function() {
-            ctx.drawImage(img, 0, 0);
-        };
-        
-        img.src = newimg;
-    };
-
-    if (n < customArray.length - 1) {
-        n++;
-        cargarPortrait(n);
     };
 };
 
@@ -305,7 +322,7 @@ function maxSize() {
     portrait.setAttribute("height", "891");
     document.getElementById("portraitcontainer").appendChild(portrait);
 
-    cargarPortrait(0);
+    if (checkArray()) cargarPortrait();
 };
 
 function minSize() {
@@ -321,7 +338,7 @@ function minSize() {
     portrait.setAttribute("height", "594");
     document.getElementById("portraitcontainer").appendChild(portrait);
 
-    cargarPortrait(0);
+    if (checkArray()) cargarPortrait();
 };
 
 function cargarPet(select, check, owner) {
@@ -385,20 +402,26 @@ function cargarPet(select, check, owner) {
     };
 };
 
-function cargarFriend(nombre, i) {
+async function cargarFriend(nombre, i) {
+
+    
 
     var img = document.getElementById("img-friend");
 
     if(i != "url") {
-        var filtro = groupFriend.filter(function(v){return v.id == parseInt(nombre)});        
-        img.setAttribute("src", filtro[0].version[i - 1]);
+        var filtro = groupFriend.filter(function(v){return v.id == parseInt(nombre)});
+        var temp = filtro[0].version[i - 1];
+        var ready = await preloadIMG(temp);
+        
+        img.setAttribute("src", ready.src);
         img.style.height = filtro[0].altura;
 
         var cuenta = ((210 - img.clientWidth)/2);
         img.style.marginLeft = cuenta + "px";
 
     } else {
-        img.setAttribute("src", nombre);
+        var ready = await preloadIMG(nombre);
+        img.setAttribute("src", ready.src);
         img.style.height = $("#input-height").val() + "px";
 
         var cuenta = ((210 - img.clientWidth)/2);
@@ -628,7 +651,7 @@ $(function() {
         canvas.height = 594;
         parent.appendChild(canvas);
 
-        cargarCanvas(0);
+        if (checkArray()) cargarCanvas();
     });
 
     $("#border-rad").click(function() {
